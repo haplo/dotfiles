@@ -1,0 +1,40 @@
+alias ls='ls --color=auto'
+alias l='ls -CF'
+alias ll='ls -alF'
+alias la='ls -A'
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias e='emacsclient -a vim'
+alias vi='emacsclient -t -a vim'
+alias vim='emacsclient -t -a vim'
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+# URL-encode and decode strings
+alias urlencode='python -c "import sys, urllib; print urllib.quote_plus(sys.argv[1]);"'
+alias urldecode='python -c "import sys, urllib; print urllib.unquote_plus(sys.argv[1]);"'
+
+#######
+# git #
+#######
+alias ga='git add'
+alias gp='git push'
+alias gl='git log'
+alias glp='git log -p'
+alias gs='git status -sb'
+alias gd='git diff'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gcam='git commit -am'
+alias gb='git branch'
+alias gco='git checkout'
+alias gra='git remote add'
+alias grr='git remote rm'
+alias gpu='git pull'
+alias gcl='git clone'

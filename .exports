@@ -1,0 +1,29 @@
+# include user bin directory in path
+export PATH=$PATH:$HOME/Software/bin;
+
+# allow 20000 entries in .bash_history
+export HISTSIZE='20000';
+export HISTFILESIZE="${HISTSIZE}";
+# don't put duplicate lines in .bash_history
+HISTCONTROL=ignoredups:ignorespace
+
+# make emacs the default editor
+export EDITOR=emacsclient;
+export ALTERNATE_EDITOR=vim;
+
+# prefer US English and use UTF-8
+export LANG='en_US.UTF-8';
+export LC_ALL='en_US.UTF-8';
+
+# don’t clear the screen after quitting a manual page
+export MANPAGER='less -X';
+
+# highlight section titles in manual pages
+# FIXME: not working???
+export LESS_TERMCAP_md="${yellow}";
+
+# make Python use UTF-8 encoding for output to stdin, stdout, and stderr
+export PYTHONIOENCODING='UTF-8';
+
+# use local installation of Clojure
+export CLOJURE_EXT=~/Software/clojure/;

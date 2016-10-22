@@ -1,0 +1,23 @@
+# set variable identifying the chroot you work in
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# git working directory dirty?
+function parse_git_dirty {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+
+# current git branch
+function parse_git_branch {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+echo " ("$(parse_git_dirty)${ref#refs/heads/}")"
+}
+
+# some colors
+BLUE="\[\033[1;34m\]"
+RED="\[\033[0;31m\]"
+YELLOW="\[\033[0;33m\]"
+GREEN="\[\033[0;32m\]"
+
+PS1="${debian_chroot:+($debian_chroot)}$RED\u@\h\[\033[00m\]:$GREEN\w$YELLOW\$(parse_git_branch)\[\033[00m\]\$ "

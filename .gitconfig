@@ -1,0 +1,79 @@
+[user]
+    name = Fidel Ramos
+    email = f@fidelramos.net
+    signingkey = 7F071B7C479FEDD1
+
+[github]
+    user = haplo
+    password =
+    oauth-token =
+
+[core]
+    excludesfile = /home/haplo/.gitignore
+    attributesfile = ~/.gitattributes
+    pager = "/usr/bin/less -RciqMSj5"
+
+    # tabwidth: replace tabs with this many spaces
+    # tab-in-indent: tabs in indentation as error
+    # blank-at-eol: whitespace at end of line as error
+    # blank-at-eof: whitespace at end of file as error
+    # space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = tabwidth=4,tab-in-indent,-indent-with-non-tab,trailing-space,blank-at-eol,blank-at-eof
+
+[color]
+    diff = auto
+    branch = auto
+    status = auto
+    sh = auto
+    ui = auto
+
+[commit]
+    gpgsign = true
+
+[diff]
+    algorithm = histogram
+    renames = true
+    mnemonicprefix = true
+
+[alias]
+    st = status
+    d = diff
+    dc = diff --cached
+    ci = commit -v
+    cim = commit -v -m
+    cia = commit -v -a
+    ciam = commit -v -a -m
+    co = checkout
+    cp = cherry-pick
+    l = log
+    ll = log -p
+    lm = log master..
+    llm = log -p master..
+    b = branch
+    rb = rebase
+    sh = !git-sh
+
+[branch]
+    autosetuprebase = always
+    autosetupmerge = true
+
+[push]
+    default = tracking
+
+[rerere]
+    enabled = true
+
+[merge]
+    tool = emerge
+
+[apply]
+    # Detect whitespace errors when applying a patch
+    whitespace = fix
+
+[advice]
+    pushUpdateRejected = false
+    statusHints = false
+    commitBeforeMerge = false
+
+[include]
+    path = ~/.gitconfig_local

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# create a new directory and enter it
+function mkd() {
+	mkdir -p "$@" && cd "$_";
+}
+
+# extract images from a PDF file, needs poppler-utils package
+function pdfextractimages() {
+    local PDF_FILE="$1";
+
+    # extract JPEG and PNG images
+    pdfimages -j -png "$PDF_FILE" ./;
+
+    # drop bad prefixes from images, leave them as NN.jpg
+    # TODO: use standard shell tools instead of mmv
+    mmv "\-0*" "#1";
+}
+
+# transform a PDF into a CBZ comic file, needs poppler-utils package
+function pdf2cbz() {
+    local PDF_FILE="$1";
+    local CBZ_FILE=$(basename "$PDF_FILE" .pdf).cbz;
+
+    # extract images from PDF
+    pdfextractimages "$PDF_FILE";
+
+    # create CBZ comic file and delete the images
+    zip -9m "$CBZ_FILE" *.jpg *.JPG *.jpeg *.JPEG *.png *.PNG;
+
+    # remove original PDF file, prompting user first
+    rm -i "$PDF_FILE";
+}
