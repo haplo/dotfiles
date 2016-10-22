@@ -52,6 +52,7 @@
     b = branch
     rb = rebase
     sh = !git-sh
+	conflicts = diff --name-only --diff-filter=U
 
 [branch]
     autosetuprebase = always
