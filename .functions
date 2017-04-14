@@ -12,9 +12,9 @@ function pdfextractimages() {
     # extract JPEG and PNG images
     pdfimages -j -png "$PDF_FILE" ./;
 
-    # drop bad prefixes from images, leave them as NN.jpg
+    # remove bad prefix (-) from images
     # TODO: use standard shell tools instead of mmv
-    mmv "\-0*" "#1";
+    mmv "\-*" "#1";
 }
 
 # transform a PDF into a CBZ comic file, needs poppler-utils package
