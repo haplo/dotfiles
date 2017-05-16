@@ -5,6 +5,16 @@ function mkd() {
 	mkdir -p "$@" && cd "$_";
 }
 
+# transform MTS files to MKV by copying video and audio
+function mts2mkv() {
+    local MTS_FILE="$1"
+    local MKV_FILE=$(basename "$1" .mts).mkv
+    echo
+    echo "### Remuxing $MTS_FILE into $MKV_FILE ###"
+    echo
+    ffmpeg -i "$MTS_FILE" -vcodec copy -acodec copy "$MKV_FILE"
+}
+
 # extract images from a PDF file, needs poppler-utils package
 function pdfextractimages() {
     local PDF_FILE="$1";
