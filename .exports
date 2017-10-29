@@ -27,3 +27,6 @@ export PYTHONIOENCODING='UTF-8';
 
 # use local installation of Clojure
 export CLOJURE_EXT=~/Software/clojure/;
+
+# https://wiki.debian.org/KVM
+export LIBVIRT_DEFAULT_URI=qemu:///system
