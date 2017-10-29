@@ -2,8 +2,6 @@
 
 pushd "$(dirname "${BASH_SOURCE}")" > /dev/null;
 
-git pull origin master;
-
 function doIt() {
     rsync --exclude ".git/" \
           --exclude "init_dotfiles.sh" \
