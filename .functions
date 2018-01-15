@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+# globbing support when pulling files from smartphone with adb
+function adbpull {
+    local source="$1"
+    if [ -z "$source" -o -n "$2" ]; then
+        echo "Usage: adbpull <source>"
+        echo
+        echo "  Example: adbpull '/sdcard/DCIM/Camera/*.jpg'"
+        echo "  Note that single quotes are important for globbing to work."
+        echo
+        echo "  Use adb shell to navigate the phone's filesystem."
+        echo
+        echo "  Files will be copied into the current directory."
+    else
+        adb shell ls "$source" | tr '\r' ' ' | xargs -n1 adb pull
+    fi
+}
+
 # create a new directory and enter it
 function mkd() {
 	mkdir -p "$@" && cd "$_";
