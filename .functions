@@ -49,6 +49,11 @@ function pdf2cbz() {
     local PDF_FILE="$1";
     local CBZ_FILE=$(basename "$PDF_FILE" .pdf).cbz;
 
+    if [ ! -f "$PDF_FILE" ]; then
+        echo "$PDF_FILE doesn't exist, aborting"
+        return 1
+    fi
+
     # extract images from PDF
     pdfextractimages "$PDF_FILE";
 
