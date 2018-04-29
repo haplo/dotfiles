@@ -25,7 +25,8 @@ function mkd() {
 # transform MTS files to MKV by copying video and audio
 function mts2mkv() {
     local MTS_FILE="$1"
-    local MKV_FILE=$(basename "$1" .mts).mkv
+    shopt -s extglob
+    local MKV_FILE="${MTS_FILE%.@(mts|MTS)}.mkv"
     echo
     echo "### Remuxing $MTS_FILE into $MKV_FILE ###"
     echo
