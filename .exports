@@ -1,9 +1,7 @@
-# include user bin directory in path
-export PATH=$PATH:$HOME/Software/bin;
-
 # allow 20000 entries in .bash_history
 export HISTSIZE='20000';
 export HISTFILESIZE="${HISTSIZE}";
+#
 # don't put duplicate lines in .bash_history
 HISTCONTROL=ignoredups:ignorespace
 
@@ -24,9 +22,6 @@ export LESS_TERMCAP_md="${yellow}";
 
 # make Python use UTF-8 encoding for output to stdin, stdout, and stderr
 export PYTHONIOENCODING='UTF-8';
-
-# use local installation of Clojure
-export CLOJURE_EXT=~/Software/clojure/;
 
 # https://wiki.debian.org/KVM
 export LIBVIRT_DEFAULT_URI=qemu:///system
