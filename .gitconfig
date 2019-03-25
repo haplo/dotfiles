@@ -9,7 +9,7 @@
     oauth-token =
 
 [core]
-    excludesfile = /home/haplo/.gitignore
+    excludesfile = /home/user/.gitignore
     attributesfile = ~/.gitattributes
     pager = "/usr/bin/less -RciqMSj5"
 
