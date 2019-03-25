@@ -25,3 +25,6 @@ export PYTHONIOENCODING='UTF-8';
 
 # https://wiki.debian.org/KVM
 export LIBVIRT_DEFAULT_URI=qemu:///system
+
+# https://www.qubes-os.org/doc/split-gpg/
+export QUBES_GPG_DOMAIN=vault-gpg
