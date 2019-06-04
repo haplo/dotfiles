@@ -28,3 +28,7 @@ export LIBVIRT_DEFAULT_URI=qemu:///system
 
 # https://www.qubes-os.org/doc/split-gpg/
 export QUBES_GPG_DOMAIN=vault-gpg
+
+# https://golang.org/doc/code.html
+export GOPATH=$HOME/Code/go
+export PATH=$PATH:$GOPATH/bin
