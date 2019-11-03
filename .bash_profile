@@ -3,7 +3,7 @@
 # load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other local settings you don’t want to commit
-for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
+for file in ~/.{path,bash_prompt,exports,aliases,functions}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
@@ -49,3 +49,7 @@ fi
 # use up and down keys to search in history
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
+
+# load .extra right at the end if present, this file is not in version control
+# and is meant for this system specific changes
+[ -r .extra ] && [ -f .extra ] && source .extra;
