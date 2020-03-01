@@ -73,3 +73,33 @@ function pdf2cbz() {
     # remove original PDF file, prompting user first
     rm -i "$PDF_FILE";
 }
+
+# Split a FLAC using a CUE file and tag the splitted tracks
+# Required packages: flac, shntool, cuetools
+#
+# For example when having two files like "Album Name.cue" and "Album Name.flac"
+# call it like this:
+#
+#   $ splitflac "Album Name"
+function splitflac() {
+    if [ -z "$1" ]; then
+        echo "Usage: splitflac <basename>"
+        echo
+        echo "<basename> must be the common part to a pair of .cue and .flac pairs,"
+        echo "without the dot."
+        return 0
+    fi
+
+    local BASE="$1"
+    local CUE="$BASE.cue"
+    local FLAC="$BASE.flac"
+    if [ ! -f "$CUE" ]; then
+        echo "$CUE doesn't exist"
+        return 1
+    fi
+    if [ ! -f "$FLAC" ]; then
+        echo "$FLAC doesn't exist"
+        return 1
+    fi
+    shnsplit -f "$CUE" -o flac "$FLAC" && cuetag.sh "$CUE" split-track*
+}
