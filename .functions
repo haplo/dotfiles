@@ -54,7 +54,8 @@ function pdfextractimages() {
     mmv "\-*" "#1";
 }
 
-# transform a PDF into a CBZ comic file, needs poppler-utils package
+# Transform a PDF into a CBZ comic file
+# Required packages: poppler-utils
 function pdf2cbz() {
     local PDF_FILE="$1";
     local CBZ_FILE=$(basename "$PDF_FILE" .pdf).cbz;
