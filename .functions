@@ -28,7 +28,7 @@ function gosetup() {
 
 # create a new directory and enter it
 function mkd() {
-	mkdir -p "$@" && cd "$_";
+    mkdir -p "$@" && cd "$_";
 }
 
 # transform MTS files to MKV by copying video and audio
