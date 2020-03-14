@@ -17,6 +17,19 @@ function adbpull {
     fi
 }
 
+# transform a .cbr file into .cbz
+function cbr2cbz() {
+    if [ -z "$1" ]; then
+        echo "Usage: cbr2cbz file.cbr"
+        exit 0
+    fi
+
+    unar -d "$1"
+    base=$(basename "$1" .cbr)
+    zip -9r "$base".cbz "$base"
+    rm -r "$base"
+}
+
 # install packages for go development
 function gosetup() {
     go get -u golang.org/x/tools/cmd/...
