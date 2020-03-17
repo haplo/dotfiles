@@ -117,3 +117,13 @@ function splitflac() {
     fi
     shnsplit -f "$CUE" -o flac "$FLAC" && cuetag.sh "$CUE" split-track*
 }
+
+# start/stop KVM Whonix
+# https://www.whonix.org/wiki/KVM
+function whonixup() {
+    virsh start Whonix-Gateway && virsh start Whonix-Workstation
+}
+function whonixdown() {
+    virsh stop Whonix-Workstation
+    virsh stop Whonix-Gateway
+}
