@@ -28,7 +28,8 @@
     ui = auto
 
 [commit]
-    gpgsign = true
+    # Disabled temporarily until Onlykey GPG signing works
+    # gpgsign = true
 
 [diff]
     algorithm = histogram
