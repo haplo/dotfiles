@@ -1,8 +1,8 @@
 Fidel's dotfiles
 ================
 
-This is my personal set up of configuration files. I use Debian
-GNU/Linux so they are particularly tailored for this OS.
+This is my personal set up of configuration files. I use Debian and Kubuntu GNU/Linux
+so they are particularly tailored for this OS.
 
 Feel free to fork the project and adapt it to your needs, or just to
 copy whatever you like. **Use at your own risk!**
@@ -14,10 +14,10 @@ I'm always up for improving my setup.
 Installation with git
 ---------------------
 
-    $ cd; git clone https://github.com/haplo/dotfiles.git
-    $ source dotfiles/init_dotfiles.sh
+    $ git clone https://github.com/haplo/dotfiles.git
+    $ dotfiles/init_dotfiles.sh
 
-*init_dotfiles.sh* currently depends on *rsync*.
+*init_dotfiles.sh* depends on *rsync*.
 
 Installation without git
 ------------------------
