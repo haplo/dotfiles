@@ -80,6 +80,3 @@
 
 [include]
     path = ~/.gitconfig_local
-
-[gpg]
-    program = qubes-gpg-client-wrapper
