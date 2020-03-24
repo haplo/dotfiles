@@ -104,6 +104,7 @@ function splitflac() {
         return 0
     fi
 
+    local CUETAG=$(which cuetag cuetag.sh)
     local BASE="$1"
     local CUE="$BASE.cue"
     local FLAC="$BASE.flac"
@@ -115,7 +116,7 @@ function splitflac() {
         echo "$FLAC doesn't exist"
         return 1
     fi
-    shnsplit -f "$CUE" -o flac "$FLAC" && cuetag.sh "$CUE" split-track*
+    shnsplit -f "$CUE" -o flac "$FLAC" && $CUETAG "$CUE" split-track*
 }
 
 # start/stop KVM Whonix
