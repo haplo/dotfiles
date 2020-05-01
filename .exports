@@ -35,3 +35,5 @@ export PATH=$PATH:$GOPATH/bin
 
 # https://virtualenvwrapper.readthedocs.io/en/latest/
 WORKON_HOME=$HOME/Code/virtualenvs
+
+export VAGRANT_DEFAULT_PROVIDER=libvirt
