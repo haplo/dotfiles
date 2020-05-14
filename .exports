@@ -31,7 +31,11 @@ export QUBES_GPG_DOMAIN=vault-gpg
 
 # https://golang.org/doc/code.html
 export GOPATH=$HOME/Code/go
-export PATH=$HOME/.local/bin:$PATH:$GOPATH/bin
+
+# https://deno.land/#installation
+export DENO_INSTALL="$HOME/.deno"
+
+export PATH=$HOME/.local/bin:$HOME/.cargo/bin:$GOPATH/bin:$DENO_INSTALL/bin:$PATH
 
 # https://virtualenvwrapper.readthedocs.io/en/latest/
 WORKON_HOME=$HOME/Code/virtualenvs
