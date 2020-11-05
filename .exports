@@ -23,6 +23,9 @@ export LESS_TERMCAP_md="${yellow}";
 # make Python use UTF-8 encoding for output to stdin, stdout, and stderr
 export PYTHONIOENCODING='UTF-8';
 
+# use ipdb for Python debugging by default
+export PYTHONBREAKPOINT=ipdb.set_trace
+
 # https://wiki.debian.org/KVM
 export LIBVIRT_DEFAULT_URI=qemu:///system
 
