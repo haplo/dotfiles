@@ -8,6 +8,9 @@
     password =
     oauth-token =
 
+[gitlab]
+    user = haplo
+
 [core]
     excludesfile = /home/user/.gitignore
     attributesfile = ~/.gitattributes
