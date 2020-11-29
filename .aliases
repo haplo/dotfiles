@@ -3,6 +3,8 @@ alias l='ls -CF'
 alias ll='ls -alF'
 alias la='ls -A'
 
+alias mv='mv -n'  # don't overwrite existing files by default
+
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
