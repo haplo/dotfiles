@@ -3,7 +3,7 @@ alias l='ls -CF'
 alias ll='ls -alF'
 alias la='ls -A'
 
-alias mv='mv -n'  # don't overwrite existing files by default
+alias mv='mv -i'  # ask before overwriting existing files
 
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
