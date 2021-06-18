@@ -13,6 +13,11 @@ alias e='emacsclient -a vim'
 alias vi='emacsclient -t -a vim'
 alias vim='emacsclient -t -a vim'
 
+# https://github.com/sharkdp/fd is installed as fdfind in Debian/Ubuntu
+if [ -x "$(which fdfind)" ]; then
+    alias fd='fdfind'
+fi
+
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
