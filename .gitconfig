@@ -1,7 +1,7 @@
 [user]
     name = Fidel Ramos
     email = f@fidelramos.net
-    signingkey = 7F071B7C479FEDD1
+    signingkey = 379F14BB02F9317F
 
 [github]
     user = haplo
@@ -31,8 +31,7 @@
     ui = auto
 
 [commit]
-    # Disabled temporarily until Onlykey GPG signing works
-    # gpgsign = true
+    gpgsign = true
 
 [diff]
     algorithm = histogram
