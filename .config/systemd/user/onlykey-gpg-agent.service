@@ -1,0 +1,9 @@
+[Unit]
+Description=onlykey-gpg-agent
+Requires=onlykey-gpg-agent.socket
+
+[Service]
+Type=simple
+Environment="GNUPGHOME=%h/.gnupg/onlykey"
+Environment="PATH=/bin:/usr/bin:/usr/local/bin:%h/.local/bin"
+ExecStart=/home/fidel/.local/bin/onlykey-gpg-agent -vv
