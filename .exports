@@ -21,6 +21,9 @@ export MANPAGER='less -X';
 # FIXME: not working???
 export LESS_TERMCAP_md="${yellow}";
 
+# OnlyKey for GPG https://docs.crp.to/onlykey-agent.html
+export GNUPGHOME="$HOME/.gnupg/onlykey"
+
 # make Python use UTF-8 encoding for output to stdin, stdout, and stderr
 export PYTHONIOENCODING='UTF-8';
 
