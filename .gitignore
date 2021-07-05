@@ -22,9 +22,12 @@ pip-log.txt
 .coverage
 .tox
 
+# mypy
+.mypy_cache
+.dmypy.json
+
 # rope
 .ropeproject
-
 
 #######################################
 # Backups, thumbnails and other trash #
