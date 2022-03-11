@@ -31,9 +31,9 @@ alias urldecode='python -c "import sys, urllib; print urllib.unquote_plus(sys.ar
 
 # run NodeJS in a docker container, mounting the current directory in /app and with a
 # persistent volume for global tools
-alias nd="docker run -it --rm --user=node --mount source=node,target=/home/node -v $(pwd):/app:rw node:16-bullseye"
+alias nd="docker run -it --rm --read-only --user=node --mount source=node,target=/home/node -v $(pwd):/app:rw node:16-bullseye"
 # same but get a shell instead of running node
-alias nds="docker run -it --rm --user=node --mount source=node,target=/home/node -v $(pwd):/app:rw --entrypoint=/bin/bash node:16-bullseye"
+alias nds="docker run -it --rm --read-only --user=node --mount source=node,target=/home/node -v $(pwd):/app:rw --entrypoint=/bin/bash node:16-bullseye"
 
 #######
 # git #
