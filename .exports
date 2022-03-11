@@ -1,7 +1,9 @@
+# -*- mode: sh -*-
+
 # allow 20000 entries in .bash_history
 export HISTSIZE='20000';
 export HISTFILESIZE="${HISTSIZE}";
-#
+
 # don't put duplicate lines in .bash_history
 HISTCONTROL=ignoredups:ignorespace
 

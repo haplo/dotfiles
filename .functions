@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# -*- mode: sh -*-
 
 # globbing support when pulling files from smartphone with adb
 function adbpull {
