@@ -22,4 +22,12 @@ else
 fi;
 unset doIt;
 
+# create persistent Docker volume for NodeJS containers (see .aliases)
+if command -v docker &> /dev/null; then
+    if ! docker volume inspect nodehome &> /dev/null; then
+        echo "Creating Docker volume nodehome"
+        docker volume create nodehome > /dev/null
+    fi
+fi
+
 popd > /dev/null;

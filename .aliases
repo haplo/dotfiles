@@ -29,11 +29,10 @@ alias .....="cd ../../../.."
 alias urlencode='python -c "import sys, urllib; print urllib.quote_plus(sys.argv[1]);"'
 alias urldecode='python -c "import sys, urllib; print urllib.unquote_plus(sys.argv[1]);"'
 
-# run NodeJS in a docker container, mounting the current directory in /app and with a
-# persistent volume for global tools
-alias nd="docker run -it --rm --read-only --user=node --mount source=node,target=/home/node -v $(pwd):/app:rw --workdir /app node:16-bullseye"
-# same but get a shell instead of running node
-alias nds="docker run -it --rm --read-only --user=node --mount source=node,target=/home/node -v $(pwd):/app:rw --workdir /app --entrypoint=/bin/bash node:16-bullseye"
+# aliases to create ad-hoc NodeJS docker containers, they will mount the current directory
+# in /app and use a persistent volume for global tools
+alias nd="docker run -it --rm --read-only --user=node --mount source=nodehome,target=/home/node -v $(pwd):/app:rw --workdir /app node:16-bullseye"
+alias nds="docker run -it --rm --read-only --user=node --mount source=nodehome,target=/home/node -v $(pwd):/app:rw --workdir /app --entrypoint=/bin/bash node:16-bullseye"
 
 #######
 # git #
