@@ -31,8 +31,8 @@ alias urldecode='python -c "import sys, urllib; print urllib.unquote_plus(sys.ar
 
 # aliases to create ad-hoc NodeJS docker containers, they will mount the current directory
 # in /app and use a persistent volume for global tools
-alias nd="docker run -it --rm --read-only --user=node --mount source=nodehome,target=/home/node -v $(pwd):/app:rw --workdir /app node:16-bullseye"
-alias nds="docker run -it --rm --read-only --user=node --mount source=nodehome,target=/home/node -v $(pwd):/app:rw --workdir /app --entrypoint=/bin/bash node:16-bullseye"
+alias nd="docker run -it --rm --user=node --mount source=nodehome,target=/home/node -v $(pwd):/app:rw --workdir /app -e  node:16-bullseye"
+alias nds="docker run -it --rm --user=node --mount source=nodehome,target=/home/node -v $(pwd):/app:rw --workdir /app --entrypoint=/bin/bash node:16-bullseye"
 
 #######
 # git #
