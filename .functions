@@ -55,6 +55,25 @@ function mts2mkv() {
     ffmpeg -i "$MTS_FILE" -vcodec copy -acodec copy "$MKV_FILE"
 }
 
+# Get a shell inside a Docker container with NodeJS
+#
+# Current directory will be mounted in /app
+#
+# Will create a nodehome Docker volume if it doesn't exist, and map it to /home/node
+# inside the Docker container. This enables persisting globally installed npm packages.
+function nds() {
+    docker volume create nodehome > /dev/null
+    docker run\
+           -it\
+           --rm\
+           --user=node\
+           --mount source=nodehome,target=/home/node\
+           -v "$(pwd)":/app:rw\
+           --workdir /app\
+           --entrypoint=/bin/bash\
+           node:16-bullseye
+}
+
 # extract images from a PDF file, needs poppler-utils package
 function pdfextractimages() {
     local PDF_FILE="$1";
