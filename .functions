@@ -30,6 +30,20 @@ function cbr2cbz() {
     rm -r "$base"
 }
 
+# Run deno in a Docker container
+# https://hub.docker.com/r/denoland/deno
+deno () {
+    docker run \
+           --interactive \
+           --tty \
+           --rm \
+           --volume $PWD:/app \
+           --volume $HOME/.deno:/deno-dir \
+           --workdir /app \
+           denoland/deno:latest \
+           "$@"
+}
+
 # install packages for go development
 function gosetup() {
     go get -u golang.org/x/tools/cmd/...
