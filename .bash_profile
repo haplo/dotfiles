@@ -56,10 +56,6 @@ fi
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-# load virtualenvwrapper if available
-[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ] && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-[ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
-
 # load .extra right at the end if present, this file is not in version control
 # and is meant for this system specific changes
 [ -r .extra ] && [ -f .extra ] && source .extra;
