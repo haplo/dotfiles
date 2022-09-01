@@ -56,6 +56,13 @@ fi
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
+# Use Guix
+# https://guix.gnu.org/en/manual/devel/en/html_node/Getting-Started.html
+GUIX_PROFILE="/home/fidel/.guix-profile"
+if [ -f "$GUIX_PROFILE/etc/profile" ]; then
+    source "$GUIX_PROFILE/etc/profile"
+fi
+
 # load .extra right at the end if present, this file is not in version control
 # and is meant for this system specific changes
 [ -r .extra ] && [ -f .extra ] && source .extra;
