@@ -56,7 +56,11 @@ fi
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-# Use Guix
+# Use Guix if available
+GUIX_PROFILE="/home/fidel/.config/guix/current"
+if [ -f "$GUIX_PROFILE/etc/profile" ]; then
+    source "$GUIX_PROFILE/etc/profile"
+fi
 # https://guix.gnu.org/en/manual/devel/en/html_node/Getting-Started.html
 GUIX_PROFILE="/home/fidel/.guix-profile"
 if [ -f "$GUIX_PROFILE/etc/profile" ]; then
