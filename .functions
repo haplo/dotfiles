@@ -85,6 +85,8 @@ function nds() {
            -v "$(pwd)":/app:rw\
            --workdir /app\
            --entrypoint=/bin/bash\
+           --network host\
+           $@\
            node:16-bullseye
 }
 
