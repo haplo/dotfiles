@@ -1,9 +1,11 @@
 # -*- mode: sh -*-
 
-alias ls='ls --color=auto'
-alias l='ls -CF'
-alias ll='ls -alF'
-alias la='ls -A'
+alias e='exa'
+alias ls='exa'
+alias ee='exa -alF'
+alias ll='exa -alF'
+alias ea='exa -a'
+alias la='exa -a'
 
 alias mv='mv -i'  # ask before overwriting existing files
 
