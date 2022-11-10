@@ -28,8 +28,8 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 # URL-encode and decode strings
-alias urlencode='python -c "import sys, urllib; print urllib.quote_plus(sys.argv[1]);"'
-alias urldecode='python -c "import sys, urllib; print urllib.unquote_plus(sys.argv[1]);"'
+alias urldecode='python -c "import sys; from urllib.parse import quote; print(quote(sys.argv[1]));"'
+alias urldecode='python -c "import sys; from urllib.parse import unquote; print(unquote(sys.argv[1]));"'
 
 #######
 # git #
