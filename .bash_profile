@@ -65,6 +65,10 @@ fi
 export GUIX_PROFILE="/home/fidel/.guix-profile"
 if [ -f "$GUIX_PROFILE/etc/profile" ]; then
     source "$GUIX_PROFILE/etc/profile"
+    export SSL_CERT_DIR="$GUIX_PROFILE/etc/ssl/certs"
+    export SSL_CERT_FILE="$SSL_CERT_DIR/ca-certificates.crt"
+    export GIT_SSL_CAINFO="$SSL_CERT_FILE"
+    export CURL_CA_BUNDLE="$SSL_CERT_FILE"
 fi
 
 # load .extra right at the end if present, this file is not in version control
