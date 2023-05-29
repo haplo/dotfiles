@@ -1,0 +1,11 @@
+# Combine best video and audio
+-f bv*+ba
+
+# Create Matroska files when merging
+--merge-output-format mkv
+
+# Save to Videos folder by default
+-o ~/Videos/%(title)s.%(ext)s
+
+# Up to 4k resolution
+-S res:2160
