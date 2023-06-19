@@ -87,7 +87,7 @@ function nds() {
            --entrypoint=/bin/bash\
            --network host\
            $@\
-           node:16-bullseye
+           node:18-bullseye
 }
 
 # extract images from a PDF file, needs poppler-utils package
