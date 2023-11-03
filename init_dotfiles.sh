@@ -4,6 +4,7 @@ pushd "$(dirname "${BASH_SOURCE}")" > /dev/null;
 
 function doIt() {
     rsync --exclude ".git/" \
+          --exclude ".dir-locals.el" \
           --exclude "init_dotfiles.sh" \
           --exclude "README.md" \
           --exclude "LICENSE" \
