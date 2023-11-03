@@ -38,6 +38,10 @@
     renames = true
     mnemonicprefix = true
 
+[diff "sqlite3"]
+    binary = true
+    textconv = "echo .dump | sqlite3"
+
 [alias]
     st = status
     d = diff
