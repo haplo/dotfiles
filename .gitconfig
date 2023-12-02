@@ -1,46 +1,7 @@
-[user]
-    name = Fidel Ramos
-    email = f@fidelramos.net
-    signingkey = 379F14BB02F9317F
-
-[github]
-    user = haplo
-    password =
-    oauth-token =
-
-[gitlab]
-    user = haplo
-
-[core]
-    excludesfile = /home/user/.gitignore
-    attributesfile = ~/.gitattributes
-    pager = "diff-so-fancy | less --tabs=4 -RF"
-
-    # tabwidth: replace tabs with this many spaces
-    # tab-in-indent: tabs in indentation as error
-    # blank-at-eol: whitespace at end of line as error
-    # blank-at-eof: whitespace at end of file as error
-    # space-before-tab: looks for spaces before tabs at the beginning of a line
-    whitespace = tabwidth=4,tab-in-indent,-indent-with-non-tab,trailing-space,blank-at-eol,blank-at-eof
-
-[color]
-    diff = auto
-    branch = auto
-    status = auto
-    sh = auto
-    ui = auto
-
-[commit]
-    gpgsign = true
-
-[diff]
-    algorithm = histogram
-    renames = true
-    mnemonicprefix = true
-
-[diff "sqlite3"]
-    binary = true
-    textconv = "echo .dump | sqlite3"
+[advice]
+    pushUpdateRejected = false
+    statusHints = false
+    commitBeforeMerge = false
 
 [alias]
     st = status
@@ -63,9 +24,61 @@
     stag = "!id=$(git rev-parse --verify HEAD); git tag -s user_${id:0:8} -m \"Tag for commit $id\""
     vtag = !git tag -v $(git describe)
 
+[apply]
+    # Detect whitespace errors when applying a patch
+    whitespace = fix
+
 [branch]
     autosetuprebase = always
     autosetupmerge = true
+
+[color]
+    diff = auto
+    branch = auto
+    status = auto
+    sh = auto
+    ui = auto
+
+[commit]
+    gpgsign = true
+
+[core]
+    excludesfile = /home/user/.gitignore
+    attributesfile = ~/.gitattributes
+    pager = "diff-so-fancy | less --tabs=4 -RF"
+
+    # tabwidth: replace tabs with this many spaces
+    # tab-in-indent: tabs in indentation as error
+    # blank-at-eol: whitespace at end of line as error
+    # blank-at-eof: whitespace at end of file as error
+    # space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = tabwidth=4,tab-in-indent,-indent-with-non-tab,trailing-space,blank-at-eol,blank-at-eof
+
+[diff]
+    algorithm = histogram
+    renames = true
+    mnemonicprefix = true
+
+[diff "sqlite3"]
+    binary = true
+    textconv = "echo .dump | sqlite3"
+
+[github]
+    user = haplo
+    password =
+    oauth-token =
+
+[gitlab]
+    user = haplo
+
+[include]
+    path = ~/.gitconfig_local
+
+[interactive]
+    diffFilter = "diff-so-fancy --patch"
+
+[merge]
+    tool = emerge
 
 [push]
     default = tracking
@@ -73,20 +86,7 @@
 [rerere]
     enabled = true
 
-[merge]
-    tool = emerge
-
-[apply]
-    # Detect whitespace errors when applying a patch
-    whitespace = fix
-
-[advice]
-    pushUpdateRejected = false
-    statusHints = false
-    commitBeforeMerge = false
-
-[include]
-    path = ~/.gitconfig_local
-
-[interactive]
-    diffFilter = "diff-so-fancy --patch"
+[user]
+    name = Fidel Ramos
+    email = f@fidelramos.net
+    signingkey = 379F14BB02F9317F
