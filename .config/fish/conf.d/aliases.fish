@@ -27,7 +27,6 @@ alias ll='ls -l'
 
 # use exa instead of ls if available
 if type -q exa
-    alias e='exa'
     alias ls='exa'
     alias ee='exa -alF'
     alias ll='exa -alF'
@@ -37,7 +36,6 @@ end
 
 # use eza instead of ls if available
 if type -q eza
-    alias e='eza'
     alias ls='eza'
     alias ee='eza -alF'
     alias ll='eza -alF'

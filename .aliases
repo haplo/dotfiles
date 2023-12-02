@@ -1,6 +1,5 @@
 # -*- mode: sh -*-
 
-alias e='exa'
 alias ls='exa'
 alias ee='exa -alF'
 alias ll='exa -alF'
