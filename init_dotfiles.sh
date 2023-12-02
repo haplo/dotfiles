@@ -3,13 +3,17 @@
 pushd "$(dirname "${BASH_SOURCE}")" > /dev/null;
 
 function doIt() {
+    echo -e "\n********************************\nCopying files to $HOME\n********************************\n"
     rsync --exclude ".git/" \
           --exclude ".dir-locals.el" \
           --exclude "init_dotfiles.sh" \
           --exclude "README.md" \
           --exclude "LICENSE" \
-          -avh --no-perms . ~;
-    source ~/.bash_profile;
+          -avh --no-perms . $HOME;
+    # set up fish vendored plugins
+    echo -e "\n********************************\nSetting up fish vendored plugins\n********************************\n"
+    rsync -av --remove-source-files $HOME/.config/fish/vendor/*/* $HOME/.config/fish/
+    rm -rf $HOME/.config/fish/vendor/
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then
