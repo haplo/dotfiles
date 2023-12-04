@@ -17,7 +17,7 @@ alias vi='emacsclient -t -a vim'
 alias vim='emacsclient -t -a vim'
 
 # https://github.com/sharkdp/fd is installed as fdfind in Debian/Ubuntu
-if [ -x "$(which fdfind)" ]; then
+if [ -x "$(which fdfind 2>/dev/null)" ]; then
     alias fd='fdfind'
 fi
 
