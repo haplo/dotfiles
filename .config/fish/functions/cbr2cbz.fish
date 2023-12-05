@@ -29,7 +29,7 @@ function cbr2cbz -a cbrfile
     or echo "Error extracting $cbrfile into $tmpdir" && return 7
 
     and echo "Creating $cbzfile"
-    zip -9rq $cbzfile "$tmpdir"/*
+    zip -9 --recurse-paths --quiet $cbzfile "$tmpdir"/*
     or echo "Error creating $cbzfile" && return 8
 
     echo "Created $cbzfile"
