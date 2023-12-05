@@ -19,12 +19,8 @@ function cbr2cbz -a cbrfile
     end
 
     set -l tmpdir (mktemp -d)
-    if test -z $tmpdir
-        echo "Couldn't create a temporary directory for extraction"
-        return 6
-    else
-        echo "Using $tmpdir for temporary extraction"
-    end
+    and echo "Using $tmpdir for temporary extraction"
+    or echo "Couldn't create a temporary directory for extraction" && return 6
 
     unrar-free $cbrfile $tmpdir >/dev/null
     or echo "Error extracting $cbrfile into $tmpdir" && return 7
