@@ -1,3 +1,3 @@
-function urlencode
-    python -c "import sys; from urllib.parse import quote; print(quote(sys.argv[1]));"
+function urlencode -a url
+    string escape --style=url $argv[1]
 end
