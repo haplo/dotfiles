@@ -1,8 +1,8 @@
 # transform a .cbr file into .cbz
 function cbr2cbz -a cbrfile
     set -l cbrfile $argv[1]
-    if not set -q cbrfile
-        echo "Usage: cbr2cbz file.cbr"
+    if test -z $cbrfile
+        echo Usage: (status function) file.cbr
         return 1
     else if not string match -q -r '.cbr$' $cbrfile
         echo "$cbrfile doesn't seem to be a .cbr file"
@@ -26,15 +26,14 @@ function cbr2cbz -a cbrfile
         echo "Using $tmpdir for temporary extraction"
     end
 
-    set -l base (basename $cbrfile .cbr)
-
     unrar-free $cbrfile $tmpdir >/dev/null
     or echo "Error extracting $cbrfile into $tmpdir" && return 7
 
-    echo "Creating $base.cbz"
-    zip -9rq $base.cbz "$tmpdir"/*
-    or echo "Error creating $base.cbz" && return 8
+    set -l cbzfile (string replace -f .cbr .cbz $cbrfile)
+    and echo "Creating $cbzfile"
+    zip -9rq $cbzfile "$tmpdir"/*
+    or echo "Error creating $cbzfile" && return 8
 
-    echo "Created $base.cbz"
+    echo "Created $cbzfile"
     rm -rf $tmpdir
 end
