@@ -3,7 +3,7 @@ function pdfextractimages -a pdffile -a output
     set pdffile $argv[1]
     set output $argv[2]
     # default to current directory
-    test -z $output; and set output ./
+    test -z $output; and set output .
 
     if test -z $pdffile
         echo Usage: (status function) file.pdf
@@ -20,7 +20,7 @@ function pdfextractimages -a pdffile -a output
     end
 
     # extract JPEG and PNG images
-    pdfimages -j -png $pdffile $output
+    pdfimages -j -png $pdffile $output/
 
     # remove bad prefix (-) from images
     pushd $output
