@@ -20,7 +20,10 @@ function pdfextractimages -a pdffile -a output
     end
 
     # extract JPEG and PNG images
-    pdfimages -j -png $pdffile $output/
+    if not pdfimages -j -png $pdffile $output/
+        echo "Error extracting images from $pdffile"
+        return 5
+    end
 
     # remove bad prefix (-) from images
     pushd $output
