@@ -21,16 +21,24 @@ function cbr2cbz -a cbrfile
         return 5
     end
 
-    set -l tmpdir (mktemp -d)
-    and echo "Using $tmpdir for temporary extraction"
-    or echo "Couldn't create a temporary directory for extraction" && return 6
+    if set -l tmpdir (mktemp -d)
+        echo "Using $tmpdir for temporary extraction"
+    else
+        echo "Couldn't create a temporary directory for extraction"
+        return 6
+    end
 
-    unrar-free $cbrfile $tmpdir >/dev/null
-    or echo "Error extracting $cbrfile into $tmpdir" && rmdir $tmpdir && return 7
+    if not unrar-free $cbrfile $tmpdir >/dev/null
+        echo "Error extracting $cbrfile into $tmpdir"
+        rmdir $tmpdir
+        return 7
+    end
 
     echo "Creating $cbzfile"
-    zip -9 --recurse-paths --quiet $cbzfile "$tmpdir"/*
-    or echo "Error creating $cbzfile" && return 8
+    if not zip -9 --recurse-paths --quiet $cbzfile "$tmpdir"/*
+        echo "Error creating $cbzfile"
+        return 8
+    end
 
     echo "Created $cbzfile"
     rm -rf $tmpdir
