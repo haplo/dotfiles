@@ -26,9 +26,9 @@ function cbr2cbz -a cbrfile
     or echo "Couldn't create a temporary directory for extraction" && return 6
 
     unrar-free $cbrfile $tmpdir >/dev/null
-    or echo "Error extracting $cbrfile into $tmpdir" && return 7
+    or echo "Error extracting $cbrfile into $tmpdir" && rmdir $tmpdir && return 7
 
-    and echo "Creating $cbzfile"
+    echo "Creating $cbzfile"
     zip -9 --recurse-paths --quiet $cbzfile "$tmpdir"/*
     or echo "Error creating $cbzfile" && return 8
 
