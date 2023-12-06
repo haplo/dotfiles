@@ -18,27 +18,32 @@ function pdf2cbz -a pdffile
         return 5
     end
 
-    set tmpdir (mktemp -d)
-    and echo "Using $tmpdir for temporary extraction"
-    or echo "Couldn't create a temporary directory for extraction" && return 6
+    if set -l tmpdir (mktemp -d)
+        echo "Using $tmpdir for temporary extraction"
+    else
+        echo "Couldn't create a temporary directory for extraction"
+        return 6
+    end
 
     # extract images from PDF
-    pdfextractimages $pdffile $tmpdir
+    if not pdfextractimages $pdffile $tmpdir
+        echo "Error extracting images from $pdffile"
+        return 7
+    end
 
     # create CBZ comic file and delete the extracted images
     set images $tmpdir/*.{jpg,JPG,jpeg,JPEG,png,PNG}
     if test (count $images) -eq 0
         echo "No images extracted from $pdffile, stopping"
-        return 7
+        return 8
     end
 
     echo "Creating $cbzfile"
-    zip -9 --move --junk-paths --quiet $cbzfile $images
-    or echo "Error creating $cbzfile" && return 7
+    if not zip -9 --move --junk-paths --quiet $cbzfile $images
+        echo "Error creating $cbzfile"
+        return 9
+    end
 
     echo "Created $cbzfile"
     rm -rf $tmpdir
-
-    # remove original PDF file, prompting user first
-    rm -i $pdffile
 end
