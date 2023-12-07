@@ -4,6 +4,7 @@ function make_it_so
     copy_files
     setup_fish_vendor
     set_fish_universal_vars
+    setup_emacs
 end
 
 function copy_files
@@ -44,6 +45,26 @@ function set_fish_universal_vars
     set enabled_features ampersand-nobg-in-token,qmark-noglob,regex-easyesc,stderr-nocaret
     echo "Enabling fish_features:" $enabled_features
     set -U fish_features $enabled_features
+end
+
+function setup_emacs
+    echo
+    echo "******************************"
+    echo "Setting up emacs configuration"
+    echo "******************************"
+    if type -q emacs
+        echo "Emacs installation found at $(which emacs), version $(emacs --version)[1]"
+        if test -e $HOME/.emacs.d
+            echo "Emacs config already found at $HOME/.emacs.d, skipping further configuration"
+        else
+            set repo https://github.com/haplo/dotemacs
+            set target $HOME/.emacs.d
+            echo "Downloading Emacs config from $repo to $target"
+            git clone $repo $target
+        end
+    else
+        echo "No Emacs installation detected, skipping Emacs configuration"
+    end
 end
 
 if test -n "$argv[1]"; and test "$argv[1]" = -f
