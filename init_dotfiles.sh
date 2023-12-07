@@ -7,7 +7,7 @@ function doIt() {
     rsync --exclude ".git/" \
           --exclude ".dir-locals.el" \
           --exclude "init_dotfiles.sh" \
-          --exclude "update_vendor.sh" \
+          --exclude "update_vendor.fish" \
           --exclude "README.md" \
           --exclude "LICENSE" \
           -avh --no-perms . $HOME;
