@@ -8,6 +8,7 @@
 function nds
     if not type -q podman
         echo "Podman is required"
+        return 1
     end
     if not podman volume exists nodehome
         echo "Creating volume nodehome"
