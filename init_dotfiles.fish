@@ -45,6 +45,12 @@ function set_fish_universal_vars
     set enabled_features ampersand-nobg-in-token,qmark-noglob,regex-easyesc,stderr-nocaret
     echo "Enabling fish_features:" $enabled_features
     set -U fish_features $enabled_features
+
+    echo "Enabling pure prompt show root prefix"
+    set -U pure_show_prefix_root_prompt true
+
+    echo "Enabling pure prompt show error code in prompt"
+    set -U pure_separate_prompt_on_error true
 end
 
 function setup_emacs
