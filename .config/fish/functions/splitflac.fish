@@ -13,7 +13,7 @@ function splitflac -a base
         echo "<basename> must be the common part to the .cue and .flac files."
         echo
         echo "For example when having two files Album Name.cue Album Name.flac"
-        echo "all it like this:"
+        echo "call it like this:"
         echo
         echo "  \$ splitflac \"Album Name\""
         return 0
@@ -24,19 +24,23 @@ function splitflac -a base
         echo "$flacfile is not a file"
         return 2
     else if not type -q cuetag
-        echo "cuetag missing, usually found in cuetools package"
+        echo "cuetag command missing, usually found in cuetools package"
         return 3
     else if not type -q flac
-        echo "flac missing, usually found in flac package"
+        echo "flac command missing, usually found in flac package"
         return 4
     else if not type -q shnsplit
-        echo "shnsplit missing, usually found in shntool package"
+        echo "shnsplit command missing, usually found in shntool package"
         return 5
     end
 
-    shnsplit -f $cuefile -o flac $flacfile
-    or echo "Error splitting into multiple track files" && return 6
+    if not shnsplit -f $cuefile -o flac $flacfile
+        echo "Error splitting into multiple track files"
+        return 6
+    end
 
-    cuetag $cuefile split-track*
-    or echo "Error tagging splitted track files" && return 7
+    if not cuetag $cuefile split-track*
+        echo "Error tagging splitted track files"
+        return 7
+    end
 end
