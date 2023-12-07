@@ -18,6 +18,17 @@ abbr -a gpu 'git pull'
 abbr -a gri 'git rebase --interactive'
 abbr -a gs 'git status -sb'
 
+abbr -a d docker
+abbr -a dc 'docker compose'
+abbr -a dps 'docker ps -a'
+abbr -a drm 'docker rm'
+abbr -a dru 'docker run --rm -it'
+abbr -a p podman
+abbr -a pc 'podman compose'
+abbr -a pps 'podman ps -a'
+abbr -a prm 'podman rm'
+abbr -a pru 'podman run --rm -it'
+
 abbr -a la 'ls -a'
 abbr -a ll 'ls -l'
 
