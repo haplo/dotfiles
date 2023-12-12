@@ -1,0 +1,8 @@
+# hide Guix installation
+blacklist /gnu
+
+# hide my secondary drives
+blacklist /mnt
+
+# hide apps installed
+blacklist /opt
