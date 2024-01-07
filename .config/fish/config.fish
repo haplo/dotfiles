@@ -7,3 +7,6 @@ end
 if type -q direnv
     direnv hook fish | source
 end
+
+# keybindings
+bind \cg _fzf_grep_directory
