@@ -1,0 +1,4 @@
+[target.x86_64-unknown-linux-gnu]
+# Optimize code for the local CPU
+# https://wiki.archlinux.org/title/Rust#Optimizing_for_native_CPU_platform
+rustflags = ["-C", "target-cpu=native"]
