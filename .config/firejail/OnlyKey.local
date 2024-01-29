@@ -1,0 +1,3 @@
+mkdir ${HOME}/Backups/onlykey
+noblacklist ${HOME}/Backups/onlykey
+whitelist ${HOME}/Backups/onlykey
