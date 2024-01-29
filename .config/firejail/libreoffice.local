@@ -1,0 +1,8 @@
+ignore include allow-java.inc
+
+mkdir ${HOME}/.config/libreoffice
+whitelist ${HOME}/.config/libreoffice
+mkdir ${HOME}/Documents
+whitelist ${HOME}/Documents
+mkdir ${HOME}/Downloads
+whitelist ${HOME}/Downloads
