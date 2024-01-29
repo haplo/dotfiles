@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Encoding=UTF-8
+Name=OnlyKey App
+Comment=Setup and configure OnlyKey
+Exec=/usr/bin/firejail /opt/OnlyKey/nw
+Icon=/opt/OnlyKey/icon.png
+Terminal=false
+Categories=Utility;
