@@ -22,6 +22,10 @@ function copy_files
         --exclude "README.md" \
         --exclude LICENSE \
         -avh . $HOME
+    # fix permissions of files in .ssh, ssh will complain if they are world-readable
+    find $HOME/.ssh/ -type d -print0 | xargs -0 chmod 700
+    find $HOME/.ssh/ -type f -print0 | xargs -0 chmod 600
+    chmod 644 $HOME/.ssh/*.pub
 end
 
 function setup_fish_vendor
