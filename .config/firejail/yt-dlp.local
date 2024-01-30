@@ -1,0 +1,2 @@
+ignore noblacklist ${MUSIC}
+whitelist ${VIDEOS}
