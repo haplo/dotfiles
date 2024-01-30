@@ -1,6 +1,7 @@
 # Use whitelisting for KeepassXC
 # KeepassXC database must be under ${HOME}/Documents/KeePassXC/foo.kdbx.
 mkdir ${HOME}/Documents/KeePassXC
+noblacklist ${HOME}/Documents/KeePassXC
 whitelist ${HOME}/Documents/KeePassXC
 
 # Do not allow access to Tor Browser

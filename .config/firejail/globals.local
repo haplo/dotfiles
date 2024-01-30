@@ -1,6 +1,9 @@
 # hide backups
 blacklist ${HOME}/Backups
 
+# hide KeepassXC
+blacklist ${HOME}/Documents/KeePassXC
+
 # hide Guix installation
 blacklist /gnu
 
