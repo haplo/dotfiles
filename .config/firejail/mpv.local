@@ -1,0 +1,2 @@
+whitelist ${HOME}/Sync
+read-only ${HOME}/Sync
