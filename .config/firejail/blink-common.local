@@ -1,0 +1,3 @@
+# for kernels with user namespaces enabled
+# See comment in /etc/firejail/blink-common.profile
+include blink-common-hardened.inc.profile
