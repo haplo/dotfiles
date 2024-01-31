@@ -41,6 +41,7 @@
 
 [commit]
     gpgsign = true
+    template = ~/.gitmessage
 
 [core]
     excludesfile = /home/user/.gitignore
