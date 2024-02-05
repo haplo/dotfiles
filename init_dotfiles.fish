@@ -13,6 +13,7 @@ function copy_files
     echo (string repeat --no-newline -n $length "*")
     echo $message
     echo (string repeat --no-newline -n $length "*")
+    set dotfiles_dir (path dirname (status --current-filename))
     rsync \
         --exclude ".git/" \
         --exclude ".dir-locals.el" \
@@ -21,7 +22,8 @@ function copy_files
         --exclude "update_vendor.fish" \
         --exclude "README.md" \
         --exclude LICENSE \
-        -avh . $HOME
+        -av $dotfiles_dir/ $HOME
+    or exit 1
     # fix permissions of files in .ssh, ssh will complain if they are world-readable
     find $HOME/.ssh/ -type d -print0 | xargs -0 --no-run-if-empty chmod 700
     find $HOME/.ssh/ -type f -print0 | xargs -0 --no-run-if-empty chmod 600
