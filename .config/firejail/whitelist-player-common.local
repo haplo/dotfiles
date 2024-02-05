@@ -3,5 +3,7 @@ read-only ${MUSIC}
 read-only ${PICTURES}
 read-only ${VIDEOS}
 
+whitelist ${HOME}/Pictures to sort
+read-only ${HOME}/Pictures to sort
 whitelist ${HOME}/Sync
 read-only ${HOME}/Sync
