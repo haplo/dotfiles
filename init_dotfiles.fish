@@ -63,7 +63,7 @@ function setup_emacs
     echo "Setting up emacs configuration"
     echo "******************************"
     if type -q emacs
-        echo "Emacs installation found at $(which emacs), version $(emacs --version)[1]"
+        echo Emacs installation found at (which emacs), version (emacs --version)[1]
         if test -e $HOME/.emacs.d
             echo "Emacs config already found at $HOME/.emacs.d, skipping further configuration"
         else
