@@ -25,7 +25,7 @@ function copy_files
     # fix permissions of files in .ssh, ssh will complain if they are world-readable
     find $HOME/.ssh/ -type d -print0 | xargs -0 chmod 700
     find $HOME/.ssh/ -type f -print0 | xargs -0 chmod 600
-    chmod 644 $HOME/.ssh/*.pub
+    find $HOME/.ssh/*.pub -type f -print0 | xargs -0 chmod 644
 end
 
 function setup_fish_vendor
