@@ -1,0 +1,5 @@
+whitelist ${PICTURES}
+read-only ${PICTURES}
+
+whitelist ${HOME}/Pictures to sort
+read-only ${HOME}/Pictures to sort
