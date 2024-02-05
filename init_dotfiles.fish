@@ -80,7 +80,7 @@ end
 if test -n "$argv[1]"; and test "$argv[1]" = -f
     make_it_so
 else
-    read -f -P "This will overwrite existing files in your home directory. Are you sure? (y/n) " -n 1 reply
+    read -l -P "This will overwrite existing files in your home directory. Are you sure? (y/n) " -n 1 reply
     if string match -i $reply y
         make_it_so
     end
