@@ -2,10 +2,13 @@ Fidel's dotfiles
 ================
 
 This is my personal set up of configuration files.
-I use Debian and Kubuntu GNU/Linux so they are particularly tailored for these OSes.
+
+I use Arch Linux in desktop and Debian GNU/Linux in servers so they are particularly tailored for these OSes.
+My main shell is [fish](https://fishshell.com/), it's set as default.
 
 Feel free to fork the project and adapt it to your needs, or just to
-copy whatever you like. **Use at your own risk!**
+copy whatever you like.
+**Use at your own risk!**
 
 Any ideas or suggestions? I would love to
 [hear about them](https://github.com/haplo/dotfiles/issues),
