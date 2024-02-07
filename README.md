@@ -16,7 +16,6 @@ Dependencies
 
 - [rsync](https://rsync.samba.org/)
 - [fish shell](https://fishshell.com/)
-- [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
 - [fzf](https://github.com/junegunn/fzf)
 - [bat](https://github.com/sharkdp/bat)
 - [exa](https://github.com/ogham/exa) or [eza](https://github.com/eza-community/eza)

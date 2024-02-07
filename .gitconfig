@@ -46,7 +46,6 @@
 [core]
     excludesfile = /home/user/.gitignore
     attributesfile = ~/.gitattributes
-    pager = "diff-so-fancy | less --tabs=4 -RF"
 
     # tabwidth: replace tabs with this many spaces
     # tab-in-indent: tabs in indentation as error
