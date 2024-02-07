@@ -36,6 +36,7 @@ function setup_fish_vendor
     echo "Setting up fish vendored plugins"
     echo "********************************"
     rsync -av --remove-source-files $HOME/.config/fish/vendor/*/* $HOME/.config/fish/
+    or exit 2
     rm -rf $HOME/.config/fish/vendor/
 end
 
