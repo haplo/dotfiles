@@ -4,6 +4,7 @@ function make_it_so
     copy_files
     setup_fish_vendor
     set_fish_universal_vars
+    set_default_shell
     setup_emacs
 end
 
@@ -56,6 +57,14 @@ function set_fish_universal_vars
 
     echo "Enabling pure prompt show error code in prompt"
     set -U pure_separate_prompt_on_error true
+end
+
+function set_default_shell
+    set current_default_shell (getent passwd $LOGNAME | cut -d: -f7)
+    if test $current_default_shell != /usr/bin/fish
+        echo "Setting /usr/bin/fish as default shell, enter password to confirm"
+        chsh -s /usr/bin/fish
+    end
 end
 
 function setup_emacs
