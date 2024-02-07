@@ -17,7 +17,6 @@ function copy_files
     rsync \
         --exclude ".git/" \
         --exclude ".dir-locals.el" \
-        --exclude "init_dotfiles.sh" \
         --exclude "init_dotfiles.fish" \
         --exclude "update_vendor.fish" \
         --exclude "README.md" \

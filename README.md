@@ -30,9 +30,9 @@ Installation with git
 ⚠ _WARNING_: this will potentially overwrite files in your home directory!
 
     $ git clone https://github.com/haplo/dotfiles.git
-    $ dotfiles/init_dotfiles.sh
+    $ dotfiles/init_dotfiles.fish
 
-*init_dotfiles.sh* depends on *rsync*.
+*init_dotfiles.fish* depends on *rsync*.
 
 Installation without git
 ------------------------
@@ -42,7 +42,7 @@ Installation without git
 This will download and unpack the latest version of the dotfiles,
 **overwriting existing files in the home directory**!
 
-    $ cd; curl -#L https://github.com/haplo/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,init_dotfiles.sh,LICENSE}
+    $ cd; curl -#L https://github.com/haplo/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,init_dotfiles.fish,LICENSE}
 
 Thanks and inspiration
 ----------------------
