@@ -10,3 +10,4 @@ end
 
 # keybindings
 bind \cg _fzf_grep_directory
+bind \eo fish_onlykey_agent_prepend
