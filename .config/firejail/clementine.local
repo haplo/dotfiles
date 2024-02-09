@@ -1,0 +1,3 @@
+whitelist ${HOME}/.cache/Clementine
+whitelist ${HOME}/.config/Clementine
+include whitelist-music-common.local
