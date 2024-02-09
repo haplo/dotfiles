@@ -1,0 +1,4 @@
+whitelist ${HOME}/.cache/MusicBrainz
+whitelist ${HOME}/.config/MusicBrainz
+whitelist ${MUSIC}
+whitelist ${HOME}/Music to sort
