@@ -44,6 +44,18 @@ This will download and unpack the latest version of the dotfiles,
 
     $ cd; curl -#L https://github.com/haplo/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,init_dotfiles.fish,LICENSE}
 
+Disabling fzf
+-------------
+
+fzf can be slow in some systems, to disable its fish integration set a universal
+variable:
+
+```fish
+set -U disable_fzf true
+```
+
+Then running *init_dotfiles.fish* will not install the *fzf-fish* plugin.
+
 Thanks and inspiration
 ----------------------
 

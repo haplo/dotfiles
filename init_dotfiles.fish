@@ -35,6 +35,11 @@ function setup_fish_vendor
     echo "********************************"
     echo "Setting up fish vendored plugins"
     echo "********************************"
+    # disable fzf plugin on slow systems
+    if test "$disable_fzf" = true
+        echo "Disabling fzf-fish plugin"
+        rm -rf $HOME/.config/fish/conf.d/fzf.fish $HOME/.config/fish/vendor/fzf-fish
+    end
     rsync -av --remove-source-files $HOME/.config/fish/vendor/*/* $HOME/.config/fish/
     or exit 2
     rm -rf $HOME/.config/fish/vendor/

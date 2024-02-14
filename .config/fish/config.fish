@@ -9,5 +9,7 @@ if type -q direnv
 end
 
 # keybindings
-bind \cg _fzf_grep_directory
+if test "$disable_fzf" != true
+    bind \cg _fzf_grep_directory
+end
 bind \eo fish_onlykey_agent_prepend
