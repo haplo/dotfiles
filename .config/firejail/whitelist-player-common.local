@@ -7,3 +7,7 @@ whitelist ${HOME}/Pictures to sort
 read-only ${HOME}/Pictures to sort
 whitelist ${HOME}/Sync
 read-only ${HOME}/Sync
+
+# was hidden by globals.local
+noblacklist /mnt
+read-only /mnt

@@ -1,4 +1,2 @@
 # was hidden by globals.local
 noblacklist /mnt
-
-include allow-lua.inc
