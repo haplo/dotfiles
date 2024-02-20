@@ -1,3 +1,6 @@
+# allow desktop access, I use it as an easy way to share among apps
+noblacklist ${DESKTOP}
+
 # hide backups
 blacklist ${HOME}/Backups
 
