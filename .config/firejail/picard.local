@@ -1,3 +1,4 @@
+whitelist ${DESKTOP}
 whitelist ${HOME}/.cache/MusicBrainz
 whitelist ${HOME}/.config/MusicBrainz
 include whitelist-music-common.local
