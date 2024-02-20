@@ -46,6 +46,7 @@
 [core]
     excludesfile = /home/user/.gitignore
     attributesfile = ~/.gitattributes
+    pager = delta
 
     # tabwidth: replace tabs with this many spaces
     # tab-in-indent: tabs in indentation as error
@@ -54,8 +55,15 @@
     # space-before-tab: looks for spaces before tabs at the beginning of a line
     whitespace = tabwidth=4,tab-in-indent,-indent-with-non-tab,trailing-space,blank-at-eol,blank-at-eof
 
+[delta]
+    # use n and N to move between diff sections
+    navigate = true
+    # set to true for terminals with light background color
+    light = false
+
 [diff]
     algorithm = histogram
+    colorMoved = default
     renames = true
     mnemonicprefix = true
 
@@ -78,7 +86,7 @@
     defaultBranch = main
 
 [interactive]
-    diffFilter = "diff-so-fancy --patch"
+    diffFilter = "delta --color-only"
 
 [merge]
     tool = emerge
