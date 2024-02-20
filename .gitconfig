@@ -89,6 +89,7 @@
     diffFilter = "delta --color-only"
 
 [merge]
+    conflictstyle = zdiff3
     tool = emerge
 
 [push]
