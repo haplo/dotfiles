@@ -1,7 +1,7 @@
 # Firejail profile for Ledger Live
 # This file is overwritten after every install/update
 # Persistent local customizations
-include ledger-live.local
+include ledger-live-desktop.local
 # Persistent global definitions
 include globals.local
 
@@ -10,6 +10,7 @@ noblacklist ${HOME}/.config/Ledger Live
 mkdir ${HOME}/.config/Ledger Live
 whitelist ${HOME}/.config/Ledger Live
 whitelist ${DOWNLOADS}
+whitelist /opt/ledger-live
 include whitelist-common.inc
 include whitelist-usr-share-common.inc
 include whitelist-runuser-common.inc
@@ -20,29 +21,25 @@ caps.drop all
 ipc-namespace
 machine-id
 netfilter
-nodbus
 nodvd
 nogroups
 nonewprivs
 noroot
 notv
-nou2f
 nosound
 novideo
 protocol unix,inet,inet6,netlink
 seccomp !chroot
-shell none
-tracelog # - breaks on Arch?
+tracelog
 
 disable-mnt
-#private-bin bash,sh
 private-cache
-private-dev
-private-etc alternatives,fonts
-#private-etc alternatives,asound.conf,ca-certificates,crypto-policies,fonts,nsswitch.conf,pki,pulse,selinux,ssl,X11,xdg
+# enabling private-dev blocks USB hardware wallets
+# private-dev
+private-etc alternatives,ca-certificates,crypto-policies,host.conf,nsswitch.conf,pki,resolv.conf,rpc,selinux,ssl
 private-lib
-private-opt ledger-live
 private-tmp
 
-# Redirect
-include electron.profile
+# app attempts to connect to dbus but seems to work fine when blocked
+dbus-user none
+dbus-system none
