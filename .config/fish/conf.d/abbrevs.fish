@@ -57,6 +57,11 @@ if type -q emacsclient
     abbr -a vim 'emacsclient -t -a vim'
 end
 
+# https://github.com/sharkdp/bat is installed as batcat in Debian/Ubuntu
+if type -q batcat && not type -q bat
+    alias bat='batcat'
+end
+
 # https://github.com/sharkdp/fd is installed as fdfind in Debian/Ubuntu
 if type -q fdfind && not type -q fd
     alias fd='fdfind'
