@@ -15,3 +15,6 @@ blacklist /mnt
 
 # Emacs secrets
 blacklist ${HOME}/.authinfo.gpg
+
+# Ansible vault
+blacklist ${HOME}/.ansible-fidelramos.net.vault_pass
