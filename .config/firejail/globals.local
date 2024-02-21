@@ -12,3 +12,6 @@ blacklist /gnu
 
 # hide my secondary drives
 blacklist /mnt
+
+# Emacs secrets
+blacklist ${HOME}/.authinfo.gpg
