@@ -97,6 +97,21 @@
 [rerere]
     enabled = true
 
+# Always pull to Github and Gitlab with HTTPS, push with SSH
+# pushInsteadOf rewrites push URLs first, and if theres a match it prevents an insteadOf
+# from rewritting
+# https://stackoverflow.com/a/71971739
+[url "https://github.com/"]
+  insteadOf = "git@github.com:"
+[url "git@github.com:"]
+  pushInsteadOf = "https://github.com/"
+  pushInsteadOf = "git@github.com:"
+[url "https://gitlab.com/"]
+  insteadOf = "git@gitlab.com:"
+[url "git@gitlab.com:"]
+  pushInsteadOf = "https://gitlab.com/"
+  pushInsteadOf = "git@gitlab.com:"
+
 [user]
     name = Fidel Ramos
     email = f@fidelramos.net
