@@ -1,0 +1,28 @@
+[Appearance]
+HideSkinBorders=true
+
+[Desktop Entry]
+DefaultProfile=Profile 1.profile
+
+[Dialogs]
+FirstRun=false
+
+[KFileDialog Settings]
+iconViewIconSize=64
+
+[Shortcuts]
+close-active-terminal=none
+file_quit=none
+new-session-two-vertical=Ctrl+2
+next-terminal=Ctrl+Tab; Ctrl+O
+rename-session=Ctrl+Shift+R
+split-left-right=Ctrl+S
+split-top-bottom=none
+
+[Window]
+DynamicTabTitles=true
+Height=90
+KeepOpen=false
+KeepOpenAfterLastSessionCloses=true
+ShowSystrayIcon=false
+Width=80
