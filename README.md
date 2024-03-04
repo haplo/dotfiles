@@ -6,7 +6,7 @@ This is my personal set up of configuration files.
 I use Arch Linux in desktop and Debian GNU/Linux in servers so they are particularly tailored for these OSes.
 My main shell is [fish](https://fishshell.com/), it's set as default.
 
-Feel free to fork the project and adapt it to your needs, or just to
+Feel free to fork the repository, adapt it to your needs, or just to
 copy whatever you like.
 **Use at your own risk!**
 
@@ -17,7 +17,7 @@ I'm always up for improving my setup.
 Dependencies
 ------------
 
-- [rsync](https://rsync.samba.org/)
+- [yadm](https://yadm.io/)
 - [fish shell](https://fishshell.com/)
 - [fzf](https://github.com/junegunn/fzf)
 - [bat](https://github.com/sharkdp/bat)
@@ -25,42 +25,50 @@ Dependencies
 - [fd](https://github.com/sharkdp/fd)
 - [delta](https://github.com/dandavison/delta)
 
-Installation with git
----------------------
+Installation
+------------
 
-⚠ _WARNING_: this will potentially overwrite files in your home directory!
+First [install yadm](https://yadm.io/docs/install).
+It's available in Arch Linux, Debian and many other distros.
+And if not packaged, in the end it's just a single shell script, you can just download it and put it in `PATH`.
+This simplicity is one reason why I chose *yadm* over other tools.
 
-    $ git clone https://github.com/haplo/dotfiles.git
-    $ dotfiles/init_dotfiles.fish
+With *yadm* in hand use this to clone this repository, install the files into `$HOME` and run the [bootstrap script](.config/yadm/bootstrap):
 
-*init_dotfiles.fish* depends on *rsync*.
+    $ yadm clone --bootstrap -f https://github.com/haplo/dotfiles.git
 
-Installation without git
-------------------------
+Updating
+--------
 
-⚠ _WARNING_: this will potentially overwrite files in your home directory!
+    $ yadm pull
 
-This will download and unpack the latest version of the dotfiles,
-**overwriting existing files in the home directory**!
+Fish plugins
+------------
 
-    $ cd; curl -#L https://github.com/haplo/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,init_dotfiles.fish,LICENSE}
+I try to minimize the amount of plugins I use, but the ones I do use I decided to vendor, i.e. include in full in this repository.
+This allows me to control the source code precisely, review updates manually and not to depend on an unverified external download whenever I install the dotfiles.
+
+The vendored plugins are in [.config/fish/vendor/](.config/fish/vendor/).
+
+To update the vendored plugins to their latest versions, in a *fish* shell:
+
+    $ update_fish_vendored_plugins
 
 Disabling fzf
 -------------
 
-fzf can be slow in some systems, to disable its fish integration set a universal
+*fzf* can be slow in some systems, to disable its *fish* integration set a universal
 variable:
 
 ```fish
 set -U disable_fzf true
 ```
 
-Then running *init_dotfiles.fish* will not install the *fzf-fish* plugin.
+Then running `yadm bootstrap` will not install the *fzf-fish* plugin.
 
 Thanks and inspiration
 ----------------------
 
-* I based the repo and the README on
-  [Mathias Bynens' dotfiles](https://github.com/mathiasbynens/dotfiles),
-  and I also copied many a useful thing from his files, so thanks to
-  him and to people on his thanks list.
+* The original version of this repository was based on [Mathias Bynens'
+  dotfiles](https://github.com/mathiasbynens/dotfiles).
+  I also copied many a useful thing from his files, so thanks to him and to people on his thanks list.

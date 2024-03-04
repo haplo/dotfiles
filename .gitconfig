@@ -43,7 +43,7 @@
     template = ~/.gitmessage
 
 [core]
-    excludesfile = /home/user/.gitignore
+    excludesfile = /home/user/.gitignore_global
     attributesfile = ~/.gitattributes
     pager = delta
 
