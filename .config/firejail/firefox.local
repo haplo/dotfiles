@@ -1,1 +1,5 @@
 whitelist ${DESKTOP}
+
+# KeepassXC Browser plugin integration
+whitelist ${RUNUSER}/org.keepassxc.KeePassXC.BrowserServer
+whitelist ${RUNUSER}/app/org.keepassxc.KeePassXC/org.keepassxc.KeePassXC.BrowserServer
