@@ -1,0 +1,8 @@
+[Debug]
+Tracer=null
+
+[%General]
+Driver=QSQLITE
+
+[QSQLITE]
+Name=/home/fidel/.local/share/akonadi/akonadi.db
