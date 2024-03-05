@@ -1,12 +1,21 @@
 #!/usr/bin/env fish
 
+function header_banner -a title
+    set title_length (math (string length $title) + 4)
+    set stars (string repeat -n $title_length '*')
+    set_color brblue
+    echo
+    echo $stars
+    echo "* $title *"
+    echo $stars
+    set_color normal
+end
+
 function setup_fish_vendor
     # fish plugins I use are included verbatim in .config/fish/vendor
     # they must be copied to .config/fish to become usable
-    echo
-    echo "********************************"
-    echo "Setting up fish vendored plugins"
-    echo "********************************"
+    header_banner "Setting up fish vendored plugins"
+
     # disable fzf plugin on slow systems
     if test "$disable_fzf" = true
         echo "Disabling fzf-fish plugin"
@@ -18,10 +27,7 @@ function setup_fish_vendor
 end
 
 function set_fish_universal_vars
-    echo
-    echo "********************************"
-    echo "Setting fish universal variables"
-    echo "********************************"
+    header_banner "Setting fish universal variables"
 
     echo "Unsetting fish_greeting"
     set -U fish_greeting
@@ -38,18 +44,18 @@ function set_fish_universal_vars
 end
 
 function set_default_shell
+    header_banner "Set fish as default shell"
     set current_default_shell (getent passwd $LOGNAME | cut -d: -f7)
     if test $current_default_shell != /usr/bin/fish
         echo "Setting /usr/bin/fish as default shell, enter password to confirm"
         chsh -s /usr/bin/fish
+    else
+        echo "fish is already the default shell, nothing to do."
     end
 end
 
 function setup_emacs
-    echo
-    echo "******************************"
-    echo "Setting up emacs configuration"
-    echo "******************************"
+    header_banner "Set up Emacs configuration"
     if type -q emacs
         echo Emacs installation found at (which emacs), version (emacs --version)[1]
         if test -e $HOME/.emacs.d
