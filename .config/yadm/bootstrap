@@ -21,9 +21,12 @@ function setup_fish_vendor
         echo "Disabling fzf-fish plugin"
         rm -rf $HOME/.config/fish/conf.d/fzf.fish $HOME/.config/fish/vendor/fzf-fish
     end
-    cp -prf $HOME/.config/fish/vendor/* $HOME/.config/fish/
+
+    set vendor_src $HOME/.config/fish/vendor
+    set vendor_tgt $HOME/.config/fish/
+    cp -prf $vendor_src/* $vendor_tgt
     or exit 2
-    rm -rf $HOME/.config/fish/vendor/
+    echo "Copied fish vendored plugins from $vendor_src to $vendor_tgt"
 end
 
 function set_fish_universal_vars
