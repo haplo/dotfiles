@@ -27,6 +27,7 @@ include whitelist-common.inc
 # Fix KeepassXC-Browser
 whitelist ${RUNUSER}/org.keepassxc.KeePassXC.BrowserServer
 whitelist ${RUNUSER}/app/org.keepassxc.KeePassXC/org.keepassxc.KeePassXC.BrowserServer
+whitelist ${RUNUSER}/ssh-agent.socket
 whitelist ${RUNUSER}/wayland-?
 
 # support hardware security keys (Yubikey, Onlykey, etc.)
