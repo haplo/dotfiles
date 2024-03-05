@@ -74,9 +74,34 @@ function setup_emacs
     end
 end
 
+function setup_rustup
+    header_banner "Set up rustup"
+    if type -q rustup
+        echo "Detected rustup at $(which rustup), executing personal setup..."
+        echo "--- rustup default stable"
+        rustup default stable
+
+        echo "--- rustup component add rust-src"
+        rustup component add rust-src
+
+        echo
+        echo "--- rustup component add rust-analyzer"
+        rustup component add rust-analyzer
+
+        set local_rust_analyzer $HOME/.local/bin/rust-analyzer
+        if ! test -e "$local_rust_analyzer"
+            set rustup_rust_analyzer (rustup which --toolchain stable rust-analyzer)
+            echo
+            echo "--- symlinking $rustup_rust_analyzer to $local_rust_analyzer"
+            ln -s $rustup_rust_analyzer $local_rust_analyzer
+        end
+    else
+        echo "rustup not found."
+    end
+end
+
 setup_fish_vendor
 set_fish_universal_vars
 set_default_shell
-if type -q emacs
-    setup_emacs
-end
+setup_emacs
+setup_rustup
