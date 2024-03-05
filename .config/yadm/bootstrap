@@ -93,6 +93,7 @@ function setup_rustup
             set rustup_rust_analyzer (rustup which --toolchain stable rust-analyzer)
             echo
             echo "--- symlinking $rustup_rust_analyzer to $local_rust_analyzer"
+            mkdir -p (dirname $local_rust_analyzer)
             ln -s $rustup_rust_analyzer $local_rust_analyzer
         end
     else
