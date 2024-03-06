@@ -1,2 +1,4 @@
-# hidden by globals.local
-noblacklist /mnt
+include photo-common.local
+
+# hidden by disable-common.local
+noblacklist ${HOME}/digikam_data

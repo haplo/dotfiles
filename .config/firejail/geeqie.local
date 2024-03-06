@@ -1,4 +1,3 @@
-# was hidden by globals.local
-noblacklist /mnt
+include photo-common.local
 
 include allow-lua.inc

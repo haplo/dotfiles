@@ -1,2 +1,1 @@
-# hidden by globals.local
-noblacklist /mnt
+include photo-common.local
