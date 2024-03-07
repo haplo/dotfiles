@@ -1,2 +1,3 @@
 whitelist ${MUSIC}
+noblacklist ${HOME}/Music to sort
 whitelist ${HOME}/Music to sort
