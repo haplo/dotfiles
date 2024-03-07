@@ -1,0 +1,4 @@
+blacklist ${HOME}/.electrum-abc
+blacklist ${HOME}/.electrum-cash
+blacklist ${HOME}/.monero
+blacklist ${HOME}/.ollama
