@@ -1,0 +1,3 @@
+# from chromium-common.profile
+# when kernel allows unprivileged userns clone
+include chromium-common-hardened.inc.profile
