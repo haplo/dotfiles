@@ -13,7 +13,9 @@ iconViewIconSize=64
 [Shortcuts]
 close-active-terminal=none
 file_quit=none
-new-session-two-vertical=Ctrl+2
+new-session-quad=Ctrl+4
+new-session-two-horizontal=Ctrl+2
+new-session-two-vertical=none
 next-terminal=Ctrl+Tab; Ctrl+O
 rename-session=Ctrl+Shift+R
 split-left-right=Ctrl+S
