@@ -1,0 +1,7 @@
+mkdir ${HOME}/.cache/strawberry
+whitelist ${HOME}/.cache/strawberry
+mkdir ${HOME}/.config/strawberry
+whitelist ${HOME}/.config/strawberry
+mkdir ${HOME}/.local/share/strawberry
+whitelist ${HOME}/.local/share/strawberry
+include whitelist-music-common.local
