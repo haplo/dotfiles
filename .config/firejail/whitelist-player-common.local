@@ -3,6 +3,8 @@ read-only ${MUSIC}
 read-only ${PICTURES}
 read-only ${VIDEOS}
 
+whitelist ${HOME}/Pictures Oneplus 8 Pro
+read-only ${HOME}/Pictures Oneplus 8 Pro
 whitelist ${HOME}/Pictures to sort
 read-only ${HOME}/Pictures to sort
 whitelist ${HOME}/Sync
