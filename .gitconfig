@@ -59,6 +59,9 @@
     navigate = true
     # set to true for terminals with light background color
     light = false
+    # do not use most for pager, it doesn't handle color properly
+    # https://github.com/dandavison/delta/issues/1490
+    pager = less
 
 [diff]
     algorithm = histogram
