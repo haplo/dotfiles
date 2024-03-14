@@ -1,2 +1,2 @@
-mkdir ${HOME}/.monero/wallets
-whitelist ${HOME}/.monero/wallets
+mkdir ${HOME}/.monero
+whitelist ${HOME}/.monero

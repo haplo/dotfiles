@@ -19,9 +19,9 @@ include disable-xdg.inc
 mkdir ${HOME}/.config/feather
 whitelist ${HOME}/.config/feather
 
-# add mkdir and whitelist for where your Monery wallets are to feather.local
-# mkdir ${HOME}/.monero/wallets
-# whitelist ${HOME}/.monero/wallets
+# add mkdir and whitelist for where your Monero wallets are to feather.local
+# mkdir ${HOME}/.monero
+# whitelist ${HOME}/.monero
 
 include whitelist-common.inc
 include whitelist-var-common.inc
