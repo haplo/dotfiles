@@ -1,20 +1,2 @@
 # allow desktop access, I use it as an easy way to share among apps
 noblacklist ${DESKTOP}
-
-# hide backups
-blacklist ${HOME}/Backups
-
-# hide KeepassXC
-blacklist ${HOME}/Documents/KeePassXC
-
-# hide Guix installation
-blacklist /gnu
-
-# hide my secondary drives
-blacklist /mnt
-
-# Emacs secrets
-blacklist ${HOME}/.authinfo.gpg
-
-# Ansible vault
-blacklist ${HOME}/.ansible-fidelramos.net.vault_pass

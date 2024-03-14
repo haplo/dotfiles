@@ -4,6 +4,7 @@ blacklist ${HOME}/Code
 blacklist ${HOME}/Comics
 blacklist ${HOME}/digikam_data
 blacklist ${HOME}/Documents
+blacklist ${HOME}/Documents/KeePassXC
 blacklist ${HOME}/Music to sort
 blacklist ${HOME}/Org
 blacklist ${HOME}/Pictures Oneplus 8 Pro/
@@ -14,3 +15,9 @@ blacklist ${HOME}/Sync
 blacklist ${HOME}/Vaults
 blacklist ${HOME}/Videos
 blacklist ${HOME}/Wallpapers
+
+# Guix installation
+blacklist /gnu
+
+# Nix installation
+blacklist /nix

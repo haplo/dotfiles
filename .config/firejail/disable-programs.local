@@ -2,3 +2,9 @@ blacklist ${HOME}/.electrum-abc
 blacklist ${HOME}/.electrum-cash
 blacklist ${HOME}/.monero
 blacklist ${HOME}/.ollama
+
+# Emacs secrets
+blacklist ${HOME}/.authinfo.gpg
+
+# Ansible vault
+blacklist ${HOME}/.ansible-fidelramos.net.vault_pass
