@@ -4,20 +4,6 @@ switch-to-activity-005505fd-5c0b-4be8-868e-607772d149f6=Meta+Ctrl+C,none,Switch 
 switch-to-activity-7d25de3e-3514-489c-8cad-e3ce570669f9=Meta+Ctrl+X,none,Switch to activity "Default"
 switch-to-activity-c5bc2af4-5eae-48ee-a97c-cd38f9796caf=Meta+Ctrl+P,none,Switch to activity "Photography"
 
-[Clementine]
-_k_friendly_name=Clementine
-next_album=Shift+Media Next,none,Next album
-next_track=Media Next,none,Next track
-play_pause=Media Play,none,Play/Pause
-prev_track=Media Previous,none,Previous track
-rate_five_star=Ctrl+Shift+%,none,Rate the current song 5 stars
-rate_four_star=Ctrl+Shift+$,none,Rate the current song 4 stars
-rate_one_star=Ctrl+Shift+!,none,Rate the current song 1 star
-rate_three_star=Ctrl+Shift+#,none,Rate the current song 3 stars
-rate_two_star=Ctrl+Shift+@,none,Rate the current song 2 stars
-rate_zero_star=Ctrl+Shift+),none,Rate the current song 0 stars
-stop=Media Stop,none,Stop
-
 [KDE Keyboard Layout Switcher]
 Switch keyboard layout to English (US)=none,none,Switch keyboard layout to English (US)
 Switch keyboard layout to Spanish=none,none,Switch keyboard layout to Spanish
@@ -323,6 +309,15 @@ ShowOSD=Display
 
 [services][org.kde.plasma.emojier.desktop]
 _launch=Meta+.
+
+[services][org.kde.spectacle.desktop]
+RecordWindow=
+
+[strawberry]
+_k_friendly_name=strawberry
+next_track=,none,Next track
+play_pause=Media Play,none,Play/Pause
+prev_track=,none,Previous track
 
 [yakuake]
 _k_friendly_name=Yakuake
