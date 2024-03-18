@@ -310,14 +310,12 @@ ShowOSD=Display
 [services][org.kde.plasma.emojier.desktop]
 _launch=Meta+.
 
-[services][org.kde.spectacle.desktop]
-RecordWindow=
-
 [strawberry]
 _k_friendly_name=strawberry
-next_track=,none,Next track
+next_track=Media Next,none,Next track
 play_pause=Media Play,none,Play/Pause
-prev_track=,none,Previous track
+prev_track=Media Previous,none,Previous track
+stop=Media Stop,none,Stop
 
 [yakuake]
 _k_friendly_name=Yakuake
