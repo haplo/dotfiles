@@ -1,0 +1,5 @@
+noblacklist ${PICTURES}
+noblacklist ${HOME}/Pictures Oneplus 8 Pro
+noblacklist ${HOME}/Pictures to sort
+noblacklist ${HOME}/Sync
+noblacklist /mnt

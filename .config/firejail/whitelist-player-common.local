@@ -1,3 +1,5 @@
+include noblacklist-player-common.local
+
 read-only ${DOWNLOADS}
 read-only ${MUSIC}
 read-only ${PICTURES}
