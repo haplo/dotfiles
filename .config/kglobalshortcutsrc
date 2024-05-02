@@ -7,7 +7,7 @@ switch-to-activity-c5bc2af4-5eae-48ee-a97c-cd38f9796caf=Meta+Ctrl+P,none,Switch 
 [KDE Keyboard Layout Switcher]
 Switch keyboard layout to English (US)=none,none,Switch keyboard layout to English (US)
 Switch keyboard layout to Spanish=none,none,Switch keyboard layout to Spanish
-Switch to Last-Used Keyboard Layout=none,Meta+Alt+L,
+Switch to Last-Used Keyboard Layout=none,Meta+Alt+L,Switch to Last-Used Keyboard Layout
 Switch to Next Keyboard Layout=Meta+Space,Meta+Alt+K,Switch to Next Keyboard Layout
 _k_friendly_name=Keyboard Layout Switcher
 
