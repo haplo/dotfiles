@@ -1,3 +1,6 @@
+# needed for hardware wallets to work
+ignore private-dev
+
 # electrum-abc installed from AppImage (electrum-abc-bin package from AUR)
 ignore include disable-shell.inc
 private-bin electrum-abc,dirname,python*,readlink,sh
