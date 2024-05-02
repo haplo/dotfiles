@@ -1,2 +1,5 @@
 # needed for hardware wallets to work
 ignore private-dev
+
+noblacklist ${HOME}/Backups
+whitelist ${HOME}/Backups/crypto/electron-cash

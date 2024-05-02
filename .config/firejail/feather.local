@@ -1,2 +1,5 @@
 mkdir ${HOME}/.monero
 whitelist ${HOME}/.monero
+
+noblacklist ${HOME}/Backups
+whitelist ${HOME}/Backups/crypto/monero

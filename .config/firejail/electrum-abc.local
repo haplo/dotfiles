@@ -1,3 +1,6 @@
 # electrum-abc installed from AppImage (electrum-abc-bin package from AUR)
 ignore include disable-shell.inc
 private-bin electrum-abc,dirname,python*,readlink,sh
+
+noblacklist ${HOME}/Backups
+whitelist ${HOME}/Backups/crypto/electrum-abc
