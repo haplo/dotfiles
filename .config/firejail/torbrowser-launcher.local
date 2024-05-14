@@ -1,0 +1,5 @@
+apparmor
+
+# https://github.com/netblue30/firejail/issues/6269
+# Remove after upgrading new major version of firejail
+private-bin execdesktop
