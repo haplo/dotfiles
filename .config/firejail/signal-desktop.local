@@ -1,5 +1,13 @@
+ignore novideo
+
+noblacklist ${PICTURES}
 whitelist ${PICTURES}
 read-only ${PICTURES}
 
+noblacklist ${HOME}/Pictures to sort
 whitelist ${HOME}/Pictures to sort
 read-only ${HOME}/Pictures to sort
+
+noblacklist ${HOME}/Pictures Oneplus 8 Pro
+whitelist ${HOME}/Pictures Oneplus 8 Pro
+read-only ${HOME}/Pictures Oneplus 8 Pro
