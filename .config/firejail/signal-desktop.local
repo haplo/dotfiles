@@ -1,5 +1,7 @@
 ignore novideo
 
+whitelist ${DESKTOP}
+
 noblacklist ${PICTURES}
 whitelist ${PICTURES}
 read-only ${PICTURES}
