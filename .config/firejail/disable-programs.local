@@ -1,3 +1,4 @@
+blacklist ${HOME}/.electrum
 blacklist ${HOME}/.electrum-abc
 blacklist ${HOME}/.electrum-cash
 blacklist ${HOME}/.monero
