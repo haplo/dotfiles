@@ -10,6 +10,7 @@ blacklist ${HOME}/Pictures to sort
 blacklist ${HOME}/Public
 blacklist ${HOME}/Recordings
 blacklist ${HOME}/Sync
+blacklist ${HOME}/Vaults
 
 # Guix installation
 blacklist /gnu

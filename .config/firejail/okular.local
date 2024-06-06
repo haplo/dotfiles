@@ -1,1 +1,2 @@
 noblacklist ${HOME}/Sync
+noblacklist ${HOME}/Vaults

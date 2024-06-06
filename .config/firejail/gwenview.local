@@ -1,1 +1,3 @@
 include photo-common.local
+
+noblacklist ${HOME}/Vaults
