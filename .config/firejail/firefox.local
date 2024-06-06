@@ -1,4 +1,5 @@
 whitelist ${DESKTOP}
+whitelist ${HOME}/Sync
 
 # KeepassXC Browser plugin integration
 whitelist ${RUNUSER}/org.keepassxc.KeePassXC.BrowserServer
