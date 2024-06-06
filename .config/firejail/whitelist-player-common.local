@@ -1,5 +1,3 @@
-include noblacklist-player-common.local
-
 read-only ${DOWNLOADS}
 read-only ${MUSIC}
 read-only ${PICTURES}
@@ -11,7 +9,4 @@ whitelist ${HOME}/Pictures to sort
 read-only ${HOME}/Pictures to sort
 whitelist ${HOME}/Sync
 read-only ${HOME}/Sync
-
-# was hidden by globals.local
-noblacklist /mnt
 read-only /mnt
