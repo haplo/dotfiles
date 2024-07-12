@@ -2,7 +2,12 @@ ignore include allow-java.inc
 
 mkdir ${HOME}/.config/libreoffice
 whitelist ${HOME}/.config/libreoffice
+noblacklist ${HOME}/Documents
 mkdir ${HOME}/Documents
 whitelist ${HOME}/Documents
-mkdir ${HOME}/Downloads
-whitelist ${HOME}/Downloads
+noblacklist ${DOWNLOADS}
+mkdir ${DOWNLOADS}
+whitelist ${DOWNLOADS}
+noblacklist ${HOME}/Sync
+mkdir ${HOME}/Sync
+whitelist ${HOME}/Sync
