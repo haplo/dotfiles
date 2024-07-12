@@ -1,4 +1,9 @@
 whitelist ${DESKTOP}
+noblacklist ${DOWNLOADS}
+mkdir ${DOWNLOADS}
+whitelist ${DOWNLOADS}
+noblacklist ${HOME}/Sync
+mkdir ${HOME}/Sync
 whitelist ${HOME}/Sync
 
 # KeepassXC Browser plugin integration
