@@ -26,6 +26,9 @@ include whitelist-common.inc
 
 # Fix KeepassXC-Browser
 whitelist ${RUNUSER}/org.keepassxc.KeePassXC.BrowserServer
+noblacklist ${RUNUSER}/app
+mkdir ${RUNUSER}/app/org.keepassxc.KeePassXC
+whitelist ${RUNUSER}/app/org.keepassxc.KeePassXC
 whitelist ${RUNUSER}/app/org.keepassxc.KeePassXC/org.keepassxc.KeePassXC.BrowserServer
 whitelist ${RUNUSER}/ssh-agent.socket
 whitelist ${RUNUSER}/wayland-?
