@@ -13,3 +13,7 @@ read-only ${HOME}/Pictures to sort
 noblacklist ${HOME}/Pictures Oneplus 8 Pro
 whitelist ${HOME}/Pictures Oneplus 8 Pro
 read-only ${HOME}/Pictures Oneplus 8 Pro
+
+noblacklist ${HOME}/Pictures Pixel 8 Pro
+whitelist ${HOME}/Pictures Pixel 8 Pro
+read-only ${HOME}/Pictures Pixel 8 Pro
