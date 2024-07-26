@@ -11,3 +11,5 @@ whitelist ${DOWNLOADS}
 noblacklist ${HOME}/Sync
 mkdir ${HOME}/Sync
 whitelist ${HOME}/Sync
+noblacklist ${HOME}/Vaults
+whitelist ${HOME}/Vaults
