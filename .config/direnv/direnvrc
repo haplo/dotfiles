@@ -1,3 +1,37 @@
+# Rye Python project layout
+# https://github.com/direnv/direnv/wiki/Python#rye
+#
+# Usage: layout rye
+#
+# Similar to layout_python, but uses Rye [1] to build a virtualenv from the
+# pyproject.toml [2] located in the same directory.
+#
+# Rye will put the virtualenv in a .venv directory by default.
+#
+# [1]: https://rye.astral.sh/
+# [2]: https://peps.python.org/pep-0518/
+layout_rye() {
+    PYPROJECT_TOML="${PYPROJECT_TOML:-pyproject.toml}"
+    if [[ ! -f "$PYPROJECT_TOML" ]]; then
+        log_status "No pyproject.toml found. Executing \`rye init\` to create a \`$PYPROJECT_TOML\` first."
+        rye init
+    fi
+
+    if [[ -d ".venv" ]]; then
+        VIRTUAL_ENV="$(pwd)/.venv"
+    fi
+
+    if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
+        log_status "No virtual environment exists. Executing \`rye sync\` to create one."
+        rye sync
+        VIRTUAL_ENV="$(pwd)/.venv"
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+    export RYE_ACTIVE=1  # or VENV_ACTIVE=1
+    export VIRTUAL_ENV
+}
+
 # Poetry Python project layout
 # Until https://github.com/direnv/direnv/pull/995 is released
 #
