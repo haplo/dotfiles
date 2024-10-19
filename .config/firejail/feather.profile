@@ -7,6 +7,7 @@ include feather.local
 include globals.local
 
 noblacklist ${HOME}/.config/feather
+noblacklist ${HOME}/.monero
 
 include disable-common.inc
 include disable-devel.inc
