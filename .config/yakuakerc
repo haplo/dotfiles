@@ -7,9 +7,6 @@ DefaultProfile=Dark.profile
 [Dialogs]
 FirstRun=false
 
-[KFileDialog Settings]
-iconViewIconSize=64
-
 [Shortcuts]
 close-active-terminal=none
 file_quit=none
@@ -27,4 +24,3 @@ Height=90
 KeepOpen=false
 KeepOpenAfterLastSessionCloses=true
 ShowSystrayIcon=false
-Width=80
