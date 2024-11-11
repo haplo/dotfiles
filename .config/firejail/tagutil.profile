@@ -38,7 +38,7 @@ seccomp
 # tracelog
 
 # disable-mnt
-# private-bin amarok
+# private-bin
 private-dev
 private-etc alternatives
 private-opt none
