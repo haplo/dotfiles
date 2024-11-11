@@ -70,3 +70,31 @@ layout_poetry() {
     export POETRY_ACTIVE=1
     export VIRTUAL_ENV
 }
+
+# uv Python project layout
+# https://github.com/direnv/direnv/wiki/Python#uv
+#
+# Usage: layout uv
+#
+# Similar to layout_python, but uses uv [1] to build a virtualenv from the
+# pyproject.toml [2] located in the same directory.
+#
+# [1]: https://rye.astral.sh/
+# [2]: https://peps.python.org/pep-0518/
+layout_uv() {
+    if [[ -d ".venv" ]]; then
+        VIRTUAL_ENV="$(pwd)/.venv"
+    fi
+
+    if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
+        log_status "No uv project exists. Executing \`uv init\` to create one."
+        uv init --no-readme
+        rm hello.py
+        uv venv
+        VIRTUAL_ENV="$(pwd)/.venv"
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+    export UV_ACTIVE=1  # or VENV_ACTIVE=1
+    export VIRTUAL_ENV
+}
