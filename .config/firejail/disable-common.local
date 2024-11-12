@@ -11,6 +11,7 @@ blacklist ${HOME}/Pictures to sort
 blacklist ${HOME}/Public
 blacklist ${HOME}/Recordings
 blacklist ${HOME}/Sync
+blacklist ${HOME}/Sync Natalie
 blacklist ${HOME}/Vaults
 
 # Guix installation
