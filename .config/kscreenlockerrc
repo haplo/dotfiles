@@ -1,6 +1,9 @@
 [$Version]
 update_info=kscreenlocker.upd:0.1-autolock
 
+[Daemon]
+Timeout=15
+
 [Greeter]
 WallpaperPlugin=org.kde.slideshow
 
