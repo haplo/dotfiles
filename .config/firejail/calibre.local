@@ -1,1 +1,7 @@
+noblacklist ${HOME}/.cache/calibre
+whitelist ${HOME}/.cache/calibre
+noblacklist ${HOME}/.config/calibre
+whitelist ${HOME}/.config/calibre
 noblacklist ${HOME}/Calibre
+whitelist ${HOME}/Calibre
+blacklist ${DOCUMENTS}
