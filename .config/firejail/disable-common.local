@@ -19,3 +19,5 @@ blacklist /gnu
 
 # Nix installation
 blacklist /nix
+
+read-only ${HOME}/.rye
