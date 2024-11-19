@@ -1,2 +1,4 @@
+noblacklist ${HOME}/Calibre
 noblacklist ${HOME}/Sync
+noblacklist ${HOME}/Sync Natalie
 noblacklist ${HOME}/Vaults
