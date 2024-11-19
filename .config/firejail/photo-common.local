@@ -3,6 +3,7 @@ noblacklist ${HOME}/Pictures Oneplus 8 Pro
 noblacklist ${HOME}/Pictures Pixel 8 Pro
 noblacklist ${HOME}/Pictures to sort
 noblacklist ${HOME}/Sync
+noblacklist ${HOME}/Sync Natalie
 
 # hidden by globals.local
 noblacklist /mnt

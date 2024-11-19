@@ -11,4 +11,6 @@ whitelist ${HOME}/Pictures to sort
 read-only ${HOME}/Pictures to sort
 whitelist ${HOME}/Sync
 read-only ${HOME}/Sync
+whitelist ${HOME}/Sync Natalie
+read-only ${HOME}/Sync Natalie
 read-only /mnt
