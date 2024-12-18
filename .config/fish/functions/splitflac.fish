@@ -6,6 +6,8 @@ function splitflac -a base
     set base (string replace -r '\.$' '' $argv[1])
     set cuefile $base.cue
     set flacfile $base.flac
+    # cuetag command is cuetag.sh in some systems, e.g. Arch Linux
+    set cuetag cuetag
 
     if test -z $base
         echo "Usage: splitflac <basename>"
@@ -17,19 +19,28 @@ function splitflac -a base
         echo
         echo "  \$ splitflac \"Album Name\""
         return 0
-    else if not test -f $cuefile
+    end
+    if not test -f $cuefile
         echo "$cuefile is not a file"
         return 1
-    else if not test -f $flacfile
+    end
+    if not test -f $flacfile
         echo "$flacfile is not a file"
         return 2
-    else if not type -q cuetag
-        echo "cuetag command missing, usually found in cuetools package"
-        return 3
-    else if not type -q flac
+    end
+    if not type -q cuetag
+        if type -q cuetag.sh
+            set cuetag cuetag.sh
+        else
+            echo "cuetag command missing, usually found in cuetools package"
+            return 3
+        end
+    end
+    if not type -q flac
         echo "flac command missing, usually found in flac package"
         return 4
-    else if not type -q shnsplit
+    end
+    if not type -q shnsplit
         echo "shnsplit command missing, usually found in shntool package"
         return 5
     end
@@ -39,7 +50,7 @@ function splitflac -a base
         return 6
     end
 
-    if not cuetag $cuefile split-track*
+    if not $cuetag $cuefile split-track*
         echo "Error tagging splitted track files"
         return 7
     end
