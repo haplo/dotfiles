@@ -245,11 +245,11 @@ view_zoom_out=Meta+-,Meta+-,Zoom Out
 _k_friendly_name=Media Controller
 mediavolumedown=none,,Media volume down
 mediavolumeup=none,,Media volume up
-nextmedia=none,Media Next,Media playback next
+nextmedia=Media Next,Media Next,Media playback next
 pausemedia=Media Pause,Media Pause,Pause media playback
 playmedia=none,,Play media playback
-playpausemedia=none,Media Play,Play/Pause media playback
-previousmedia=none,Media Previous,Media playback previous
+playpausemedia=Media Play,Media Play,Play/Pause media playback
+previousmedia=Media Previous,Media Previous,Media playback previous
 stopmedia=none,Media Stop,Stop media playback
 
 [org_kde_powerdevil]
