@@ -24,3 +24,4 @@ Height=90
 KeepOpen=false
 KeepOpenAfterLastSessionCloses=true
 ShowSystrayIcon=false
+Width=80
