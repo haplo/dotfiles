@@ -1,1 +1,4 @@
+# mpv.profile makes desktop read-only, but I want to write screenshots there
+ignore read-only ${DESKTOP}
+
 include noblacklist-player-common.local
