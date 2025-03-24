@@ -287,6 +287,9 @@ switch to next activity=none,,Switch to Next Activity
 switch to previous activity=none,,Switch to Previous Activity
 toggle do not disturb=Meta+Shift+D,,Toggle do not disturb
 
+[services][emacsclient.desktop]
+_launch=Meta+E
+
 [services][org.kde.dolphin.desktop]
 _launch=Meta+D
 
