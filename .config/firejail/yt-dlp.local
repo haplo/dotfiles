@@ -1,2 +1,6 @@
 ignore noblacklist ${MUSIC}
 whitelist ${VIDEOS}
+
+# makes ffmpeg fail with this error:
+# ffmpeg: error while loading shared libraries: /opt/intel/oneapi/compiler/latest/lib/libintlc.so.5: cannot make segment writable for relocation: Operation not permitted
+ignore memory-deny-write-execute
