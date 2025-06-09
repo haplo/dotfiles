@@ -1,0 +1,10 @@
+whitelist ${DESKTOP}
+
+# required by mpv
+# include allow-lua.inc
+
+# Required to record sound
+ignore nosound
+
+# anki fails to open if mpv is installed but not listed here
+private-bin anki,lame,mplayer,mpv,python*
