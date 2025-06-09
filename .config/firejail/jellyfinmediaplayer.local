@@ -1,0 +1,2 @@
+mkdir ${HOME}/.local/share/jellyfinmediaplayer
+whitelist ${HOME}/.local/share/jellyfinmediaplayer
