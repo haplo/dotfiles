@@ -3,14 +3,16 @@ Categories=Utility;
 Comment[en_US]=Setup and configure OnlyKey
 Comment=Setup and configure OnlyKey
 Encoding=UTF-8
-Exec=/usr/bin/firejail --profile OnlyKey /opt/OnlyKey/nw
+Exec=/usr/bin/firejail --profile=OnlyKey /opt/OnlyKey/nw
 GenericName[en_US]=
 GenericName=
 Icon=/opt/OnlyKey/icon.png
 MimeType=
 Name[en_US]=OnlyKey App
 Name=OnlyKey App
+NoDisplay=false
 Path=
+PrefersNonDefaultGPU=false
 StartupNotify=true
 Terminal=false
 TerminalOptions=
