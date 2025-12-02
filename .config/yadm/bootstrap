@@ -11,6 +11,26 @@ function header_banner -a title
     set_color normal
 end
 
+function install_packages
+    header_banner "Installing common packages"
+    if command -v apt >/dev/null 2>&1
+        # Debian, Ubuntu and derivatives
+        set -l packages bat direnv eza fd-find fzf git less most ripgrep
+        sudo apt install $packages
+    else if command -v pacman >/dev/null 2>&1
+        # Arch Linux and derivatives
+        set -l packages "bat direnv eza fd fzf git less most ripgrep uv"
+        sudo pacman -Sy $packages
+    else if command -v dnf >/dev/null 2>&1
+        # Fedora and other RPM-based distros
+        echo "FIXME: RPM-based distro detected, but no packages defined to be installed."
+        return 2
+    else
+        echo "No supported package manager found, unable to automatically install common packages."
+        return 1
+    end
+end
+
 function setup_fish_vendor
     # fish plugins I use are included verbatim in .config/fish/vendor
     # they must be copied to .config/fish to become usable
@@ -101,6 +121,7 @@ function setup_rustup
     end
 end
 
+install_packages
 setup_fish_vendor
 set_fish_universal_vars
 set_default_shell
