@@ -7,10 +7,12 @@ export HISTFILESIZE="${HISTSIZE}";
 # don't put duplicate lines in .bash_history
 HISTCONTROL=ignoredups:ignorespace
 
-# make emacs the default editor
-export EDITOR='emacsclient -t';
-export VISUAL='emacsclient -t';
-export ALTERNATE_EDITOR=vim;
+# make emacs the default editor if available
+if command -v emacsclient >/dev/null 2>&1; then
+    export EDITOR="emacsclient -t -a'' -c";
+else
+    export EDITOR='vim';
+fi
 
 # prefer US English and use UTF-8
 export LANG='en_US.UTF-8';
