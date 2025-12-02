@@ -38,9 +38,11 @@ end
 set -gx LANG 'en_US.UTF-8'
 set -gx LC_ALL 'en_US.UTF-8'
 
-set -gx EDITOR 'emacsclient --tty'
-set -gx VISUAL 'emacsclient --reuse-frame'
-set -gx ALTERNATE_EDITOR vim
+if type -q emacsclient
+    set -gx EDITOR 'emacsclient --tty'
+    set -gx VISUAL 'emacsclient --reuse-frame'
+    set -gx ALTERNATE_EDITOR ""
+end
 set -gx SUDO_EDITOR rvim
 
 # OnlyKey for GPG https://docs.crp.to/onlykey-agent.html
