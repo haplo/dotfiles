@@ -51,7 +51,4 @@ export DENO_INSTALL="$HOME/.deno"
 
 export PATH=$HOME/.local/bin:$HOME/.cargo/bin:$GOPATH/bin:$DENO_INSTALL/bin:$PATH
 
-# https://virtualenvwrapper.readthedocs.io/en/latest/
-WORKON_HOME=$HOME/Code/virtualenvs
-
 export VAGRANT_DEFAULT_PROVIDER=libvirt
