@@ -59,15 +59,15 @@ end
 
 function setup_emacs
     header_banner "Set up Emacs configuration"
+    set -l emacs_home $HOME/.config/.emacs
     if type -q emacs
         echo Emacs installation found at (which emacs), version (emacs --version)[1]
-        if test -e $HOME/.emacs.d
-            echo "Emacs config already found at $HOME/.emacs.d, skipping further configuration"
+        if test -e $emacs_home
+            echo "Emacs config already found at $emacs_home, skipping further configuration"
         else
-            set repo https://github.com/haplo/dotemacs
-            set target $HOME/.emacs.d
-            echo "Downloading Emacs config from $repo to $target"
-            git clone $repo $target
+            set -l repo https://github.com/haplo/dotemacs
+            echo "Downloading Emacs config from $repo to $emacs_home"
+            git clone $repo $emacs_home
         end
     else
         echo "No Emacs installation detected, skipping Emacs configuration"
