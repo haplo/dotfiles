@@ -12,5 +12,8 @@ whitelist ${DOWNLOADS}
 noblacklist ${HOME}/Sync
 mkdir ${HOME}/Sync
 whitelist ${HOME}/Sync
+noblacklist ${HOME}/Sync Natalie
+mkdir ${HOME}/Sync Natalie
+whitelist ${HOME}/Sync Natalie
 noblacklist ${HOME}/Vaults
 whitelist ${HOME}/Vaults
