@@ -1,0 +1,9 @@
+[Unit]
+Description=Run yadm pull and notify
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/yadm_pull_and_notify.fish
+StandardOutput=journal
+StandardError=journal

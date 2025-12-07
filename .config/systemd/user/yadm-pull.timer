@@ -1,0 +1,9 @@
+[Unit]
+Description=Timer to run yadm pull and notify every 24 hours
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target

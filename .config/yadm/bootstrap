@@ -15,11 +15,11 @@ function install_packages
     header_banner "Installing common packages"
     if command -v apt >/dev/null 2>&1
         # Debian, Ubuntu and derivatives
-        set -l packages bat direnv eza fd-find fzf git less most ripgrep
+        set -l packages bat direnv eza fd-find fzf git less libnotify-bin most ripgrep
         sudo apt install $packages
     else if command -v pacman >/dev/null 2>&1
         # Arch Linux and derivatives
-        set -l packages bat direnv eza fd fzf git less most ripgrep uv
+        set -l packages bat direnv eza fd fzf git less libnotify most ripgrep uv
         sudo pacman -Syu --needed $packages
     else if command -v dnf >/dev/null 2>&1
         # Fedora and other RPM-based distros
@@ -121,9 +121,20 @@ function setup_rustup
     end
 end
 
+function setup_systemd
+    header_banner "Set up user systemd"
+    if type -q systemctl
+        echo "Enabling yadm-pull.timer: periodic automatic yadm pull and notify"
+        systemctl --user enable --now yadm-pull.timer
+    else
+        echo "systemd not found."
+    end
+end
+
 install_packages
 setup_fish_vendor
 set_fish_universal_vars
 set_default_shell
 setup_emacs
 setup_rustup
+setup_systemd
