@@ -19,8 +19,8 @@ function install_packages
         sudo apt install $packages
     else if command -v pacman >/dev/null 2>&1
         # Arch Linux and derivatives
-        set -l packages "bat direnv eza fd fzf git less most ripgrep uv"
-        sudo pacman -Sy $packages
+        set -l packages bat direnv eza fd fzf git less most ripgrep uv
+        sudo pacman -Syu --needed $packages
     else if command -v dnf >/dev/null 2>&1
         # Fedora and other RPM-based distros
         echo "FIXME: RPM-based distro detected, but no packages defined to be installed."
