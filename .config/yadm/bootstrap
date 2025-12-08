@@ -124,6 +124,8 @@ end
 function setup_systemd
     header_banner "Set up user systemd"
     if type -q systemctl
+        echo "Enabling backup-installed-packages.timer: periodic backup of installed OS packages"
+        systemctl --user enable --now backup-installed-packages.timer
         echo "Enabling yadm-pull.timer: periodic automatic yadm pull and notify"
         systemctl --user enable --now yadm-pull.timer
     else
