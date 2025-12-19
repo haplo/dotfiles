@@ -19,15 +19,32 @@ play_pause=none,none,Play/Pause
 prev_track=none,none,Previous track
 stop=none,none,Stop
 
+[brave-browser]
+0A90F7F9B8B03C3C35C2851846DEA571-choose_credential_fields=none,none,Choose Custom Login Fields
+0A90F7F9B8B03C3C35C2851846DEA571-fill_password=none,none,Fill Password Only
+0A90F7F9B8B03C3C35C2851846DEA571-fill_totp=none,none,Fill TOTP
+0A90F7F9B8B03C3C35C2851846DEA571-fill_username_password=none,none,Fill Username and Password
+0A90F7F9B8B03C3C35C2851846DEA571-redetect_fields=none,none,Redetect login fields
+0A90F7F9B8B03C3C35C2851846DEA571-reload_extension=none,none,Reload
+0A90F7F9B8B03C3C35C2851846DEA571-request_autotype=none,none,Request Global Auto-Type
+0A90F7F9B8B03C3C35C2851846DEA571-retrive_credentials_forced=none,none,Reopen database
+0A90F7F9B8B03C3C35C2851846DEA571-save_credentials=none,none,Save Credentials
+0A90F7F9B8B03C3C35C2851846DEA571-show_password_generator=none,none,Show Password Generator
+E4D6D73636C4BC51F83554D1F64A6623-choose_credential_fields=none,none,Choose Custom Login Fields
+E4D6D73636C4BC51F83554D1F64A6623-fill_password=none,none,Fill Password Only
+E4D6D73636C4BC51F83554D1F64A6623-fill_totp=none,none,Fill TOTP
+E4D6D73636C4BC51F83554D1F64A6623-fill_username_password=none,none,Fill Username and Password
+E4D6D73636C4BC51F83554D1F64A6623-redetect_fields=none,none,Redetect login fields
+E4D6D73636C4BC51F83554D1F64A6623-reload_extension=none,none,Reload
+E4D6D73636C4BC51F83554D1F64A6623-request_autotype=Ctrl+Shift+G,none,Request Global Auto-Type
+E4D6D73636C4BC51F83554D1F64A6623-retrive_credentials_forced=none,none,Reopen database
+E4D6D73636C4BC51F83554D1F64A6623-save_credentials=none,none,Save Credentials
+E4D6D73636C4BC51F83554D1F64A6623-show_password_generator=none,none,Show Password Generator
+_k_friendly_name=Brave
+
 [kaccess]
 Toggle Screen Reader On and Off=none,Meta+Alt+S,Toggle Screen Reader On and Off
 _k_friendly_name=Accessibility
-
-[kcm_touchpad]
-Disable Touchpad=Touchpad Off,Touchpad Off,
-Enable Touchpad=Touchpad On,Touchpad On,
-Toggle Touchpad=Touchpad Toggle\tMeta+Ctrl+Zenkaku Hankaku,Touchpad Toggle\tTouchpad Toggle\tMeta+Ctrl+Touchpad Toggle\tMeta+Ctrl+Zenkaku Hankaku,
-_k_friendly_name=Touchpad
 
 [khotkeys]
 _k_friendly_name=Custom Shortcuts Service
@@ -150,14 +167,14 @@ Switch to Screen to the Left=none,,Switch to Screen to the Left
 Switch to Screen to the Right=none,,Switch to Screen to the Right
 Toggle Night Color=none,none,Suspend/Resume Night Light
 Toggle Window Raise/Lower=none,,Toggle Window Raise/Lower
-Walk Through Windows=Alt+Tab,Alt+Tab,Walk Through Windows
-Walk Through Windows (Reverse)=Alt+Shift+Backtab,Alt+Shift+Tab,Walk Through Windows (Reverse)
-Walk Through Windows Alternative=none,,Walk Through Windows Alternative
-Walk Through Windows Alternative (Reverse)=none,,Walk Through Windows Alternative (Reverse)
-Walk Through Windows of Current Application=Ctrl+Tab,Alt+`,Walk Through Windows of Current Application
-Walk Through Windows of Current Application (Reverse)=none,Alt+~,Walk Through Windows of Current Application (Reverse)
-Walk Through Windows of Current Application Alternative=none,,Walk Through Windows of Current Application Alternative
-Walk Through Windows of Current Application Alternative (Reverse)=none,,Walk Through Windows of Current Application Alternative (Reverse)
+Walk Through Windows=Alt+Tab,Meta+Tab\tAlt+Tab,Walk Through Windows
+Walk Through Windows (Reverse)=Alt+Shift+Backtab,Meta+Shift+Tab\tAlt+Shift+Tab,Walk Through Windows (Reverse)
+Walk Through Windows Alternative=none,none,Walk Through Windows Alternative
+Walk Through Windows Alternative (Reverse)=none,none,Walk Through Windows Alternative (Reverse)
+Walk Through Windows of Current Application=Ctrl+Tab,Meta+`\tAlt+`,Walk Through Windows of Current Application
+Walk Through Windows of Current Application (Reverse)=none,Meta+~\tAlt+~,Walk Through Windows of Current Application (Reverse)
+Walk Through Windows of Current Application Alternative=none,none,Walk Through Windows of Current Application Alternative
+Walk Through Windows of Current Application Alternative (Reverse)=none,none,Walk Through Windows of Current Application Alternative (Reverse)
 Window Above Other Windows=none,,Keep Window Above Others
 Window Below Other Windows=none,,Keep Window Below Others
 Window Close=Alt+F4,Alt+F4,Close Window
@@ -185,7 +202,7 @@ Window One Screen Down=none,,Move Window One Screen Down
 Window One Screen Up=none,,Move Window One Screen Up
 Window One Screen to the Left=none,,Move Window One Screen to the Left
 Window One Screen to the Right=none,,Move Window One Screen to the Right
-Window Operations Menu=Alt+F3,Alt+F3,Window Operations Menu
+Window Operations Menu=Alt+F3,Alt+F3,Window Menu
 Window Pack Down=none,,Move Window Down
 Window Pack Left=none,,Move Window Left
 Window Pack Right=none,,Move Window Right
@@ -200,7 +217,7 @@ Window Quick Tile Top Left=Meta+Ctrl+Home,,Quick Tile Window to the Top Left
 Window Quick Tile Top Right=Meta+Ctrl+PgUp,,Quick Tile Window to the Top Right
 Window Raise=none,,Raise Window
 Window Resize=none,,Resize Window
-Window Shade=none,,Shade Window
+Window Shade=none,none,Shade Window
 Window Shrink Horizontal=none,,Shrink Window Horizontally
 Window Shrink Vertical=none,,Shrink Window Vertically
 Window to Desktop 1=Meta+Alt+F1\tMeta+Alt+1,,Window to Desktop 1
@@ -269,6 +286,7 @@ _k_friendly_name=Power Management
 powerProfile=Battery,Battery\tMeta+B,Switch Power Profile
 
 [plasmashell]
+Slideshow Wallpaper Next Image=none,,Next Wallpaper Image
 _k_friendly_name=plasmashell
 activate application launcher=Meta,Meta\tAlt+F1,Activate Application Launcher
 activate task manager entry 1=Meta+1,Meta+1,Activate Task Manager Entry 1
@@ -287,7 +305,7 @@ clipboard_action=none,Meta+Ctrl+X,Automatic Action Popup Menu
 cycle-panels=Meta+Alt+P,Meta+Alt+P,Move keyboard focus between panels
 cycleNextAction=none,,Next History Item
 cyclePrevAction=none,,Previous History Item
-edit_clipboard=none,none,Edit Contents…
+edit_clipboard=none,,Edit Contents…
 manage activities=Meta+Q,Meta+Q,Show Activity Switcher
 next activity=Meta+Tab,none,Walk through activities
 previous activity=none,none,Walk through activities (Reverse)
@@ -295,7 +313,6 @@ repeat_action=Meta+Ctrl+R,,Manually Invoke Action on Current Clipboard
 show dashboard=none,Ctrl+F12,Show Desktop
 show-barcode=Meta+B,,Show Barcode…
 show-on-mouse-pos=Meta+V,Meta+V,Show Clipboard Items at Mouse Position
-stop current activity=Meta+S,Meta+S,Stop Current Activity
 switch to next activity=none,,Switch to Next Activity
 switch to previous activity=none,,Switch to Previous Activity
 toggle do not disturb=Meta+Shift+D,,Toggle do not disturb
@@ -326,6 +343,13 @@ ShowOSD=Display
 
 [services][org.kde.plasma.emojier.desktop]
 _launch=Meta+.
+
+[services][org.kde.spectacle.desktop]
+RecordWindow=
+_launch=Print
+
+[services][org.kde.touchpadshortcuts.desktop]
+ToggleTouchpad=Touchpad Toggle\tMeta+Ctrl+Zenkaku Hankaku
 
 [yakuake]
 _k_friendly_name=Yakuake
