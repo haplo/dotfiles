@@ -66,3 +66,5 @@ end
 if type -q fdfind && not type -q fd
     alias fd='fdfind'
 end
+
+abbr -a opencode 'firejail --profile=opencode --whitelist=(pwd) /usr/bin/opencode'
