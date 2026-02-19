@@ -1,1 +1,8 @@
 whitelist ${DESKTOP}
+
+# Fix KeepassXC-Browser
+noblacklist ${RUNUSER}/app
+noblacklist ${RUNUSER}/app/org.keepassxc.KeePassXC
+mkdir ${RUNUSER}/app
+mkdir ${RUNUSER}/app/org.keepassxc.KeePassXC
+whitelist ${RUNUSER}/app/org.keepassxc.KeePassXC

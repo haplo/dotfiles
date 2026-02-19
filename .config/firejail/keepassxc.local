@@ -6,14 +6,12 @@ whitelist ${HOME}/Documents/KeePassXC
 
 # Do not allow access to Tor Browser
 blacklist ${HOME}/.local/share/torbrowser
+ignore noblacklist ${HOME}/.local/share/torbrowser
 
-# Enable KeePassXC-Browser
+# Needed for KeePassXC-Browser.
 mkdir ${HOME}/.config/BraveSoftware/Brave-Browser/NativeMessagingHosts
 mkfile ${HOME}/.config/BraveSoftware/Brave-Browser/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json
 whitelist ${HOME}/.config/BraveSoftware/Brave-Browser/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json
-mkdir ${HOME}/.config/chromium/NativeMessagingHosts
-mkfile ${HOME}/.config/chromium/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json
-whitelist ${HOME}/.config/chromium/NativeMessagingHosts/org.keepassxc.keepassxc_browser.json
 mkdir ${HOME}/.mozilla/native-messaging-hosts
 mkfile ${HOME}/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json
 whitelist ${HOME}/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json
@@ -23,15 +21,6 @@ whitelist ${HOME}/.cache/keepassxc
 whitelist ${HOME}/.config/keepassxc
 whitelist ${HOME}/.config/KeePassXCrc
 include whitelist-common.inc
-
-# Fix KeepassXC-Browser
-whitelist ${RUNUSER}/org.keepassxc.KeePassXC.BrowserServer
-noblacklist ${RUNUSER}/app
-mkdir ${RUNUSER}/app/org.keepassxc.KeePassXC
-whitelist ${RUNUSER}/app/org.keepassxc.KeePassXC
-whitelist ${RUNUSER}/app/org.keepassxc.KeePassXC/org.keepassxc.KeePassXC.BrowserServer
-whitelist ${RUNUSER}/ssh-agent.socket
-whitelist ${RUNUSER}/wayland-?
 
 # support hardware security keys (Yubikey, Onlykey, etc.)
 ignore nou2f
