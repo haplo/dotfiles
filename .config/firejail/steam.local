@@ -1,0 +1,10 @@
+include whitelist-games.local
+
+# Civilization 5
+noblacklist ${HOME}/.local/share/Aspyr
+mkdir ${HOME}/.local/share/Aspyr
+whitelist ${HOME}/.local/share/Aspyr
+
+# borrowed from steam.profile
+# added taskset, xdg-user-dir
+# private-bin awk,basename,bash,bsdtar,bzip2,cat,chmod,cksum,cmp,comm,compress,cp,curl,cut,date,dbus-launch,dbus-send,desktop-file-edit,desktop-file-install,desktop-file-validate,dirname,echo,env,expr,file,find,getopt,grep,gtar,gzip,head,hostname,id,lbzip2,ldconfig,ldd,ln,ls,lsb_release,lsof,lspci,lz4,lzip,lzma,lzop,md5sum,mkdir,mktemp,mv,netstat,ps,pulseaudio,python*,readlink,realpath,rm,sed,sh,sha1sum,sha256sum,sha512sum,sleep,sort,steam,steamdeps,steam-native,steam-runtime,sum,tail,tar,taskset,tclsh,test,touch,tr,umask,uname,update-desktop-database,wc,wget,wget2,which,whoami,xdg-user-dir,xterm,xz,zenity
