@@ -1,5 +1,5 @@
 # Firejail profile for opencode
-# Description: DESCRIPTION OF THE PROGRAM
+# Description: An open source AI coding agent.
 # This file is overwritten after every install/update
 quiet
 # Persistent local customizations
@@ -16,7 +16,7 @@ noblacklist ${HOME}/.config/opencode
 noblacklist ${HOME}/.local/share/opencode
 
 # Allows files commonly used by IDEs
-#include allow-common-devel.inc
+include allow-common-devel.inc
 
 # Disable Wayland
 blacklist ${RUNUSER}/wayland-*
