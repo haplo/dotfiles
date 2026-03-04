@@ -8,8 +8,8 @@
         "baseURL": "http://192.168.1.131:11434/v1"
       },
       "models": {
-        "glm-4.7-flash:latest": {
-          "name": "GLM-4.7-flash (Local)"
+        "qwen3.5:27b": {
+          "name": "Qwen 3.5 27b"
         }
       }
     }
