@@ -5,7 +5,6 @@ blacklist ${HOME}/digikam_data
 blacklist ${HOME}/Documents
 blacklist ${HOME}/Documents/KeePassXC
 blacklist ${HOME}/Org
-blacklist ${HOME}/Pictures Oneplus 8 Pro
 blacklist ${HOME}/Pictures Pixel 8 Pro
 blacklist ${HOME}/Pictures to sort
 blacklist ${HOME}/Public
