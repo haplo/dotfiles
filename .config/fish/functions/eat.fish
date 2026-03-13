@@ -1,19 +1,43 @@
 # borrowed from https://github.com/razzius/fish-functions
 # this code is in the PUBLIC DOMAIN
-function eat --argument dir
+function eat --argument _dir
+    set dir (echo $_dir | trim-trailing-slash)
+
     set files_to_move (find $dir -maxdepth 1 -not -path $dir)
 
     for f in $files_to_move
-        set filename (echo $f | string replace $dir '' | trim-left /)
-        if file-exists ./$filename
-            echo "eat: file would be overwritten: ./$filename"
+        set filename (echo $f | string replace $dir/ '')
+
+        # Handle the special case of a file within a directory named
+        # the same as the directory itself. Since the directory will
+        # be deleted, it won't collide with the file of the same name.
+        if equals $filename $dir
+            continue
+        end
+
+        if test -e ./$filename
+            error "eat: file would be overwritten: ./$filename"
             return 1
         end
     end
 
+    set target (dirname $dir)
+
+    set tmpdir (mkusertemp)
+
     for f in $files_to_move
-        mv $f .
+        mv -n $f $tmpdir
     end
 
-    rmdir $dir
+    rmdir $dir || return $status
+
+    for f in $files_to_move
+        # Use the -n flag to not overwrite.
+        # This should already be handled by the `test -e` logic above
+        # but I'll also use -n here just to be safe.
+        set filename (echo $f | string replace $dir/ '')
+        mv -n $tmpdir/$filename $target
+    end
+
+    rmdir $tmpdir
 end
