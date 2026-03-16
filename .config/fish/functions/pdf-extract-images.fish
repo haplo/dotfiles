@@ -1,5 +1,5 @@
 # extract images from a PDF file
-function pdfextractimages -a pdffile -a output
+function pdf-extract-images -a pdffile -a output
     set pdffile $argv[1]
     set output $argv[2]
     # default to current directory

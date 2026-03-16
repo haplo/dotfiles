@@ -1,6 +1,6 @@
 # This function is designed to reencode videos shot by my digital camera and
 # phones into smaller versions, while keeping metadata (EXIF tags and the like)
-function reencode_video -a vid
+function reencode-video -a vid
     set vid $argv[1]
     set newvid (path change-extension .x265.mp4 $vid)
 

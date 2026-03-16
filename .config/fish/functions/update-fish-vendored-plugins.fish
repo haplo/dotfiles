@@ -2,7 +2,7 @@
 
 # Update files in .config/fish/vendor/ to their latest upstream versions
 
-function download_and_update
+function __download_and_update_vendor
     set name $argv[1]
     set url $argv[2]
 
@@ -22,19 +22,19 @@ function download_and_update
     echo
 end
 
-function update_fzf_fish
+function __update_fzf_fish
     set DIRS_TO_COPY completions conf.d functions
-    download_and_update fzf-fish https://github.com/PatrickF1/fzf.fish/archive/refs/heads/main.tar.gz $DIRS_TO_COPY
+    __download_and_update_vendor fzf-fish https://github.com/PatrickF1/fzf.fish/archive/refs/heads/main.tar.gz $DIRS_TO_COPY
 end
 
-function update_pure
+function __update_pure
     set DIRS_TO_COPY conf.d functions
-    download_and_update pure https://github.com/pure-fish/pure/archive/refs/heads/master.tar.gz $DIRS_TO_COPY
+    __download_and_update_vendor pure https://github.com/pure-fish/pure/archive/refs/heads/master.tar.gz $DIRS_TO_COPY
 end
 
-function update_fish_vendored_plugins
-    update_fzf_fish
-    update_pure
+function update-fish-vendored-plugins
+    __update_fzf_fish
+    __update_pure
     # force yadm add because ~/.config/fish/vendor/ is in .gitignore
     yadm add -f $HOME/.config/fish/vendor/
 end

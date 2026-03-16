@@ -1,11 +1,11 @@
-function find_dupes
+function find-dupes
     argparse d/delete -- $argv
     or return
 
     set -l dir $argv[1]
 
     if test -z "$dir"
-        echo "Usage: find_dupes [-d|--delete] <path>"
+        echo "Usage: find-dupes [-d|--delete] <path>"
         return 1
     else if not test -d "$dir"
         echo "$dir should be a directory"

@@ -1,5 +1,5 @@
 # function that outputs to stdout a list of all installed OS packages
-function list_installed_os_packages
+function list-installed-os-packages
     if type -q apt
         # Debian/Ubuntu
         apt list --installed
