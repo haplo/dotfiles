@@ -1,3 +1,4 @@
+# make a directory and immediately cd into it
 function mkd -a dir
     set -l dir $argv[1]
     if test -z $dir
