@@ -8,6 +8,8 @@ if type -q direnv
     direnv hook fish | source
 end
 
+set -g fish_greeting
+
 # keybindings
 if test "$disable_fzf" != true
     bind \cg _fzf_grep_directory
