@@ -32,16 +32,7 @@ abbr -a pru 'podman run --rm -it'
 abbr -a la 'ls -a'
 abbr -a ll 'ls -l'
 
-# prefer exa instead of ls if available
-if type -q exa
-    abbr -a ls exa
-    abbr -a ee 'exa -alF'
-    abbr -a ll 'exa -alF'
-    abbr -a ea 'exa -a'
-    abbr -a la 'exa -a'
-end
-
-# prefer eza instead of ls/exa if available
+# prefer eza instead of ls if available
 if type -q eza
     abbr -a ls eza
     abbr -a ee 'eza -alF'
