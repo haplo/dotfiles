@@ -15,11 +15,11 @@ function install_packages
     header_banner "Installing common packages"
     if command -v apt >/dev/null 2>&1
         # Debian, Ubuntu and derivatives
-        set -l packages bat direnv eza fd-find fzf git less libnotify-bin most ripgrep
+        set -l packages bat direnv eza fd-find fzf git git-delta less libnotify-bin most ripgrep
         sudo apt install $packages
     else if command -v pacman >/dev/null 2>&1
         # Arch Linux and derivatives
-        set -l packages bat direnv eza fd fzf git less libnotify most ripgrep uv
+        set -l packages bat direnv eza fd fzf git git-delta less libnotify most ripgrep uv
         sudo pacman -Syu --needed $packages
     else if command -v dnf >/dev/null 2>&1
         # Fedora and other RPM-based distros
