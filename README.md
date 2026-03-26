@@ -52,7 +52,7 @@ The vendored plugins are in [.config/fish/vendor/](.config/fish/vendor/).
 
 To update the vendored plugins to their latest versions, in a *fish* shell:
 
-    $ update_fish_vendored_plugins
+    $ update-fish-vendored-plugins
 
 Disabling fzf
 -------------
