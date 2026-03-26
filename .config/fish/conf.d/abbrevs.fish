@@ -59,4 +59,4 @@ if type -q fdfind && not type -q fd
 end
 
 abbr -a opencode 'firejail --profile=opencode --whitelist=(pwd) /usr/bin/opencode'
-abbr -a opencode-ollama 'OPENCODE_CONFIG=~/.config/opencode/opencode-ollama.json firejail --profile=opencode-ollama --whitelist=(pwd) /usr/bin/opencode'
+abbr -a opencode-ollama 'OPENCODE_CONFIG=~/.config/opencode/opencode-ollama.json OPENCODE_DISABLE_MODELS_FETCH=1 firejail --profile=opencode-ollama --whitelist=(pwd) /usr/bin/opencode'
