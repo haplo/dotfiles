@@ -21,7 +21,7 @@ Dependencies
 - [fish shell](https://fishshell.com/)
 - [fzf](https://github.com/junegunn/fzf)
 - [bat](https://github.com/sharkdp/bat)
-- [exa](https://github.com/ogham/exa) or [eza](https://github.com/eza-community/eza)
+- [eza](https://github.com/eza-community/eza)
 - [fd](https://github.com/sharkdp/fd)
 - [delta](https://github.com/dandavison/delta)
 
