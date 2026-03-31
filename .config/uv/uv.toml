@@ -1,0 +1,2 @@
+# attempt to mitigate compromised packages
+exclude-newer = "7 days"
