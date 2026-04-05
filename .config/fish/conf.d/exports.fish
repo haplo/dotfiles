@@ -59,3 +59,6 @@ set -gx GOPATH "$HOME/Code/go"
 # https://wiki.debian.org/KVM
 set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
 set -gx VAGRANT_DEFAULT_PROVIDER libvirt
+
+# use my main discrete GPU in ROCm and ignore the iGPU
+set -gx HIP_VISIBLE_DEVICES 0
