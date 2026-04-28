@@ -1,9 +1,14 @@
 [Unit]
 Description=Run yadm pull and notify
-After=graphical-session.target
+After=graphical-session.target network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot
 ExecStart=%h/.local/bin/yadm_pull_and_notify.fish
 StandardOutput=journal
 StandardError=journal
+Restart=on-failure
+RestartSec=5min
+StartLimitIntervalSec=1day
+StartLimitBurst=3
