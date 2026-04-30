@@ -35,6 +35,8 @@ function ai-research --description "Initialize or open an AI agent research proj
         # Set local git user and email for the researcher agent to commit
         git config --local user.name "Researcher Agent"
         git config --local user.email "researcher@agent.local"
+        git add opencode.json
+        git commit -m "Initial commit"
         echo "Initialized git repository"
     end
 
