@@ -23,7 +23,7 @@
       "model": "venice/kimi-k2-6",
       "prompt": "{file:./prompts/researcher.md}",
       "temperature": 0.2,
-      "steps": 20,
+      "steps": 30,
       "color": "accent",
       "permission": {
         "bash": {
@@ -38,7 +38,9 @@
           "git notes *": "allow",
           "git rev-parse *": "allow",
           "git show *": "allow",
-          "git status *": "allow"
+          "git status *": "allow",
+          "~/.local/share/opencode/research-agent/bin/research-run-init.py *": "allow",
+          "~/.local/share/opencode/research-agent/bin/research-run-validate.py *": "allow"
         },
         "codesearch": "deny",
         "doom_loop": "ask",
@@ -67,13 +69,16 @@
       "model": "venice/kimi-k2-6",
       "prompt": "{file:./prompts/web-searcher.md}",
       "temperature": 0.2,
-      "steps": 8,
+      "steps": 20,
       "color": "info",
       "permission": {
         "bash": "deny",
         "codesearch": "deny",
         "doom_loop": "ask",
-        "edit": "deny",
+        "edit": {
+          "*": "deny",
+          ".research/runs/**": "allow"
+        },
         "external_directory": "deny",
         "glob": "deny",
         "grep": "deny",
