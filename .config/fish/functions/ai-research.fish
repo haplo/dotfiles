@@ -43,4 +43,7 @@ function ai-research --description "Initialize or open an AI agent research proj
         mkdir -p .research/runs
         echo "Created .research/runs/"
     end
+
+    # start sandboxed opencode
+    firejail --profile=opencode-research /usr/bin/opencode
 end
