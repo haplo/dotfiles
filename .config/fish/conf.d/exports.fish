@@ -62,3 +62,6 @@ set -gx VAGRANT_DEFAULT_PROVIDER libvirt
 
 # use my main discrete GPU in ROCm and ignore the iGPU
 set -gx HIP_VISIBLE_DEVICES 0
+
+# where my AI research projects lie
+set -gx AI_RESEARCH_DIR "$HOME/Documents/AI Research"

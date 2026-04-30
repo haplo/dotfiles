@@ -5,7 +5,7 @@ function ai-research --description "Initialize or open an AI agent research proj
     end
 
     set -l project_name $argv[1]
-    set -l base_dir "$HOME/Documents/AI Research"
+    set -l base_dir $AI_RESEARCH_DIR
     set -l project_dir "$base_dir/$project_name"
 
     # Ensure base and project directories exist
