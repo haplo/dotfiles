@@ -24,9 +24,9 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-MANDATORY_FILES = ("meta.json", "searches.jsonl", "response.md")
-RECOMMENDED_FILES = ("notes.md",)
-VALID_ENTRY_TYPES = ("search", "fetch")
+MANDATORY_FILES = ["notes.md"]
+RECOMMENDED_FILES = ["meta.json", "searches.jsonl"]
+VALID_ENTRY_TYPES = ["search", "fetch"]
 
 
 def utc_now_iso() -> str:
