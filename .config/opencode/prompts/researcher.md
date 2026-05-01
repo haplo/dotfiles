@@ -30,6 +30,7 @@ For each web-searcher you spawn, follow these steps strictly in order:
               --slug <kebab-case-topic> \
               --research-prompt "<the user's prompt to you, verbatim>" \
               --searcher-prompt "<your full delegation prompt for the searcher>"
+   Do not prefix the command with python3, just call it.
    The script prints the relative run directory path on stdout (e.g. `.research/runs/20260430-142301-llm-prompts`). Capture this path.
 
 2. Spawn the web-searcher subagent. Its delegation message MUST include:
