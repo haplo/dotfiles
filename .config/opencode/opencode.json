@@ -62,7 +62,7 @@
           "web-searcher": "allow"
         },
         "todowrite": "deny",
-        "webfetch": "deny",
+        "webfetch": "allow",
         "websearch": "deny"
       }
     },
