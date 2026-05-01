@@ -41,6 +41,7 @@
           "git show *": "allow",
           "git status *": "allow",
           "ls": "allow",
+          "mkdir *": "allow",
           "pdftotext *": "allow",
           ".research/bin/research-run-init.py *": "allow",
           ".research/bin/research-run-validate.py *": "allow"
