@@ -46,6 +46,10 @@ function ai-research --description "Initialize or open an AI agent research proj
         echo "Created .research/runs/"
     end
 
-    # start sandboxed opencode
-    firejail --profile=opencode-research /usr/bin/opencode
+    if test -z (git status --porcelain 2>/dev/null)
+        # start sandboxed opencode
+        firejail --profile=opencode-research /usr/bin/opencode
+    else
+        echo "WARNING: dirty git repository, clean before starting opencode"
+    end
 end
