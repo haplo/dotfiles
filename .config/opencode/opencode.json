@@ -39,6 +39,7 @@
           "git rev-parse *": "allow",
           "git show *": "allow",
           "git status *": "allow",
+          "pdftotext *": "allow",
           "~/.local/share/opencode/research-agent/bin/research-run-init.py *": "allow",
           "~/.local/share/opencode/research-agent/bin/research-run-validate.py *": "allow"
         },
