@@ -23,7 +23,7 @@
       "model": "venice/kimi-k2-6",
       "prompt": "{file:./prompts/researcher.md}",
       "temperature": 0.2,
-      "steps": 30,
+      "steps": 40,
       "color": "accent",
       "permission": {
         "bash": {
@@ -66,10 +66,10 @@
       "mode": "subagent",
       "hidden": true,
       "description": "Web-only search subagent for a single research thread. Runs several query variations, fetches high-signal pages, and returns a concise evidence bundle.",
-      "model": "venice/kimi-k2-6",
+      "model": "venice/minimax-m27",
       "prompt": "{file:./prompts/web-searcher.md}",
       "temperature": 0.2,
-      "steps": 20,
+      "steps": 30,
       "color": "info",
       "permission": {
         "bash": "deny",
