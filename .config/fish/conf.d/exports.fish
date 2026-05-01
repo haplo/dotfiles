@@ -64,4 +64,4 @@ set -gx VAGRANT_DEFAULT_PROVIDER libvirt
 set -gx HIP_VISIBLE_DEVICES 0
 
 # where my AI research projects lie
-set -gx AI_RESEARCH_DIR "$HOME/Documents/AI Research"
+set -gx RESEARCH_DIR "$HOME/Sync/Research"
