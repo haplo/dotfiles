@@ -55,7 +55,8 @@ function ai-research --description "Initialize or open an AI agent research proj
 
     if test -z (git status --porcelain 2>/dev/null)
         # start sandboxed opencode
-        firejail --profile=opencode-research /usr/bin/opencode
+        # direnv exec is necessary to set environment variables via .envrc
+        direnv exec . firejail --profile=opencode-research /usr/bin/opencode
     else
         echo "WARNING: dirty git repository, clean before starting opencode"
     end
