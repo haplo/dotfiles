@@ -37,8 +37,10 @@
           "git mv *": "allow",
           "git notes *": "allow",
           "git rev-parse *": "allow",
+          "git rm": "allow",
           "git show *": "allow",
           "git status *": "allow",
+          "ls": "allow",
           "pdftotext *": "allow",
           ".research/bin/research-run-init.py *": "allow",
           ".research/bin/research-run-validate.py *": "allow"
