@@ -40,8 +40,8 @@
           "git show *": "allow",
           "git status *": "allow",
           "pdftotext *": "allow",
-          "~/.local/share/opencode/research-agent/bin/research-run-init.py *": "allow",
-          "~/.local/share/opencode/research-agent/bin/research-run-validate.py *": "allow"
+          ".research/bin/research-run-init.py *": "allow",
+          ".research/bin/research-run-validate.py *": "allow"
         },
         "codesearch": "deny",
         "doom_loop": "ask",

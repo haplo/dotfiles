@@ -29,6 +29,17 @@ function ai-research --description "Initialize or open an AI agent research proj
         echo "Created opencode.json"
     end
 
+    # copy scripts for searches
+    if not test -d .research/bin
+        mkdir -p .research/bin
+    end
+    if not test -e .research/bin/research-run-init.py
+        cp ~/.local/share/opencode/research-agent/bin/research-run-init.py .research/bin/
+    end
+    if not test -e .research/bin/research-run-validate.py
+        cp ~/.local/share/opencode/research-agent/bin/research-run-validate.py .research/bin/
+    end
+
     # Initialize git repository if not already a repo
     if not test -d .git
         git init -q

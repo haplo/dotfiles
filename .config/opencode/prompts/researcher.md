@@ -26,7 +26,7 @@ Web-searcher delegation protocol:
 For each web-searcher you spawn, follow these steps strictly in order:
 
 1. Initialize a run directory by invoking:
-          ~/.local/share/opencode/research-agent/bin/research-run-init.py \
+          .research/bin/research-run-init.py \
               --slug <kebab-case-topic> \
               --research-prompt "<the user's prompt to you, verbatim>" \
               --searcher-prompt "<your full delegation prompt for the searcher>"
@@ -43,12 +43,12 @@ For each web-searcher you spawn, follow these steps strictly in order:
 3. Wait for the searcher to return its handoff message. The handoff confirms which files were written and may report fatal problems.
 
 4. Validate the run:
-   - On normal completion: invoke `~/.local/share/opencode/research-agent/bin/research-run-validate.py <run-dir>`. If it exits non-zero, treat the run as failed and surface the error.
-   - If the searcher reported a fatal problem in its handoff: invoke `~/.local/share/opencode/research-agent/bin/research-run-validate.py <run-dir> --mark-failed --error "<short reason>"` instead.
+   - On normal completion: invoke `.research/bin/research-run-validate.py <run-dir>`. If it exits non-zero, treat the run as failed and surface the error.
+   - If the searcher reported a fatal problem in its handoff: invoke `.research/bin/research-run-validate.py <run-dir> --mark-failed --error "<short reason>"` instead.
 
-5. Read `<run-dir>/response.md` to obtain the searcher's findings. This is the primary input you use for writing project notes. You may also read `<run-dir>/notes.md` if you need more detail than `response.md` provides.
+5. Read `<run-dir>/notes.md` to obtain the searcher's findings.
 
-6. Do NOT copy `response.md` verbatim into project notes. Re-synthesize using project context, `AGENTS.md` conventions, and the user's actual question. The searcher's output is raw input.
+6. Do NOT copy `notes.md` verbatim into project notes. Re-synthesize using project context, `AGENTS.md` conventions, and the user's actual question. The searcher's output is raw input.
 
 Delegation rules:
 - Do not use `websearch` or `webfetch` tools directly. All web access goes through web-searcher subagents.
@@ -56,6 +56,7 @@ Delegation rules:
 - Do not ask the searcher to read or edit project files. The searcher cannot do this.
 - Do not skip the init or validate scripts. The run directory contract is mandatory.
 - Do not invent run IDs or paths. The init script is the only source of run directory paths.
+- Do not read the `research-run-init.py` nor `research-run-validate.py` scripts, assume they are in place and execute them blindly as instructed. If they are fail to run for any reason abort execution and let the user know to fix it.
 
 Run directory rules:
 - Run directories live under `.research/runs/` and are committed to the repository.
