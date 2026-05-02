@@ -152,8 +152,7 @@ def finalize_meta(
     meta["result_count"] = counts.get("result_count")
     meta["fetch_count"] = counts.get("fetch_count")
     meta["fetch_error_count"] = counts.get("fetch_error_count")
-    if error is not None:
-        meta["error"] = error
+    meta["error"] = error
     atomic_write_json(run_dir / "meta.json", meta)
 
 
@@ -234,6 +233,8 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
+    previously_failed = meta.get("status") == "failed"
+
     file_errors = check_mandatory_files(run_dir)
     if file_errors:
         for err in file_errors:
@@ -256,6 +257,12 @@ def main(argv: list[str] | None = None) -> int:
     except OSError as e:
         print(f"error: failed to write meta.json: {e}", file=sys.stderr)
         return 1
+
+    if previously_failed:
+        print(
+            f"note: recovered previously-failed run: {run_dir.as_posix()}",
+            file=sys.stderr,
+        )
 
     summary = {
         "run_id": meta.get("run_id"),
