@@ -1,4 +1,8 @@
 whitelist ${DESKTOP}
+noblacklist ${HOME}/Sync
+whitelist ${HOME}/Sync
+noblacklist ${HOME}/Sync Natalie
+whitelist ${HOME}/Sync Natalie
 
 # Fix KeepassXC-Browser
 noblacklist ${RUNUSER}/app
