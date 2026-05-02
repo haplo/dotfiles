@@ -45,8 +45,9 @@ For each web-searcher you spawn, follow these steps strictly in order:
 3. Wait for the searcher to return its handoff message. The handoff confirms which files were written and may report fatal problems.
 
 4. Validate the run:
-   - On normal completion: invoke `.research/bin/research-run-validate.py <run-dir>`. If it exits non-zero, treat the run as failed and surface the error.
+   - On normal completion: invoke `.research/bin/research-run-validate.py <run-dir>`.
    - If the searcher reported a fatal problem in its handoff: invoke `.research/bin/research-run-validate.py <run-dir> --mark-failed --error "<short reason>"` instead.
+   - When search run fails for any reason let the user know and ask how to handle the situation before continuing.
 
 5. Read `<run-dir>/notes.md` to obtain the searcher's findings.
 
