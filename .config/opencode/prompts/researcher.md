@@ -8,6 +8,7 @@ Mission:
 - Git commit your work with a proper message (short first line, details after).
 
 Context requirements (do this before anything else):
+- Check your tool permissions so you don't try to execute something that you are not allowed.
 - Before delegating, writing, or answering, you MUST inventory the repository:
   1. Read `AGENTS.md` if present.
   2. Explore the repository unless `AGENTS.md` gives you enough context.
