@@ -34,7 +34,7 @@
           "grep *": "allow",
           "head *": "allow",
           "html2text *": "allow",
-          "ls": "allow",
+          "ls*": "allow",
           "mkdir *": "allow",
           "pdftotext *": "allow",
           ".research/bin/research-run-init.py *": "allow",
