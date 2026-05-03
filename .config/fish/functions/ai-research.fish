@@ -1,10 +1,25 @@
 function ai-research --description "Initialize or open an AI agent research project"
-    if test (count $argv) -lt 1
-        echo "Usage: ai-research <project-name>"
+    # -f (force flag) must be first argument, before project_name
+    set -l force_flag false
+    set -l arg_idx 1
+    if test "$argv[1]" = "-f"
+        set force_flag true
+        set arg_idx 2
+    end
+
+    if test (count $argv) -lt $arg_idx
+        echo "Usage: ai-research [-f] <project-name> [opencode-args...]"
         return 1
     end
 
-    set -l project_name $argv[1]
+    set -l project_name $argv[$arg_idx]
+    set -l opencode_args
+    set -l total_args (count $argv)
+    if test $total_args -gt $arg_idx
+        for i in (seq (math $arg_idx + 1) $total_args)
+            set -a opencode_args $argv[$i]
+        end
+    end
     set -l base_dir $RESEARCH_DIR
     set -l project_dir "$base_dir/$project_name"
 
@@ -54,10 +69,10 @@ function ai-research --description "Initialize or open an AI agent research proj
     end
 
     # check if git is dirty before starting opencode
-    if test (git status --porcelain | count) -eq 0
+    if test "$force_flag" = "true"; or test (git status --porcelain | count) -eq 0
         # start sandboxed opencode
         # direnv exec is necessary to set environment variables via .envrc
-        direnv exec . firejail --profile=opencode-research /usr/bin/opencode
+        direnv exec . firejail --profile=opencode-research /usr/bin/opencode $opencode_args
     else
         echo "WARNING: dirty git repository, clean before starting opencode"
         echo

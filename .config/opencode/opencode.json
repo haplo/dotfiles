@@ -28,6 +28,7 @@
       "permission": {
         "bash": {
           "*": "deny",
+          "cp *": "allow",
           "curl *": "allow",
           "file *": "allow",
           "git *": "allow",
@@ -36,6 +37,7 @@
           "html2text *": "allow",
           "ls*": "allow",
           "mkdir *": "allow",
+          "mv *": "allow",
           "pdftotext *": "allow",
           ".research/bin/research-run-init.py *": "allow",
           ".research/bin/research-run-validate.py *": "allow"
