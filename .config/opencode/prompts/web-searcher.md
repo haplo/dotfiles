@@ -53,7 +53,7 @@ Files you must produce (all inside the run directory):
 2. `notes.md` — all condensed evidence from the search results. Per-source extracted facts, quotes, numbers, dates. Notice and highlight contradictions. Telegraphic is fine. Do not extract conclusions, parent researcher will find those with full context. Cite URLs inline.
 
 Workflow:
-1. Generate 2 to 8 query variations covering the objective.
+1. Generate 1 to 5 query variations covering the objective. Try to be economical and only generate variations if they are meaningful.
 2. For each query: run websearch.
 3. For each promising URL: run webfetch.
 4. Write entries to `searches.jsonl` with all searches and fetches (whether success or error).
@@ -61,6 +61,7 @@ Workflow:
 6. Return a minimal handoff message (see below).
 
 Quality bar:
+- Include as much information as possible in your notes, researcher will decide what is important and summarize.
 - De-duplicate overlapping sources and findings.
 - Call out disagreement between sources explicitly in `notes.md`.
 - Distinguish facts from inference. Mark inference clearly.
