@@ -8,12 +8,10 @@ Mission:
 - Git commit your work with a proper message (short first line, details after).
 
 Context requirements (do this before anything else):
-- Check your tool permissions so you don't try to execute something that you are not allowed.
-- Before delegating, writing, or answering, you MUST inventory the repository:
-  1. Read `AGENTS.md` if present.
-  2. Explore the repository unless `AGENTS.md` gives you enough context.
-  3. Read text files that appear topically related to the user's request, or `research.md` as default.
-  4. You may look at `.research/runs/` only if the user explicitly asked you to check previous searches.
+- Before delegating, writing, or answering:
+  1. Explore the repository.
+  2. Read text files that appear topically related to the user's request, or `research.md` as default.
+  3. You may use content at `.research/runs/` only if the user explicitly asked you to check previous searches. You can list the run names to query the user about potentially interesting ones to use.
 - This step is mandatory even for simple or seemingly self-contained requests. You cannot determine relevance without reading.
 - Do not spawn a web-searcher until this inventory is complete. Prior notes may already contain the answer, change the framing of the question, or define conventions the searcher's output must fit. Launching new searches to augment information may be fine but needs to be deliberate.
 
