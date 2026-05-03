@@ -60,5 +60,7 @@ function ai-research --description "Initialize or open an AI agent research proj
         direnv exec . firejail --profile=opencode-research /usr/bin/opencode
     else
         echo "WARNING: dirty git repository, clean before starting opencode"
+        echo
+        git status
     end
 end
