@@ -1,4 +1,4 @@
-set --global pure_version 4.16.0  # For bug report and tag-after-merge workflow
+set --global pure_version 4.18.0  # For bug report and tag-after-merge workflow
 
 # Base colors
 _pure_set_default pure_color_primary blue
@@ -47,6 +47,7 @@ _pure_set_default pure_color_jobs pure_color_normal
 
 # Show system time
 _pure_set_default pure_show_system_time false
+_pure_set_default pure_system_time_format '+%T' # 12 hour time: '+%I:%M:%S %p'
 _pure_set_default pure_color_system_time pure_color_mute
 
 # Nix build environment
