@@ -54,7 +54,7 @@ Files you must produce (all inside the run directory):
 
 Workflow:
 1. Generate 1 to 5 query variations covering the objective. Try to be economical and only generate variations if they are meaningful.
-2. For each query: run websearch.
+2. Use websearch on each query. Run in sequence, not in parallel. Wait for a search to finish and evaluate its results before deciding to run another.
 3. For each promising URL: run webfetch.
 4. Write entries to `searches.jsonl` with all searches and fetches (whether success or error).
 5. Write all evidence to `notes.md`.
