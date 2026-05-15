@@ -92,3 +92,6 @@ dbus-system none
 ##read-only ${HOME}
 ##read-write ${HOME}
 #restrict-namespaces
+
+env NO_BROWSER=true
+restrict-namespaces
