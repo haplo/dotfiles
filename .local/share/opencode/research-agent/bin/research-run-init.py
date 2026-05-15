@@ -69,6 +69,9 @@ def create_run_dir(slug: str) -> Path:
         run_dir = RUNS_DIR / run_id
         try:
             run_dir.mkdir(parents=False, exist_ok=False)
+            # create firecrawl directory
+            firecrawl_dir = run_dir / "firecrawl"
+            firecrawl_dir.mkdir(parents=False, exist_ok=False)
             return run_dir
         except FileExistsError:
             continue
