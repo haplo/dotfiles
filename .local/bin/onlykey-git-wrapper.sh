@@ -30,6 +30,7 @@ set -eu
 # Values are the identity string passed to onlykey-agent.
 identity_for() {
     case "$1" in
+        aur.archlinux.org) echo "haplo@archlinux.org" ;;
         git.fidelramos.net)  echo "fidelramos.net" ;;
         # default: use host as onlykey-agent identity
         *)              echo "$1" ;;
