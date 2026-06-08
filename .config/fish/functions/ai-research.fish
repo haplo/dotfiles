@@ -27,6 +27,17 @@ function ai-research --description "Initialize or open an AI agent research proj
     mkdir -p $project_dir
     cd $project_dir; or return 1
 
+    # Initialize git repository if not already a repo
+    if not test -d .git
+        git init -q
+        # Set local git user and email for the researcher agent to commit
+        git config --local user.name "Researcher Agent"
+        git config --local user.email "researcher@agent.local"
+        git add opencode.json
+        git commit -m "Initial commit"
+        echo "Initialized git repository"
+    end
+
     # Create opencode.json if it doesn't exist
     if not test -e opencode.json
         echo '{
@@ -42,31 +53,20 @@ function ai-research --description "Initialize or open an AI agent research proj
   }
 }' > opencode.json
         echo "Created opencode.json"
+        if ! git diff --staged --quiet
+            echo "WARNING: there are staged git files, not commiting opencode.json"
+            return
+        end
+        git add opencode.json && git commit -m "Create opencode.json" --quiet
     end
 
-    # copy scripts to track search runs into the project for agents to execute
-    if not test -d .research/bin
-        mkdir -p .research/bin
-    end
     # copy latest version of the scripts
-    cp ~/.local/share/opencode/research-agent/bin/research-run-{init,validate}.py .research/bin/
-
-    # Initialize git repository if not already a repo
-    if not test -d .git
-        git init -q
-        # Set local git user and email for the researcher agent to commit
-        git config --local user.name "Researcher Agent"
-        git config --local user.email "researcher@agent.local"
-        git add opencode.json
-        git commit -m "Initial commit"
-        echo "Initialized git repository"
+    cp ~/.local/share/opencode/research-agent/bin/research-{run-init,run-validate,save-page,save-search}.py .
+    if ! git diff --staged --quiet
+        echo "WARNING: there are staged git files, not commiting research scripts"
+        return
     end
-
-    # Create .research/runs/ directory
-    if not test -d .research/runs
-        mkdir -p .research/runs
-        echo "Created .research/runs/"
-    end
+    git add ./research-*.py && git commit -m "Update scripts" --quiet
 
     # check if git is dirty before starting opencode
     if test "$force_flag" = "true"; or test (git status --porcelain | count) -eq 0

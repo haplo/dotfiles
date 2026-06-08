@@ -26,6 +26,7 @@ from pathlib import Path
 
 MANDATORY_FILES = ["notes.md"]
 RECOMMENDED_FILES = ["meta.json", "searches.jsonl"]
+RECOMMENDED_DIRS = ["pages"]
 VALID_ENTRY_TYPES = ["search", "fetch"]
 
 
@@ -73,6 +74,19 @@ def check_recommended_files(run_dir: Path) -> list[str]:
             warnings.append(f"missing recommended file: {name}")
         elif path.stat().st_size == 0:
             warnings.append(f"recommended file is empty: {name}")
+    return warnings
+
+
+def check_recommended_dirs(run_dir: Path) -> list[str]:
+    warnings = []
+    for name in RECOMMENDED_DIRS:
+        path = run_dir / name
+        if not path.is_dir():
+            warnings.append(f"missing recommended directory: {name}")
+            continue
+        for child in sorted(path.iterdir()):
+            if child.is_file() and child.stat().st_size == 0:
+                warnings.append(f"empty file in {name}/: {child.name}")
     return warnings
 
 
@@ -175,7 +189,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "run_dir",
-        help="Path to the run directory (e.g. .research/runs/<run-id>).",
+        help="Path to the run directory (e.g. <research-dir>/runs/<run-id>).",
     )
     parser.add_argument(
         "--mark-failed",
@@ -249,7 +263,7 @@ def main(argv: list[str] | None = None) -> int:
         try_finalize_failed(run_dir, counts, "; ".join(parse_errors[:3]))
         return 1
 
-    for w in check_recommended_files(run_dir):
+    for w in check_recommended_files(run_dir) + check_recommended_dirs(run_dir):
         print(f"warning: {w}", file=sys.stderr)
 
     try:
