@@ -19,6 +19,7 @@ Content organization:
   - When completing a TODO add a short summary of why it was completed as a single sentence as a new nested list item. Full details should be in the relevant notes files.
   - Do not put TODOs inside research runs.
 - Try to update and augment existing content when possible. Only add new sections when existing sections don't fit.
+- Avoid duplicating content across different files. Better to have a source of truth and reference to it.
 - Put downloaded files in `files` subdirectories.
   - Validate downloaded files (sometimes they can be HTML error pages). Clean up invalid files and let the user know.
   - Rename files to useful filenames to keep them organized.
