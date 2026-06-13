@@ -76,7 +76,7 @@ seccomp
 disable-mnt
 private-cache
 private-dev
-private-etc alternatives,ca-certificates,crypto-policies,dconf,fonts,ld.so.cache,ld.so.preload,machine-id,pki,resolv.conf,ssl
+private-etc @alternatives,java*,@network,@tls-ca
 private-tmp
 
 dbus-user none
