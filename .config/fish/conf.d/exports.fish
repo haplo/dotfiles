@@ -46,6 +46,10 @@ set -gx PYTHONIOENCODING UTF-8
 # use ipdb for Python debugging by default
 set -gx PYTHONBREAKPOINT 'ipdb.set_trace'
 
+# https://wiki.archlinux.org/title/Android#App_development
+# https://developer.android.com/tools/variables#android_home
+set -gx ANDROID_HOME "$HOME/.local/android/sdk"
+
 # https://golang.org/doc/code.html
 set -gx GOPATH "$HOME/Code/go"
 if test -n "$GOPATH"/bin
