@@ -7,10 +7,6 @@ if test -d "$HOME/.cargo/bin"
     fish_add_path $HOME/.cargo/bin
 end
 
-if test -n "$GOPATH"
-    fish_add_path $GOPATH/bin
-end
-
 if test -n "$DENO_INSTALL"
     fish_add_path $DENO_INSTALL/bin
 end
@@ -52,6 +48,9 @@ set -gx PYTHONBREAKPOINT 'ipdb.set_trace'
 
 # https://golang.org/doc/code.html
 set -gx GOPATH "$HOME/Code/go"
+if test -n "$GOPATH"/bin
+    fish_add_path $GOPATH/bin
+end
 
 # https://wiki.debian.org/KVM
 set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
