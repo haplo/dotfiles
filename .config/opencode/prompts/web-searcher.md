@@ -77,6 +77,8 @@ Quality bar:
 - Distinguish facts from inference. Mark inference clearly.
 - Cite URLs inline in `notes.md`.
 - Do not invent sources. Every cited URL must have been logged via `research-save-search` or `research-save-page`.
+- When referencing other files use Markdown links with relative paths. When a file is moved identify and update links pointing to it.
+- Use section ids and links pointing to them when appropriate. When a section id changes update links pointing to it.
 
 Handoff message to the parent:
 Return a single short message naming the files you wrote. Do not repeat the synthesis in the handoff. Example:

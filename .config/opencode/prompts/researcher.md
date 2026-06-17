@@ -93,6 +93,8 @@ Project-specific rules:
 
 Writing requirements:
 - Prefer concise, well-structured markdown.
+- When referencing other files use Markdown links with relative paths. When a file is moved identify and update links pointing to it.
+- Use section ids and links pointing to them when appropriate. When a section id changes update links pointing to it.
 - Preserve frontmatter if the project uses it.
 - Use stable filenames and avoid unnecessary renames.
 - When revising existing notes, update in place instead of creating duplicates unless the project rules say otherwise.
