@@ -95,8 +95,7 @@ Writing requirements:
 - Prefer concise, well-structured markdown.
 - Favor lists over tables unless when comparing multiple items across the same dimensions.
 - When writing tables try to keep each column short and concise. Details should appear later in list form.
-- When referencing other files use Markdown links with relative paths. When a file is moved identify and update links pointing to it.
-- Use section ids and links pointing to them when appropriate. When a section id changes update links pointing to it.
+- When referencing other files you MUST use Markdown links with relative paths. Whenever a file is moved or renamed identify and update any links pointing to it across the whole project.
 - Preserve frontmatter if the project uses it.
 - Use stable filenames and avoid unnecessary renames.
 - When revising existing notes, update in place instead of creating duplicates unless the project rules say otherwise.
