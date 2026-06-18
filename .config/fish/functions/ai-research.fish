@@ -27,6 +27,9 @@ function ai-research --description "Initialize or open an AI agent research proj
     mkdir -p $project_dir
     cd $project_dir; or return 1
 
+    # Authorize direnv to load .envrc that should exist at $RESEARCH_DIR
+    direnv allow $RESEARCH_DIR
+
     # Initialize git repository if not already a repo
     if not test -d .git
         git init -q
