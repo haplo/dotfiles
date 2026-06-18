@@ -68,9 +68,9 @@ Web search protocol:
 
 2. Do not create, move or delete these directories yourself unless instructed otherwise, they are a provenance log.
 
-3. Delegate to the `web-searcher` subagent. Pass it:
+3. Delegate to the `web-searcher` subagent. You MUST pass:
    - The research objective (use verbatim the same text you gave as `--researcher-prompt` to `research-run-init.py`)
-   - The run directory path (output from step 1)
+   - The run directory path (output of research-run-init.py from step 1)
    The subagent handles all searching, page fetching, and writes `searches.jsonl` and `notes.md` into the run directory. It returns a handoff summary of its work.
 
 4. Validate the run:
