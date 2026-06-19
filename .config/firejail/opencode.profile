@@ -14,6 +14,7 @@ ignore noexec ${HOME}
 noblacklist ${HOME}/.cache/opencode
 noblacklist ${HOME}/.config/opencode
 noblacklist ${HOME}/.local/share/opencode
+noblacklist ${HOME}/.local/state/opencode
 
 # Allows files commonly used by IDEs
 include allow-common-devel.inc
@@ -28,11 +29,9 @@ blacklist /usr/libexec
 
 # disable-*.inc includes
 # remove disable-write-mnt.inc if you set disable-mnt
-#include disable-common.inc
-#include disable-exec.inc
+include disable-common.inc
 include disable-proc.inc
-#include disable-programs.inc
-#include disable-shell.inc
+include disable-programs.inc
 include disable-write-mnt.inc
 include disable-x11.inc
 include disable-xdg.inc
@@ -43,6 +42,8 @@ mkdir ${HOME}/.config/opencode
 whitelist ${HOME}/.config/opencode
 mkdir ${HOME}/.local/share/opencode
 whitelist ${HOME}/.local/share/opencode
+mkdir ${HOME}/.local/state/opencode
+whitelist ${HOME}/.local/state/opencode
 #include whitelist-common.inc
 #include whitelist-run-common.inc
 #include whitelist-runuser-common.inc
@@ -71,7 +72,8 @@ nou2f
 novideo
 protocol unix,inet,inet6
 seccomp
-#tracelog
+seccomp.block-secondary
+tracelog
 
 disable-mnt
 private-cache
