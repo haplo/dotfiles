@@ -5,13 +5,13 @@
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (local)",
+      "name": "Llama.cpp (local)",
       "options": {
         "baseURL": "http://127.0.0.1:11434/v1"
       },
       "models": {
-        "qwen3.5:27b": {
-          "name": "Qwen 3.5 27b"
+        "qwen3.6:27b": {
+          "name": "Qwen 3.6 27b"
         }
       }
     }
