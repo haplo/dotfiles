@@ -52,13 +52,13 @@ def has_filename(ref):
     return bool(re.match(r'\w', basename))
 
 
-def file_exists(repo_root, source_dir, ref):
-    """Check if the referenced file exists relative to source dir or repo root."""
+def resolve_file(repo_root, source_dir, ref):
+    """Return the full path of the referenced file if it exists, else None."""
     path = ref.split('#')[0]
     for base in (source_dir, repo_root):
         full = os.path.normpath(os.path.join(base, path))
         if os.path.isfile(full):
-            return True
+            return full
     return False
 
 
@@ -125,7 +125,10 @@ def process_file(filepath, repo_root):
                 continue
             if in_ranges(m.start(), link_ranges):
                 continue
-            if file_exists(repo_root, source_dir, ref):
+            resolved = resolve_file(repo_root, source_dir, ref)
+            if resolved is not None:
+                if resolved == os.path.normpath(filepath) and '#' not in ref:
+                    continue
                 replacements.append((m.start(), m.end(), f'[`{ref}`]({ref})'))
                 count += 1
             else:
@@ -147,7 +150,10 @@ def process_file(filepath, repo_root):
                 continue
             if in_ranges(m.start(), link_ranges) or in_ranges(m.start(), backtick_ranges):
                 continue
-            if file_exists(repo_root, source_dir, ref):
+            resolved = resolve_file(repo_root, source_dir, ref)
+            if resolved is not None:
+                if resolved == os.path.normpath(filepath) and '#' not in ref:
+                    continue
                 replacements.append((m.start(), m.end(), f'[{ref}]({ref})'))
                 count += 1
             else:
