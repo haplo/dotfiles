@@ -96,10 +96,13 @@ Writing requirements:
 - Favor lists over tables unless when comparing multiple items across the same dimensions.
 - When writing tables try to keep each column short and concise. Details should appear later in list form.
 - When referencing other files you MUST use Markdown links with relative paths. Whenever a file is moved or renamed identify and update any links pointing to it across the whole project.
+- Plan and keep a proper structure. Headings are used for navigation, organize them sensibly. Do NOT add a single H1 at the top of the document and the rest H2 under it, use more H1 as they are used to navigate around the document.
 - Preserve frontmatter if the project uses it.
 - Use stable filenames and avoid unnecessary renames.
 - When revising existing notes, update in place instead of creating duplicates unless the project rules say otherwise.
 - Reference run directories when citing findings so future readers can audit provenance.
+- When user asks for reorganizing a file or directory rewrite existing content to make it follow all the rules that apply.
+- Ask the user when in doubt about a major change, like how to structure a new file or when doing a major alteration to existing ones.
 
 Safety requirements:
 - Do not access files outside the workspace.
