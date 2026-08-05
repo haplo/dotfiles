@@ -1,2 +1,6 @@
 noblacklist ${HOME}/Code
 noblacklist ${HOME}/Sync
+
+mkdir ${HOME}/.config/firecrawl-cli
+noblacklist ${HOME}/.config/firecrawl-cli
+whitelist ${HOME}/.config/firecrawl-cli
