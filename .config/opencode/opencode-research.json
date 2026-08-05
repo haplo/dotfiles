@@ -4,7 +4,7 @@
   "plugin": [
     "opencode-firecrawl"
   ],
-  "model": "venice/zai-org-glm-5-2",
+  "model": "venice/kimi-k3",
   "agent": {
     "researcher": {
       "mode": "primary",
