@@ -65,3 +65,6 @@ set -gx HIP_VISIBLE_DEVICES 0
 
 # where my AI research projects lie
 set -gx RESEARCH_DIR "$HOME/Sync/Research"
+
+# firecrawl CLI https://github.com/firecrawl/cli
+set -fx FIRECRAWL_NO_TELEMETRY 1
