@@ -4,7 +4,6 @@ description: |
   Search, scrape, and interact with the web via the Firecrawl CLI. Use this skill whenever the user wants to search the web, find articles, research a topic, look something up online, scrape a webpage, grab content from a URL, get data from a website, crawl documentation, download a site, or interact with pages that need clicks or logins. Also use when they say "fetch this page", "pull the content from", "get the page at https://", or reference external websites. This provides real-time web search with full page content and interact capabilities — beyond what Claude can do natively with built-in tools. Do NOT trigger for local file operations, git commands, deployments, or code editing tasks.
 allowed-tools:
   - Bash(firecrawl *)
-  - Bash(npx firecrawl *)
 ---
 
 # Firecrawl CLI
@@ -17,7 +16,7 @@ If the task is to integrate Firecrawl into an application, add `FIRECRAWL_API_KE
 
 ## Prerequisites
 
-Must be installed. Check with `firecrawl --status`.
+Must be installed and authenticated. Check with `firecrawl --status`.
 
 ```
   🔥 firecrawl cli v1.8.0
@@ -29,8 +28,6 @@ Must be installed. Check with `firecrawl --status`.
 
 - **Concurrency**: Max parallel jobs. Run parallel operations up to this limit.
 - **Credits**: Remaining API credits. Each operation consumes credits.
-
-Authenticating gives the best results. Prefer a free account via `firecrawl init --browser` (browser login) or a `FIRECRAWL_API_KEY` whenever the human can sign up. If you cannot obtain a key and the human cannot sign up, you can still search, scrape, and interact without an API key on the keyless free tier (rate-limited). See [agent onboarding](https://www.firecrawl.dev/agent-onboarding/SKILL.md) for the full set of onboarding paths.
 
 If not ready, see [rules/install.md](rules/install.md). For output handling guidelines, see [rules/security.md](rules/security.md).
 
