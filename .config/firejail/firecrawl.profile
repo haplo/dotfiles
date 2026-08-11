@@ -19,7 +19,7 @@ caps.drop all
 hostname onlykey
 ipc-namespace
 machine-id
-net none
+#net none
 netfilter
 no3d
 nodvd
@@ -29,8 +29,9 @@ nonewprivs
 noroot
 nosound
 notv
+nou2f
 novideo
-protocol unix,inet,inet6,netlink
+protocol unix,inet,inet6
 seccomp
 tracelog
 
