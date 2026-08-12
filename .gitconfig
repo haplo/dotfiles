@@ -125,6 +125,21 @@
 
 # configuration overrides, must be at the bottom
 # https://blog.jannikwempe.com/git-config-includes
-[includeIf "gitdir/i:~/Code/archlinux/"]
-    path = ~/Code/archlinux/gitconfig
 
+[includeIf "gitdir/i:~/Code/archlinux/"]
+    path = ~/.gitconfig-archlinux
+
+[includeIf "hasconfig:remote.*.url:git@github.com:haplo/**"]
+    path = ~/.gitconfig-github
+[includeIf "hasconfig:remote.*.url:https://github.com/haplo/**"]
+    path = ~/.gitconfig-github
+
+[includeIf "hasconfig:remote.*.url:git@gitlab.com:yourhandle/**"]
+    path = ~/.gitconfig-gitlab
+[includeIf "hasconfig:remote.*.url:https://gitlab.com/yourhandle/**"]
+    path = ~/.gitconfig-gitlab
+
+[includeIf "hasconfig:remote.*.url:git@codeberg.org:fidelramos/**"]
+    path = ~/.gitconfig-codeberg
+[includeIf "hasconfig:remote.*.url:https://codeberg.org/fidelramos/**"]
+    path = ~/.gitconfig-codeberg
