@@ -9,7 +9,7 @@
     "researcher": {
       "mode": "primary",
       "description": "Primary research agent. Plans work, delegates web search, writes and organizes files, saves provenance, and records changes in git.",
-      "model": "venice/deepseek-v4-flash-0731",
+      "model": "venice/grok-4-6",
       "prompt": "{file:./prompts/researcher.md}",
       "temperature": 0.2,
       "steps": 50,
