@@ -35,10 +35,10 @@ abbr -a ll 'ls -l'
 # prefer eza instead of ls if available
 if type -q eza
     abbr -a ls eza
-    abbr -a ee 'eza -alF'
-    abbr -a ll 'eza -alF'
-    abbr -a ea 'eza -a'
     abbr -a la 'eza -a'
+    abbr -a ll 'eza -al'
+    abbr -a lt 'eza -aT'
+    abbr -a llt 'eza -alT'
 end
 
 # use running Emacs if available
