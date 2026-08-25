@@ -10,15 +10,11 @@
         "baseURL": "http://127.0.0.1:11434/v1"
       },
       "models": {
-        "qwen3.6:27b": {
-          "name": "Qwen 3.6 27b"
+        "qwen3.8:27b": {
+          "name": "Qwen 3.8 27b"
         }
       }
     }
   },
-  "model": "ollama/qwen3.5:27b",
-  "permission": {
-    "websearch": "deny",
-    "webfetch": "deny"
-  }
+  "model": "ollama/qwen3.8:27b"
 }
