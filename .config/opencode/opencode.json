@@ -9,7 +9,7 @@
         "baseURL": "http://127.0.0.1:11434/v1"
       },
       "models": {
-        "qwen3.8:27b": {
+        "Qwen3.8-27b": {
           "name": "Qwen 3.8 27b"
         }
       }
