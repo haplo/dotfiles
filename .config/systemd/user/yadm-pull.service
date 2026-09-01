@@ -2,6 +2,8 @@
 Description=Run yadm pull and notify
 After=graphical-session.target network-online.target
 Wants=network-online.target
+StartLimitIntervalSec=1day
+StartLimitBurst=3
 
 [Service]
 Type=oneshot
@@ -10,5 +12,3 @@ StandardOutput=journal
 StandardError=journal
 Restart=on-failure
 RestartSec=5min
-StartLimitIntervalSec=1day
-StartLimitBurst=3
