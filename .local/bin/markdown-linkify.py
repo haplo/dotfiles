@@ -12,6 +12,9 @@ files that are not already Markdown links, and converts them to relative links.
 - Directory references to non-existent directories are left unchanged (no warning,
   since trailing slashes are common in prose)
 - Fenced code blocks and YAML frontmatter are skipped
+- Files can be excluded with -e/--exclude GLOB (repeatable, anchored at the
+  scanned directory; * matches one level, ** matches multiple levels). If -e
+  is not given, patterns are read from MARKDOWN_LINKIFY_EXCLUDE (|-separated)
 - Quiet on success; prints total converted references at the end
 """
 
@@ -39,6 +42,43 @@ BACKTICK_DIR_RE = re.compile(r'`((?:[\w-]+/)+)`')
 PLAIN_DIR_RE = re.compile(r'(?<![\w`/])((?:[\w-]+/)+)(?![\w])')
 
 SKIP_DIRS = {'.git', '.firecrawl', '__pycache__', 'tmp', '.opencode'}
+
+
+def glob_to_regex(pattern):
+    """Translate a glob pattern to a compiled regex, anchored at both ends.
+
+    * and ? match within a path segment; ** matches across segments;
+    **/ also matches zero directories (so **/x.md matches ./x.md too).
+    """
+    if pattern.startswith('./'):
+        pattern = pattern[2:]
+    i, n = 0, len(pattern)
+    out = []
+    while i < n:
+        c = pattern[i]
+        if c == '*':
+            if pattern[i:i + 2] == '**':
+                while i < n and pattern[i] == '*':
+                    i += 1
+                if pattern[i:i + 1] == '/':
+                    out.append('(?:.*/)?')
+                    i += 1
+                else:
+                    out.append('.*')
+            else:
+                out.append('[^/]*')
+                i += 1
+        elif c == '?':
+            out.append('[^/]')
+            i += 1
+        else:
+            out.append(re.escape(c))
+            i += 1
+    return re.compile('^' + ''.join(out) + '$')
+
+
+def is_excluded(relpath, matchers):
+    return any(m.match(relpath) for m in matchers)
 
 
 def is_url(s):
@@ -210,9 +250,14 @@ def process_file(filepath, repo_root):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Convert plain .md file references in markdown files to relative links.')
+        description='Convert plain .md file references in markdown files to relative links.',
+        epilog='If -e is not given, exclude patterns are read from the '
+               'MARKDOWN_LINKIFY_EXCLUDE environment variable (|-separated).')
     parser.add_argument('directory', nargs='?',
         help='Repository root directory to scan (default: current working directory).')
+    parser.add_argument('-e', '--exclude', action='append', default=[], metavar='GLOB',
+        help='Glob pattern of files to exclude, anchored at the scanned directory '
+             '(* = one level, ** = multiple levels); may be given multiple times.')
     args = parser.parse_args()
 
     repo_root = args.directory if args.directory else os.getcwd()
@@ -220,13 +265,22 @@ def main():
         parser.error(f"not a directory: {repo_root}")
     repo_root = os.path.abspath(repo_root)
 
+    patterns = args.exclude
+    if not patterns:
+        patterns = os.environ.get('MARKDOWN_LINKIFY_EXCLUDE', '').split('|')
+    matchers = [glob_to_regex(p) for p in (p.strip() for p in patterns) if p]
+
     total = 0
 
     for root, dirs, files in os.walk(repo_root):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for f in sorted(files):
-            if f.endswith('.md'):
-                total += process_file(os.path.join(root, f), repo_root)
+            if not f.endswith('.md'):
+                continue
+            filepath = os.path.join(root, f)
+            if is_excluded(os.path.relpath(filepath, repo_root), matchers):
+                continue
+            total += process_file(filepath, repo_root)
 
     print(f"Total references converted: {total}")
 
