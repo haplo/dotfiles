@@ -102,7 +102,7 @@ def resolve_file(repo_root, source_dir, ref):
         full = os.path.normpath(os.path.join(base, path))
         if os.path.isfile(full):
             return full
-    return False
+    return None
 
 
 def dir_exists(repo_root, source_dir, ref):
