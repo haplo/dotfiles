@@ -15,6 +15,9 @@ files that are not already Markdown links, and converts them to relative links.
 - Files can be excluded with -e/--exclude GLOB (repeatable, anchored at the
   scanned directory; * matches one level, ** matches multiple levels). If -e
   is not given, patterns are read from MARKDOWN_LINKIFY_EXCLUDE (|-separated)
+- -v prints each parsed file; -vv also prints each updated line as
+  file:LINE  <updated line>
+- -n/--dry-run writes no changes (useful combined with -v)
 - Quiet on success; prints total converted references at the end
 """
 
@@ -120,8 +123,9 @@ def in_ranges(pos, ranges):
     return any(s <= pos < e for s, e in ranges)
 
 
-def process_file(filepath, repo_root):
+def process_file(filepath, repo_root, verbose=0, dry_run=False):
     source_dir = os.path.dirname(filepath)
+    relpath = os.path.relpath(filepath, repo_root)
     count = 0
 
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -154,6 +158,8 @@ def process_file(filepath, repo_root):
         if in_code_block:
             new_lines.append(line)
             continue
+
+        original_line = line
 
         # --- Process backtick-enclosed .md references ---
         link_ranges = find_ranges(line, LINK_RE)
@@ -239,9 +245,12 @@ def process_file(filepath, repo_root):
         for start, end, repl in sorted(replacements, key=lambda x: -x[0]):
             line = line[:start] + repl + line[end:]
 
+        if verbose >= 2 and line != original_line:
+            print(f"{relpath}:{line_num}  {line.rstrip()}")
+
         new_lines.append(line)
 
-    if count > 0:
+    if count > 0 and not dry_run:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.writelines(new_lines)
 
@@ -258,6 +267,10 @@ def main():
     parser.add_argument('-e', '--exclude', action='append', default=[], metavar='GLOB',
         help='Glob pattern of files to exclude, anchored at the scanned directory '
              '(* = one level, ** = multiple levels); may be given multiple times.')
+    parser.add_argument('-v', '--verbose', action='count', default=0,
+        help='Print each parsed file; use -vv to also print each updated line.')
+    parser.add_argument('-n', '--dry-run', action='store_true',
+        help='Write no changes; useful combined with -v to see what would change.')
     args = parser.parse_args()
 
     repo_root = args.directory if args.directory else os.getcwd()
@@ -278,11 +291,16 @@ def main():
             if not f.endswith('.md'):
                 continue
             filepath = os.path.join(root, f)
-            if is_excluded(os.path.relpath(filepath, repo_root), matchers):
+            relpath = os.path.relpath(filepath, repo_root)
+            if is_excluded(relpath, matchers):
                 continue
-            total += process_file(filepath, repo_root)
+            if args.verbose >= 1:
+                print(relpath)
+            total += process_file(filepath, repo_root, verbose=args.verbose,
+                                  dry_run=args.dry_run)
 
-    print(f"Total references converted: {total}")
+    suffix = ' (dry run, no files written)' if args.dry_run else ''
+    print(f"Total references converted: {total}{suffix}")
 
 
 if __name__ == '__main__':
