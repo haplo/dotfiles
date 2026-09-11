@@ -15,5 +15,5 @@
       }
     }
   },
-  "model": "venice/kimi-k3"
+  "model": "venice/deepseek-v4-1-flash"
 }
