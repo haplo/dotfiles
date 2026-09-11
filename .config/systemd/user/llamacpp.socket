@@ -1,0 +1,9 @@
+[Unit]
+Description=llama.cpp public socket
+
+[Socket]
+ListenStream=127.0.0.1:11434
+Service=llamacpp-proxy.service
+
+[Install]
+WantedBy=sockets.target

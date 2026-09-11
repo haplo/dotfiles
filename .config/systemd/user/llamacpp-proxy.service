@@ -1,0 +1,13 @@
+[Unit]
+Description=llama.cpp socket proxy (11434 -> 9931)
+BindsTo=llamacpp.service
+After=llamacpp.service
+PartOf=llamacpp.service
+
+[Service]
+Type=notify
+TimeoutStartSec=30s
+#ExecStartPre=bash -c 'until curl -I http://127.0.0.1:9931/health | grep "200 OK"; do sleep 1; done'
+ExecStart=/usr/lib/systemd/systemd-socket-proxyd --exit-idle-time=15min 127.0.0.1:9931
+Restart=on-failure
+RestartSec=1

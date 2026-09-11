@@ -1,0 +1,13 @@
+[Unit]
+Description=llama.cpp server
+StopWhenUnneeded=yes
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/llama-server --port 9931 --models-preset %h/.config/llama.cpp/models.ini
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=5m
+
+[Install]
+WantedBy=multi-user.target
