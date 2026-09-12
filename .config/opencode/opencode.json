@@ -2,14 +2,14 @@
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": false,
   "provider": {
-    "ollama": {
+    "llama": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "Llama.cpp (local)",
       "options": {
         "baseURL": "http://127.0.0.1:11434/v1"
       },
       "models": {
-        "Qwen3.8-27b": {
+        "qwen27b": {
           "name": "Qwen 3.8 27b"
         }
       }

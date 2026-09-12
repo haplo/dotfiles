@@ -3,18 +3,18 @@
   "autoupdate": false,
   "disabled_providers": ["anthropic", "gemini", "openai", "venice"],
   "provider": {
-    "ollama": {
+    "llama": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "Llama.cpp (local)",
       "options": {
         "baseURL": "http://127.0.0.1:11434/v1"
       },
       "models": {
-        "qwen3.8:27b": {
+        "qwen27b": {
           "name": "Qwen 3.8 27b"
         }
       }
     }
   },
-  "model": "ollama/qwen3.8:27b"
+  "model": "llama/qwen27b"
 }
