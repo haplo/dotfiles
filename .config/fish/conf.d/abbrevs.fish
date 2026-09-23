@@ -62,5 +62,5 @@ abbr -a --set-cursor logs 'journalctl -xe%'
 abbr -a --set-cursor logserr 'journalctl -xep3%'
 abbr -a --set-cursor logswarn 'journalctl -xep4%'
 
-abbr -a opencode 'firejail --profile=opencode --whitelist=(pwd) /usr/bin/opencode'
-abbr -a opencode-local 'OPENCODE_CONFIG=~/.config/opencode/opencode-local.json OPENCODE_DISABLE_MODELS_FETCH=1 firejail --profile=opencode-local --whitelist=(pwd) /usr/bin/opencode'
+abbr -a opencode 'firejail --profile=opencode --whitelist=(pwd) /usr/bin/opencode --standalone'
+abbr -a opencode-local 'OPENCODE_CONFIG=~/.config/opencode/opencode-local.json OPENCODE_DISABLE_MODELS_FETCH=1 firejail --profile=opencode-local --whitelist=(pwd) /usr/bin/opencode --standalone'

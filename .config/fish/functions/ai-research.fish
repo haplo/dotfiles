@@ -13,7 +13,7 @@ function ai-research --description "Initialize or open an AI agent research proj
     end
 
     set -l project_name $argv[$arg_idx]
-    set -l opencode_args
+    set -l opencode_args --standalone
     set -l total_args (count $argv)
     if test $total_args -gt $arg_idx
         for i in (seq (math $arg_idx + 1) $total_args)

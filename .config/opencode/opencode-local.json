@@ -1,20 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
-  "disabled_providers": ["anthropic", "gemini", "openai", "venice"],
-  "provider": {
-    "llama": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Llama.cpp (local)",
-      "options": {
-        "baseURL": "http://127.0.0.1:11434/v1"
-      },
-      "models": {
-        "qwen27b": {
-          "name": "Qwen 3.8 27b"
-        }
-      }
-    }
-  },
-  "model": "llama/qwen27b"
+  "model": "llama/qwen27b",
+  "default_agent": "build",
+  "experimental": {
+    "policies": [
+      { "effect": "deny", "action": "provider.use", "resource": "*" },
+      { "effect": "allow", "action": "provider.use", "resource": "llama" }
+    ]
+  }
 }

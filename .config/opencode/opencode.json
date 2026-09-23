@@ -1,11 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": false,
-  "provider": {
+  "update": "disable",
+  "providers": {
     "llama": {
-      "npm": "@ai-sdk/openai-compatible",
       "name": "Llama.cpp (local)",
-      "options": {
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
         "baseURL": "http://127.0.0.1:11434/v1"
       },
       "models": {
