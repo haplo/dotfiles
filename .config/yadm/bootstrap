@@ -19,7 +19,7 @@ function install_packages
         sudo apt install $packages
     else if command -v pacman >/dev/null 2>&1
         # Arch Linux and derivatives
-        set -l packages bat direnv enchant eza fd fzf git git-delta less libnotify most nuspell ripgrep uv
+        set -l packages bat direnv enchant eza fd fzf git git-delta less libnotify moor nuspell ripgrep uv
         sudo pacman -Syu --needed $packages
     else if command -v dnf >/dev/null 2>&1
         # Fedora and other RPM-based distros

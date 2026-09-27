@@ -11,7 +11,10 @@ if test -n "$DENO_INSTALL"
     fish_add_path $DENO_INSTALL/bin
 end
 
-if type -q most
+if type -q moor
+    set -gx PAGER moor
+    set -gx MANPAGER moor
+else if type -q most
     set -gx PAGER most
     set -gx MANPAGER most
 else if type -q less
