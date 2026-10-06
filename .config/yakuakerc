@@ -15,7 +15,6 @@ new-session-two-horizontal=none
 new-session-two-vertical=none
 next-terminal=Ctrl+Tab; Ctrl+O
 rename-session=Ctrl+Shift+R
-split-left-right=Ctrl+S
 split-top-bottom=none
 
 [Window]
