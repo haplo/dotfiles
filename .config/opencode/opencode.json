@@ -1,6 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "update": "disable",
+  "mcp": {
+    "website-spec": {
+      "type": "remote",
+      "url": "https://mcp.specification.website/mcp"
+    }
+  },
   "providers": {
     "llama": {
       "name": "Llama.cpp (local)",
