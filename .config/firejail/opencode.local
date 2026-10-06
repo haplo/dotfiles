@@ -4,3 +4,15 @@ noblacklist ${HOME}/Sync
 mkdir ${HOME}/.config/firecrawl-cli
 noblacklist ${HOME}/.config/firecrawl-cli
 whitelist ${HOME}/.config/firecrawl-cli
+
+# allow minimal SSH
+# don't use allow-ssh.inc because it gives access to ~/.ssh
+noblacklist ${PATH}/ssh*
+noblacklist ${PATH}/scp
+noblacklist ${PATH}/sftp
+# Arch Linux and derivatives
+noblacklist /usr/lib/ssh
+# Debian/Ubuntu and derivatives
+noblacklist /usr/lib/openssh
+# Fedora and derivatives
+noblacklist /usr/libexec/openssh
