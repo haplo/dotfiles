@@ -1,0 +1,23 @@
+noblacklist ${HOME}/Code
+noblacklist ${HOME}/Sync/Research
+
+# allow /tmp/agents
+ignore private-tmp
+whitelist /tmp/agents
+
+# stricter SSH: allow ssh commands but disallow ~/.ssh
+ignore include allow-ssh.inc
+noblacklist ${PATH}/ssh*
+noblacklist ${PATH}/scp
+noblacklist ${PATH}/sftp
+# Arch Linux and derivatives
+noblacklist /usr/lib/ssh
+# Debian/Ubuntu and derivatives
+noblacklist /usr/lib/openssh
+# Fedora and derivatives
+noblacklist /usr/libexec/openssh
+
+# firecrawl
+mkdir ${HOME}/.config/firecrawl-cli
+noblacklist ${HOME}/.config/firecrawl-cli
+whitelist ${HOME}/.config/firecrawl-cli

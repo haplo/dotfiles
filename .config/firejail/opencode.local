@@ -1,18 +1,11 @@
-noblacklist ${HOME}/Code
-noblacklist ${HOME}/Sync
-
-mkdir ${HOME}/.config/firecrawl-cli
-noblacklist ${HOME}/.config/firecrawl-cli
-whitelist ${HOME}/.config/firecrawl-cli
-
-# allow minimal SSH
-# don't use allow-ssh.inc because it gives access to ~/.ssh
-noblacklist ${PATH}/ssh*
-noblacklist ${PATH}/scp
-noblacklist ${PATH}/sftp
-# Arch Linux and derivatives
-noblacklist /usr/lib/ssh
-# Debian/Ubuntu and derivatives
-noblacklist /usr/lib/openssh
-# Fedora and derivatives
-noblacklist /usr/libexec/openssh
+mkdir ${HOME}/.cache/opencode
+mkdir ${HOME}/.config/opencode
+mkdir ${HOME}/.local/share/opencode
+mkdir ${HOME}/.local/state/opencode
+whitelist ${HOME}/.cache/opencode
+whitelist ${HOME}/.config/opencode
+#whitelist ${HOME}/.config/git
+#whitelist ${HOME}/.gitconfig
+whitelist ${HOME}/.local/share/opencode
+whitelist ${HOME}/.local/state/opencode
+include whitelist-common.inc
