@@ -1,0 +1,7 @@
+mkdir ${HOME}/.agents
+mkdir ${HOME}/.pi
+whitelist ${HOME}/.agents
+#whitelist ${HOME}/.config/git
+#whitelist ${HOME}/.gitconfig
+whitelist ${HOME}/.pi
+include whitelist-common.inc
