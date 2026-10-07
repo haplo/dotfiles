@@ -76,7 +76,17 @@ function ai-research --description "Initialize or open an AI agent research proj
     if test "$force_flag" = "true"; or test (git status --porcelain | count) -eq 0
         # start sandboxed opencode
         # direnv exec is necessary to set environment variables via .envrc
-        direnv exec . firejail --profile=opencode-research /usr/bin/opencode $opencode_args
+        direnv exec . fish -c '
+            # Build whitelist arguments after direnv loads the colon-separated .envrc value.
+            set -l extra_whitelist_args
+            for dir in (string split : -- "$FIREJAIL_EXTRA_WHITELIST")
+                if test -n "$dir"
+                    set -a extra_whitelist_args "--whitelist=$dir"
+                end
+            end
+        
+            exec firejail --profile=opencode-research $extra_whitelist_args /usr/bin/opencode $argv
+        ' -- $opencode_args
     else
         echo "WARNING: dirty git repository, clean before starting opencode"
         echo
