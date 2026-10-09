@@ -1,0 +1,22 @@
+{
+  "collapseChangelog": true,
+  "defaultProjectTrust": "ask",
+  "defaultThinkingLevel": "high",
+  "defaultTools": ["read", "bash", "edit", "write", "grep", "find", "ls"],
+  "enableAnalytics": false,
+  "enableInstallTelemetry": false,
+  "enabledModels": [
+    "deepseek-v4-1-flash",
+    "kimi-k3",
+    "claude-opus-5-5",
+    "openai-gpt-61-sol"
+  ],
+  "hideThinkingBlock": true,
+  "lastChangelogVersion": "1.0.4",
+  "quietStartup": "header",
+  "shellPath": "/usr/bin/bash",
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "theme": "light/dark"
+}
