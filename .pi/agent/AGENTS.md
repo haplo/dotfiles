@@ -15,3 +15,4 @@
 - Work on the current workspace unless asked otherwise.
 - Do not expect sudo/root access.
 - Do not fight against the sandbox, ask for access when you need it.
+- If you need a temporary dir to work: `mktemp -d -p /tmp/agents/`
