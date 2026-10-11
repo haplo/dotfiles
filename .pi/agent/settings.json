@@ -1,11 +1,14 @@
 {
   "collapseChangelog": true,
+  "defaultModel": "Qwen3.8-27b",
+  "defaultProvider": "llama-server=http://127.0.0.1:11434",
   "defaultProjectTrust": "ask",
   "defaultThinkingLevel": "high",
   "defaultTools": ["read", "bash", "edit", "write", "grep", "find", "ls"],
   "enableAnalytics": false,
   "enableInstallTelemetry": false,
   "enabledModels": [
+    "Qwen3.8-27b",
     "deepseek-v4-1-flash",
     "kimi-k3",
     "claude-opus-5-5",
@@ -13,10 +16,21 @@
   ],
   "hideThinkingBlock": true,
   "lastChangelogVersion": "1.0.4",
+  "llamaSettings": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:11434"
+      }
+    ]
+  },
   "quietStartup": "header",
   "shellPath": "/usr/bin/bash",
   "terminal": {
     "showTerminalProgress": true
   },
-  "theme": "light/dark"
+  "theme": "light/dark",
+  "packages": [
+    "npm:pi-llama-cpp",
+    "npm:pi-venice"
+  ]
 }
