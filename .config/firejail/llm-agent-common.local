@@ -1,6 +1,9 @@
 noblacklist ${HOME}/Code
 noblacklist ${HOME}/Sync/Research
 
+include allow-java.inc
+private-etc java*
+
 # allow /tmp/agents
 ignore private-tmp
 whitelist /tmp/agents
