@@ -5,6 +5,15 @@
   "defaultProjectTrust": "ask",
   "defaultThinkingLevel": "high",
   "defaultTools": ["read", "bash", "edit", "write", "grep", "find", "ls"],
+  "defaultTools": [
+    "read",
+    "bash",
+    "edit",
+    "write",
+    "grep",
+    "find",
+    "ls"
+  ],
   "enableAnalytics": false,
   "enableInstallTelemetry": false,
   "enabledModels": [
@@ -15,7 +24,7 @@
     "openai-gpt-61-sol"
   ],
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "1.0.4",
+  "lastChangelogVersion": "1.1.0",
   "llamaSettings": {
     "servers": [
       {
