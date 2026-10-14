@@ -56,21 +56,6 @@ fi
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
-# Use Guix if available
-export GUIX_PROFILE="/home/fidel/.config/guix/current"
-if [ -f "$GUIX_PROFILE/etc/profile" ]; then
-    source "$GUIX_PROFILE/etc/profile"
-fi
-# https://guix.gnu.org/en/manual/devel/en/html_node/Getting-Started.html
-export GUIX_PROFILE="/home/fidel/.guix-profile"
-if [ -f "$GUIX_PROFILE/etc/profile" ]; then
-    source "$GUIX_PROFILE/etc/profile"
-    export SSL_CERT_DIR="$GUIX_PROFILE/etc/ssl/certs"
-    export SSL_CERT_FILE="$SSL_CERT_DIR/ca-certificates.crt"
-    export GIT_SSL_CAINFO="$SSL_CERT_FILE"
-    export CURL_CA_BUNDLE="$SSL_CERT_FILE"
-fi
-
 # load .extra right at the end if present, this file is not in version control
 # and is meant for this system specific changes
 [ -r .extra ] && [ -f .extra ] && source .extra;
