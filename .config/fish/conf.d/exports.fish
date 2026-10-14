@@ -41,9 +41,6 @@ if type -q emacsclient
 end
 set -gx SUDO_EDITOR rvim
 
-# OnlyKey for GPG https://docs.crp.to/onlykey-agent.html
-set -gx GNUPGHOME "$HOME/.gnupg/onlykey"
-
 # make Python use UTF-8 encoding for output to stdin, stdout, and stderr
 set -gx PYTHONIOENCODING UTF-8
 # use ipdb for Python debugging by default
