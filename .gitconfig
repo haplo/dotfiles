@@ -43,7 +43,6 @@
     template = ~/.gitmessage
 
 [core]
-    sshCommand = ~/.local/bin/onlykey-git-wrapper.sh
     excludesfile = ~/.gitignore_global
     attributesfile = ~/.gitattributes
     pager = delta
