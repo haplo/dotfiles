@@ -1,16 +1,3 @@
-# set PATH so it includes user's private bin if it exists
-if test -d "$HOME/.local/bin"
-    fish_add_path $HOME/.local/bin
-end
-
-if test -d "$HOME/.cargo/bin"
-    fish_add_path $HOME/.cargo/bin
-end
-
-if test -n "$DENO_INSTALL"
-    fish_add_path $DENO_INSTALL/bin
-end
-
 if type -q moor
     set -gx PAGER moor
     set -gx MANPAGER moor
@@ -49,12 +36,6 @@ set -gx PYTHONBREAKPOINT 'ipdb.set_trace'
 # https://wiki.archlinux.org/title/Android#App_development
 # https://developer.android.com/tools/variables#android_home
 set -gx ANDROID_HOME "$HOME/.local/android/sdk"
-
-# https://golang.org/doc/code.html
-set -gx GOPATH "$HOME/Code/go"
-if test -n "$GOPATH"/bin
-    fish_add_path $GOPATH/bin
-end
 
 # https://wiki.debian.org/KVM
 set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
