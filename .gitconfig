@@ -120,7 +120,7 @@
 [user]
     name = Fidel Ramos
     email = contact.gyldd@8shield.net
-    signingkey = 379F14BB02F9317F
+    signingkey = 975BECA6F7290772E0ADD499C4590434B6C74321
 
 # configuration overrides, must be at the bottom
 # https://blog.jannikwempe.com/git-config-includes
