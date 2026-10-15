@@ -22,7 +22,9 @@ whitelist ${HOME}/.config/keepassxc
 whitelist ${HOME}/.config/KeePassXCrc
 include whitelist-common.inc
 
-# support hardware security keys (Yubikey, Onlykey, etc.)
+# support OnlyKey hardware security key
 ignore nou2f
 ignore private-dev
 protocol netlink
+# support Nitrokey 3 hardware security key
+whitelist /run/pcscd
