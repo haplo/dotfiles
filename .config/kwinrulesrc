@@ -1,45 +1,6 @@
 [$Version]
 update_info=kwinrules.upd:replace-placement-string-to-enum,kwinrules.upd:use-virtual-desktop-ids
 
-[04683306-9eb8-476e-aaff-501cad4e9f6e]
-Description=Application settings for Clementine
-activity=00000000-0000-0000-0000-000000000000
-activityrule=3
-desktops=e35f4828-49ef-4caa-bd4a-43855528a654
-desktopsrule=3
-wmclass=\sorg.clementine_player.Clementine
-wmclasscomplete=true
-wmclassmatch=1
-
-[097bc754-22cf-46a3-8db6-10846d883db0]
-Description=Application settings for digikam
-activity=c5bc2af4-5eae-48ee-a97c-cd38f9796caf
-activityrule=3
-desktops=d08da560-ce27-43c1-9bd5-dc99a0c3343d
-desktopsrule=3
-maximizehoriz=true
-maximizehorizrule=3
-maximizevert=true
-maximizevertrule=3
-noborderrule=3
-wmclass=\sorg.kde.digikam
-wmclasscomplete=true
-wmclassmatch=1
-
-[0df2c0ed-f37a-4844-99dd-d05d223f86a6]
-Description=Application settings for geeqie
-activity=c5bc2af4-5eae-48ee-a97c-cd38f9796caf
-activityrule=3
-clientmachine=localhost
-desktops=58792994-fe19-4d82-bb81-6d6f861e4f81
-desktopsrule=3
-maximizehoriz=true
-maximizehorizrule=3
-maximizevert=true
-maximizevertrule=3
-wmclass=geeqie
-wmclassmatch=1
-
 [1]
 Description=Window settings for firefox
 activity=00000000-0000-0000-0000-000000000000
@@ -74,18 +35,6 @@ wmclass=\sorg.strawberrymusicplayer.strawberry
 wmclasscomplete=true
 wmclassmatch=1
 
-[20bf4d0c-b427-48c4-a9cc-0b5a3644424e]
-Description=Window settings for KeePassXC
-activity=005505fd-5c0b-4be8-868e-607772d149f6,7d25de3e-3514-489c-8cad-e3ce570669f9
-activityrule=3
-desktops=d08da560-ce27-43c1-9bd5-dc99a0c3343d
-desktopsrule=3
-title=KeePassXC
-types=1
-wmclass=\sorg.keepassxc.KeePassXC
-wmclasscomplete=true
-wmclassmatch=1
-
 [2140a3cd-0140-46c2-85be-950b950ddd8e]
 Description=Window settings for Brave-browser
 clientmachine=localhost
@@ -116,11 +65,11 @@ wmclassmatch=1
 Description=Application settings for Emacs
 activity=005505fd-5c0b-4be8-868e-607772d149f6,7d25de3e-3514-489c-8cad-e3ce570669f9
 clientmachine=localhost
+decorationpolicy=none
+decorationpolicyrule=3
 desktops=d08da560-ce27-43c1-9bd5-dc99a0c3343d
 maximizehoriz=true
 maximizevert=true
-noborder=true
-noborderrule=3
 position=1536,0
 size=1056,1501
 sizerule=3
@@ -128,34 +77,6 @@ title=Emacs
 wmclass=emacs
 wmclasscomplete=true
 wmclassmatch=2
-
-[344808f6-26f7-4761-bae2-6e782540a67d]
-Description=Application settings for firefox
-maximizevertrule=3
-position=0,0
-positionrule=3
-size=1536,1684
-sizerule=3
-types=1
-wmclass=\sfirefox
-wmclasscomplete=true
-wmclassmatch=1
-
-[35a4f328-1fcc-4690-95af-0153ad5b8412]
-Description=Window settings for Picard
-activity=00000000-0000-0000-0000-000000000000
-activityrule=5
-desktops=da831f4f-b295-41da-b242-5a5cc3184ea1
-desktopsrule=3
-position=1536,0
-positionrule=3
-size=1536,864
-sizerule=3
-title=MusicBrainz Picard
-types=1
-wmclass=\sorg.musicbrainz.Picard
-wmclasscomplete=true
-wmclassmatch=1
 
 [4]
 Description=Window settings for KeePassXC
@@ -223,12 +144,12 @@ Description=Application settings for rawtherapee
 activity=c5bc2af4-5eae-48ee-a97c-cd38f9796caf
 activityrule=3
 clientmachine=localhost
+decorationpolicy=none
+decorationpolicyrule=3
 desktops=e35f4828-49ef-4caa-bd4a-43855528a654
 desktopsrule=3
 maximizehoriz=true
 maximizevert=true
-noborder=true
-noborderrule=3
 position=0,0
 size=1536,1684
 title=MusicBrainz Picard
@@ -241,13 +162,14 @@ Description=Application settings for Digikam
 activity=c5bc2af4-5eae-48ee-a97c-cd38f9796caf
 activityrule=3
 clientmachine=localhost
+decorationpolicy=server
+decorationpolicyrule=3
 desktops=d08da560-ce27-43c1-9bd5-dc99a0c3343d
 desktopsrule=3
 maximizehoriz=true
 maximizehorizrule=3
 maximizevert=true
 maximizevertrule=3
-noborderrule=3
 position=0,0
 size=1536,1684
 title=digiKam
@@ -261,13 +183,14 @@ Description=Ansel
 activity=c5bc2af4-5eae-48ee-a97c-cd38f9796caf
 activityrule=3
 clientmachine=localhost
+decorationpolicy=server
+decorationpolicyrule=3
 desktops=e35f4828-49ef-4caa-bd4a-43855528a654
 desktopsrule=3
 maximizehoriz=true
 maximizehorizrule=3
 maximizevert=true
 maximizevertrule=3
-noborderrule=3
 title=Ansel
 types=1
 windowrole=main-app
@@ -293,50 +216,8 @@ types=1
 wmclass=geeqie
 wmclassmatch=1
 
-[885f44a0-5a44-4b97-93ab-3da4477a7920]
-Description=Window settings for firefox
-position=0,0
-positionrule=3
-size=1600,1600
-sizerule=3
-title=Home / X — Mozilla Firefox
-types=1
-wmclass=\sfirefox
-wmclasscomplete=true
-wmclassmatch=1
-
-[9217bcae-c26c-4b11-a187-9b8a03f5f75e]
-Description=Window settings for org.strawberrymusicplayer.strawberry
-activity=00000000-0000-0000-0000-000000000000
-activityrule=3
-desktops=da831f4f-b295-41da-b242-5a5cc3184ea1
-desktopsrule=3
-position=0,0
-positionrule=3
-size=1600,1378
-sizerule=3
-title=Strawberry Music Player
-types=1
-wmclass=\sorg.strawberrymusicplayer.strawberry
-wmclasscomplete=true
-wmclassmatch=1
-
 [General]
-count=15
-rules=5c52c8d5-dbd2-48d5-ba0d-f70bff4b398a,72b51950-eac0-4592-9b09-96f5a75e77fe,2f6bc69c-1781-4336-9185-09f9e421ce06,2140a3cd-0140-46c2-85be-950b950ddd8e,e91d2bf3-813b-436d-a585-14c159f7836a,1,2,3,4,5,6,7,8,4c576f05-66a7-4ccc-8e67-ec6d8e7e1ba4,cd59a26c-21a6-42ed-bce3-e7728f71c1b8
-
-[b09710ff-47f5-4997-bcba-c4b4673f8126]
-Description=Application settings for emacs
-wmclass=emacs
-wmclasscomplete=true
-wmclassmatch=2
-
-[b3f02c50-737d-4e5b-85c5-a134486c2b3f]
-Description=Application settings for Emacs
-noborderrule=3
-wmclass=emacs
-wmclasscomplete=true
-wmclassmatch=2
+Order=steam,5c52c8d5-dbd2-48d5-ba0d-f70bff4b398a,72b51950-eac0-4592-9b09-96f5a75e77fe,2f6bc69c-1781-4336-9185-09f9e421ce06,2140a3cd-0140-46c2-85be-950b950ddd8e,e91d2bf3-813b-436d-a585-14c159f7836a,1,2,3,4,5,6,7,8,4c576f05-66a7-4ccc-8e67-ec6d8e7e1ba4,cd59a26c-21a6-42ed-bce3-e7728f71c1b8
 
 [cd59a26c-21a6-42ed-bce3-e7728f71c1b8]
 Description=Yakuake
@@ -361,14 +242,4 @@ windowrole=browser-window
 windowrolematch=1
 wmclass=signal Signal
 wmclasscomplete=true
-wmclassmatch=1
-
-[eb01c96b-9ab1-4709-bfee-fb4112638ef0]
-Description=Application settings for rawtherapee
-activity=c5bc2af4-5eae-48ee-a97c-cd38f9796caf
-activityrule=3
-desktops=e35f4828-49ef-4caa-bd4a-43855528a654
-desktopsrule=3
-noborderrule=3
-wmclass=rawtherapee
 wmclassmatch=1
