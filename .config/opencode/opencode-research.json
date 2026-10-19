@@ -1,12 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "venice/kimi-k3",
+  "model": "deepseek-v4-1-flash-1017",
   "default_agent": "researcher",
   "agents": {
     "researcher": {
       "mode": "primary",
       "description": "Primary research agent. Plans work, delegates web search, writes and organizes files, saves provenance, and records changes in git.",
-      "model": "venice/deepseek-v4-1-flash",
+      "model": "venice/deepseek-v4-1-flash-1017",
       "system": "{file:./prompts/researcher.md}",
       "request": {
         "body": {
@@ -38,7 +38,7 @@
       "mode": "subagent",
       "hidden": true,
       "description": "Web-only search subagent for a single research thread. Runs several query variations, fetches high-signal pages, and returns a concise evidence bundle.",
-      "model": "venice/deepseek-v4-1-flash",
+      "model": "venice/deepseek-v4-1-flash-1017",
       "system": "{file:./prompts/web-searcher.md}",
       "request": {
         "body": {
