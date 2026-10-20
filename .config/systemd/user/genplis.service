@@ -1,0 +1,6 @@
+[Unit]
+Description=Generate M3U playlists with genplis
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/genplis -qq
