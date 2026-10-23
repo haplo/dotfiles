@@ -10,4 +10,6 @@ whitelist ${HOME}/.local/share/opencode
 whitelist ${HOME}/.local/state/opencode
 mkdir ${HOME}/.agents/skills
 whitelist ${HOME}/.agents/skills
+mkdir ${HOME}/.config/uv
+whitelist ${HOME}/.config/uv
 include whitelist-common.inc
