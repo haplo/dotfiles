@@ -17,9 +17,10 @@ mkfile ${HOME}/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.j
 whitelist ${HOME}/.mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json
 mkdir ${HOME}/.cache/keepassxc
 mkdir ${HOME}/.config/keepassxc
+mkdir ${HOME}/.local/state/keepassxc
 whitelist ${HOME}/.cache/keepassxc
 whitelist ${HOME}/.config/keepassxc
-whitelist ${HOME}/.config/KeePassXCrc
+whitelist ${HOME}/.local/state/keepassxc
 include whitelist-common.inc
 
 # support OnlyKey hardware security key
