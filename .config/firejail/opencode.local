@@ -8,4 +8,6 @@ whitelist ${HOME}/.config/opencode
 #whitelist ${HOME}/.gitconfig
 whitelist ${HOME}/.local/share/opencode
 whitelist ${HOME}/.local/state/opencode
+mkdir ${HOME}/.agents/skills
+whitelist ${HOME}/.agents/skills
 include whitelist-common.inc
