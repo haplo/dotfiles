@@ -10,13 +10,14 @@ noblacklist ${HOME}/.config/ASGARDEX
 mkdir ${HOME}/.config/ASGARDEX
 whitelist ${HOME}/.config/ASGARDEX
 
-private-bin asgardex
 private-cache
-?HAS_APPIMAGE: ignore private-dev
 private-dev
 private-etc alternatives,ca-certificates,crypto-policies,dconf,fonts,ld.so.cache,ld.so.preload,machine-id,pki,resolv.conf,ssl
-private-opt asgardex
-private-tmp
+ignore private-tmp
+
+# app attempts to connect to dbus but seems to work fine when blocked
+ignore dbus-user none
+ignore dbus-system none
 
 # Redirect
-include electron.profile
+include electron-common.profile
