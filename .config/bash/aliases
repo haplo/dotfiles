@@ -1,0 +1,31 @@
+# -*- mode: sh -*-
+
+if command -v eza &> /dev/null; then
+    alias ls='eza -lh --group-directories-first --icons=auto'
+    alias la='eza -a'
+    alias lt='eza --tree --level=2 --long --icons --git'
+fi
+
+alias mv='mv -i'  # ask before overwriting existing files
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias e='emacsclient -a vim'
+alias vi='emacsclient -t -a vim'
+alias vim='emacsclient -t -a vim'
+
+# https://github.com/sharkdp/fd is installed as fdfind in Debian/Ubuntu
+if command -v fdfind &> /dev/null; then
+    alias fd='fdfind'
+fi
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+# Git
+alias g='git'
+alias gcm='git commit -m'
