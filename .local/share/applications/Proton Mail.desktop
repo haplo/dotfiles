@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Proton Mail
+Comment=Proton Mail
+Exec=proton-mail-handler %u
+Terminal=false
+Type=Application
+Icon=proton-mail
+StartupNotify=true
+MimeType=x-scheme-handler/mailto

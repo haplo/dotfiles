@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Open Proton Mail as a web app, translating mailto: links into Proton's
+# composer URL. Proton's protocol handler format is documented as
+# https://mail.proton.me/inbox/#mailto=%s, where %s is the whole mailto URI.
+#
+# Fall back to xdg-open on systems without Omarchy's web-app launcher.
+
+set -e
+
+url="${1:-}"
+
+if [[ $url == mailto:* ]]; then
+  target="https://mail.proton.me/inbox/#mailto=$url"
+else
+  target="https://mail.proton.me/"
+fi
+
+if command -v omarchy-launch-webapp >/dev/null 2>&1; then
+  exec omarchy-launch-webapp "$target"
+fi
+
+exec xdg-open "$target"

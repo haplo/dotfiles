@@ -133,6 +133,50 @@ function setup_systemd
     end
 end
 
+function remove_omarchy_webapp -a name
+    set -l desktop "$HOME/.local/share/applications/$name.desktop"
+    if test -f "$desktop"; and grep -qE '^Exec=.*(omarchy-launch-webapp|omarchy-webapp-handler)' "$desktop"
+        echo "Removing web app: $name"
+        OMARCHY_REMOVE_NOTIFY=false omarchy-webapp-remove "$name" >/dev/null
+        or echo "Warning: failed to remove $name"
+    end
+end
+
+function setup_omarchy
+    if not type -q omarchy; or not test -d /usr/share/omarchy
+        echo "Omarchy not detected, skipping Omarchy setup"
+        return 0
+    end
+
+    header_banner "Setting up Omarchy"
+
+    # Remove some unused preinstalled webapps
+    for name in Basecamp HEY "Google Contacts" "Google Messages" "Google Photos"
+        remove_omarchy_webapp "$name"
+    end
+
+    if test -f "$HOME/.local/bin/proton-mail-handler"
+        chmod +x "$HOME/.local/bin/proton-mail-handler"
+    end
+
+    if type -q update-desktop-database
+        update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1
+    end
+
+    if type -q gtk-update-icon-cache; and test -d "$HOME/.local/share/icons/hicolor"
+        gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" >/dev/null 2>&1
+    end
+
+    if type -q hyprctl
+        hyprctl reload >/dev/null 2>&1
+        set -l errors (hyprctl configerrors 2>/dev/null | string collect)
+        if test -n "$errors"
+            echo "Hyprland config errors:"
+            echo "$errors"
+        end
+    end
+end
+
 install_packages
 setup_fish_vendor
 set_fish_universal_vars
@@ -140,3 +184,4 @@ set_default_shell
 setup_emacs
 setup_rustup
 setup_systemd
+setup_omarchy
