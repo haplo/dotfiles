@@ -20,6 +20,8 @@ hl.unbind("SUPER + SHIFT + C")
 hl.unbind("SUPER + SHIFT + CTRL + G")
 hl.unbind("SUPER + SHIFT + P")
 
+o.bind("SUPER + SHIFT + V", "Venice.ai", { webapp = "https://venice.ai/chat" })
+
 -- To disable every Omarchy default binding, set this in
 -- ~/.config/hypr/hyprland.lua before require("default.hypr.omarchy"), then add
 -- only the bindings you want below:
