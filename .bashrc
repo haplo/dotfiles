@@ -29,7 +29,7 @@ source "$OMARCHY_PATH/default/bash/rc"
 
 # my config overrides
 # * ~/.config/bash/extra can be used for local settings not to commit
-for file in ~/.config/bash/{path,exports,init,aliases,functions,prompt,extra}; do
+for file in ~/.config/bash/{exports,path,init,aliases,functions,prompt,extra}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;

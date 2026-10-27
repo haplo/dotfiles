@@ -1,0 +1,13 @@
+export PATH=$HOME/.local/bin:$PATH
+
+if [ -d $HOME/.cargo/bin ]; then
+    export PATH=$PATH:$HOME/.cargo/bin
+fi
+
+if [ -d $GOPATH/bin ]; then
+   export PATH=$PATH:$GOPATH/bin
+fi
+
+if [ -d $DENO_INSTALL/bin ]; then
+   export PATH=$PATH:$DENO_INSTALL/bin
+fi

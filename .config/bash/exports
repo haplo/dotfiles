@@ -48,6 +48,4 @@ export GOPATH=$HOME/Code/go
 # https://deno.land/#installation
 export DENO_INSTALL="$HOME/.deno"
 
-export PATH=$HOME/.local/bin:$HOME/.cargo/bin:$GOPATH/bin:$DENO_INSTALL/bin:$PATH
-
 export VAGRANT_DEFAULT_PROVIDER=libvirt
