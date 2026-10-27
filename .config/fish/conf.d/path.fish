@@ -4,15 +4,15 @@ if test -d "$HOME/.local/bin"
 end
 
 if test -d "$HOME/.cargo/bin"
-    fish_add_path $HOME/.cargo/bin
+    fish_add_path --append $HOME/.cargo/bin
 end
 
 if test -n "$DENO_INSTALL"
-    fish_add_path $DENO_INSTALL/bin
+    fish_add_path --append $DENO_INSTALL/bin
 end
 
 # https://golang.org/doc/code.html
 set -gx GOPATH "$HOME/Code/go"
 if test -n "$GOPATH"/bin
-    fish_add_path $GOPATH/bin
+    fish_add_path --append $GOPATH/bin
 end
