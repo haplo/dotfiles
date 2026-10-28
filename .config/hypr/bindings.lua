@@ -20,6 +20,7 @@ hl.unbind("SUPER + SHIFT + C")
 hl.unbind("SUPER + SHIFT + CTRL + G")
 hl.unbind("SUPER + SHIFT + P")
 
+o.bind("SUPER + SHIFT + T", "DeepL", { webapp = "https://www.deepl.com/en/translator" })
 o.bind("SUPER + SHIFT + V", "Venice.ai", { webapp = "https://venice.ai/chat" })
 
 -- To disable every Omarchy default binding, set this in
