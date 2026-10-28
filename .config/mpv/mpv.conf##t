@@ -3,11 +3,12 @@
 #   https://github.com/Argon-/mpv-config/blob/master/mpv.conf
 #   https://gist.github.com/xorpaul/f550d645b4c1b3598357dc2c65bc3593
 
-# Uses GPU-accelerated video output by default.
+{% if yadm.hostname == "eolian" %}
 vo=gpu
-
-# Can cause performance problems with some GPU drivers and GPUs.
 profile=gpu-hq
+{% else %}
+vo=auto
+{% endif %}
 
 # Enables best HW decoder; turn off for software decoding
 hwdec=auto-copy
