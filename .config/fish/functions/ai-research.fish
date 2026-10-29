@@ -21,7 +21,7 @@ function ai-research --description "Initialize or open an AI agent research proj
         end
     end
     set -l base_dir $RESEARCH_DIR
-    set -l project_dir "$base_dir/$project_name"
+    set -lx project_dir "$base_dir/$project_name"
 
     # Ensure base and project directories exist
     mkdir -p $project_dir
@@ -78,14 +78,14 @@ function ai-research --description "Initialize or open an AI agent research proj
         # direnv exec is necessary to set environment variables via .envrc
         direnv exec . fish -c '
             # Build whitelist arguments after direnv loads the colon-separated .envrc value.
-            set -l extra_whitelist_args
-            for dir in (string split : -- "$FIREJAIL_EXTRA_WHITELIST")
+            set -l extra_whitelist_args "--allow=$project_dir"
+            for dir in (string split : -- "$EXTRA_WHITELIST")
                 if test -n "$dir"
-                    set -a extra_whitelist_args "--whitelist=$dir"
+                    set -a extra_whitelist_args "-a $dir"
                 end
             end
-        
-            exec firejail --profile=opencode-research $extra_whitelist_args /usr/bin/opencode $argv
+
+            mise-sbx $extra_whitelist_args opencode $argv
         ' -- $opencode_args
     else
         echo "WARNING: dirty git repository, clean before starting opencode"
