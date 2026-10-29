@@ -1,0 +1,225 @@
+# Sandbox policy for mise-sbx.
+#
+# Read ~/.config/mise/AGENTS.md before editing. Rules:
+#   [default]        applies to every tool that has no [tools.<name>] entry
+#   [tools.<name>]   merged over [default]: allow_read/allow_write/allow_env
+#                    are appended, `net` is overridden
+#   net = false      no network (seccomp blocks IPv4/IPv6 sockets)
+#   net = true       network allowed
+#   net = "opt-in"   network only when MISE_SANDBOX_NET=1
+#
+# Paths: relative paths resolve from the directory mise-sbx was run in, `~` is
+# expanded. Missing paths are dropped (Landlock cannot bind them). A missing
+# write path whose last segment has no dot is created first; paths that look
+# like files (last segment contains a dot) are skipped.
+#
+# allow_write implies read access to that path.
+
+[default]
+allow_read  = ["."]
+allow_write = ["."]
+net         = false
+allow_env   = []
+
+[sync]
+# Bins that must not get a wrapper: internal helpers that only their own
+# (already sandboxed) parent invokes.
+exclude = ["codex-code-mode-host", "opencode2"]
+# What to do with ~/.local/bin launchers that Omarchy regenerated
+# (omarchy-mise-install): repoint them at mise-sbx, only warn about them, or
+# leave them alone.
+reconcile = "repoint"
+
+# ---------------------------------------------------------------------------
+# Deny list: subtracted from every grant, including --fs=home / --fs=home-ro.
+# Landlock has no negative rules, so an allowed parent is split into its
+# non-denied children. `-a <path>` overrides a deny at or above that path;
+# denies below it still apply. `--fs=all` ignores this list (with a warning).
+# `mise-sbx policy <tool>` shows the expanded rules.
+# ---------------------------------------------------------------------------
+
+[deny]
+paths = [
+  # secrets and credentials
+  "~/.ssh",
+  "~/.gnupg",
+  "~/.aws",
+  "~/.azure",
+  "~/.kube",
+  "~/.netrc",
+  "~/.git-credentials",
+  "~/.npmrc",
+  "~/.pypirc",
+  "~/.gem/credentials",
+  "~/.password-store",
+  "~/.local/share/keyrings",
+  "~/.docker/config.json",
+  "~/.config/containers/auth.json",
+  "~/.config/sops",
+  "~/.config/op",
+  "~/.config/age",
+  "~/.config/gcloud",
+  "~/.cargo/credentials.toml",
+  # browser profiles
+  "~/.mozilla",
+  "~/.config/google-chrome",
+  "~/.config/chromium",
+  "~/.config/BraveSoftware",
+  "~/.config/microsoft-edge",
+  "~/.config/vivaldi",
+  # personal dirs
+  "~/Backups",
+  "~/Calibre",
+  "~/Documents",
+  "~/Downloads",
+  "~/Music",
+  "~/Music to sort",
+  "~/Org",
+  "~/Pictures",
+  "~/Sync",
+  "~/Sync Natalie",
+  "~/Videos",
+  "~/Wallpapers",
+]
+
+# ---------------------------------------------------------------------------
+# AI agents: reach their API, keep their own state, touch nothing else
+# ---------------------------------------------------------------------------
+
+[tools.claude]
+net         = true
+allow_write = ["~/.claude", "~/.cache/claude", "~/.local/state/claude"]
+allow_read  = ["~/.claude.json", "~/.gitconfig", "~/.config/git"]
+allow_env   = ["ANTHROPIC_*", "CLAUDE_*"]
+
+[tools.codex]
+net         = true
+allow_write = ["~/.codex", "~/.cache/codex"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["OPENAI_*", "CODEX_*"]
+
+[tools.gemini]
+net         = true
+allow_write = ["~/.gemini"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["GEMINI_*", "GOOGLE_*", "GOOGLE_CLOUD_*"]
+
+[tools.opencode]
+net         = true
+allow_write = ["~/.config/opencode", "~/.local/share/opencode", "~/.local/state/opencode", "~/.cache/opencode"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["OPENCODE_*", "ANTHROPIC_*", "OPENAI_*", "GEMINI_*", "GOOGLE_*", "OPENROUTER_*", "GROQ_*", "MISTRAL_*", "XAI_*"]
+
+[tools.pi]
+net         = true
+allow_write = ["~/.pi", "~/.cache/pi", "~/.local/state/pi"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["PI_*"]
+
+# Additional agent CLIs installed on demand by the ~/.local/bin launchers.
+# Config dirs are best-effort guesses: run the tool, check the audit log and
+# `mise-sbx policy <tool>`, then correct the paths here.
+
+[tools.copilot]
+net         = true
+allow_write = ["~/.config/github-copilot", "~/.local/share/github-copilot", "~/.cache/github-copilot"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["GH_*", "GITHUB_*", "COPILOT_*"]
+
+[tools.crush]
+net         = true
+allow_write = ["~/.config/crush", "~/.local/share/crush", "~/.cache/crush"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["ANTHROPIC_*", "OPENAI_*", "GEMINI_*", "GROQ_*", "OPENROUTER_*", "CRUSH_*"]
+
+[tools.cursor-agent]
+net         = true
+allow_write = ["~/.cursor", "~/.config/cursor", "~/.local/share/cursor-agent", "~/.cache/cursor-agent"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["CURSOR_*"]
+
+[tools.gh]
+net         = true
+allow_write = ["~/.config/gh", "~/.cache/gh", "~/.local/state/gh"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["GH_*", "GITHUB_*", "GIT_*"]
+
+[tools.ghui]
+net         = true
+allow_write = ["~/.config/ghui", "~/.local/share/ghui", "~/.cache/ghui"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["GH_*", "GITHUB_*"]
+
+[tools.grok]
+net         = true
+allow_write = ["~/.grok", "~/.config/grok", "~/.local/share/grok", "~/.cache/grok"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["XAI_*", "GROK_*"]
+
+[tools.hunk]
+net         = true
+allow_write = ["~/.config/hunk", "~/.local/share/hunk", "~/.cache/hunk"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["ANTHROPIC_*", "OPENAI_*", "HUNK_*"]
+
+[tools.muse]
+net         = true
+allow_write = ["~/.muse", "~/.config/muse", "~/.local/share/muse", "~/.cache/muse"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["MUSE_*"]
+
+[tools.omp]
+net         = true
+allow_write = ["~/.config/omp", "~/.local/share/omp", "~/.cache/omp"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["ANTHROPIC_*", "OPENAI_*", "OMP_*"]
+
+[tools.playwright]
+net         = true
+allow_write = ["~/.cache/ms-playwright", "~/.cache/playwright", "~/.config/playwright"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["PLAYWRIGHT_*", "NODE_*"]
+
+# ---------------------------------------------------------------------------
+# Package managers: network for installs, caches writable, nothing else
+# ---------------------------------------------------------------------------
+
+[tools.npm]
+net         = true
+allow_write = ["~/.npm", "~/.cache/npm"]
+allow_read  = ["~/.node_repl_history", "~/.gitconfig", "~/.config/git"]
+allow_env   = ["NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
+
+[tools.npx]
+net         = true
+allow_write = ["~/.npm", "~/.cache/npm"]
+allow_read  = ["~/.node_repl_history", "~/.gitconfig", "~/.config/git"]
+allow_env   = ["NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
+
+[tools.pnpm]
+net         = true
+allow_write = ["~/.local/share/pnpm", "~/.cache/pnpm", "~/.config/pnpm"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["PNPM_*", "NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
+
+[tools.yarn]
+net         = true
+allow_write = ["~/.yarn", "~/.cache/yarn", "~/.config/yarn"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["YARN_*", "NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
+
+[tools.bun]
+net         = true
+allow_write = ["~/.bun", "~/.cache/bun"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["BUN_*", "NODE_*", "NODE_ENV"]
+
+# ---------------------------------------------------------------------------
+# Node itself: offline unless MISE_SANDBOX_NET=1
+# ---------------------------------------------------------------------------
+
+[tools.node]
+net         = "opt-in"
+allow_write = ["~/.npm/_logs", "~/.cache/node"]
+allow_read  = ["~/.node_repl_history", "~/.gitconfig", "~/.config/git"]
+allow_env   = ["NODE_*", "NODE_ENV"]

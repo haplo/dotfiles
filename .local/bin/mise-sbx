@@ -1,0 +1,819 @@
+#!/usr/bin/env python3
+"""mise-sbx - run mise-managed tools inside mise's Landlock/seccomp sandbox.
+
+Usage:
+  mise-sbx [options] <tool> [args...]
+  mise-sbx -c '<shell command>'
+  mise-sbx sync                 regenerate [wrappers] for every mise bin
+  mise-sbx dirs                 show resolved config/data/state paths
+  mise-sbx policy <tool>        show the effective policy for a tool
+  mise-sbx --help
+
+Options (before <tool>):
+  --net                allow network for this run
+  --no-net             deny network for this run
+  --fs=project|home|home-ro|all
+                       project (default) = read/write cwd only
+                       home              = also read/write $HOME
+                       home-ro           = also read $HOME
+                       all               = read/write / (ignores the deny list)
+  --env=min|all        min (default) = minimal env, all = pass everything
+  -a, --allow PATH     grant read/write access to PATH (repeatable)
+  --allow-ro PATH      grant read-only access to PATH (repeatable)
+  --sandbox=off        disable sandboxing entirely for this run
+  --dry-run            print the command that would run
+
+Environment equivalents:
+  MISE_SANDBOX_NET=1              same as --net
+  MISE_SANDBOX_FS=home|home-ro|all
+  MISE_SANDBOX_ENV=all
+  MISE_SANDBOX_ALLOW=<paths>      same as -a, separated by ':'
+  MISE_SANDBOX_ALLOW_RO=<paths>   same as --allow-ro, separated by ':'
+  MISE_SANDBOX=off                same as --sandbox=off
+  MISE_SANDBOX_LOG=0              do not append to the audit log
+  MISE_SBX_CONFIG=<path>          use another policy file
+  MISE_SBX_SHIMS_DIR=<path>       shims directory used by `sync`
+
+Policy: ~/.config/mise/sandbox.toml. Documentation: ~/.config/mise/AGENTS.md.
+"""
+
+from __future__ import annotations
+
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import tomllib
+from datetime import datetime, timezone
+from pathlib import Path
+
+def env_dir(env_name: str, xdg_name: str, default: str, sub: str | None = None) -> Path:
+    """Resolve a mise directory: tool-specific env, then XDG env, then default.
+
+    MISE_*_DIR already points at a mise-specific directory, so `sub` applies only
+    to the XDG/default branch.
+    """
+    value = os.environ.get(env_name)
+    if value:
+        return Path(value).expanduser()
+    base = Path(os.environ.get(xdg_name) or default).expanduser()
+    return base / sub if sub else base
+
+
+CONFIG_DIR = env_dir("MISE_CONFIG_DIR", "XDG_CONFIG_HOME", "~/.config", sub="mise")
+DATA_DIR = env_dir("MISE_DATA_DIR", "XDG_DATA_HOME", "~/.local/share", sub="mise")
+STATE_DIR = env_dir("MISE_STATE_DIR", "XDG_STATE_HOME", "~/.local/state")
+CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME") or "~/.cache").expanduser() / "mise-sbx"
+
+POLICY_PATH = Path(
+    os.environ.get("MISE_SBX_CONFIG", str(CONFIG_DIR / "sandbox.toml"))
+).expanduser()
+LOG_PATH = Path(
+    os.environ.get("MISE_SBX_LOG_PATH", str(STATE_DIR / "mise-sbx.log"))
+).expanduser()
+WRAPPERS_PATH = CONFIG_DIR / "conf.d" / "90-sandbox-wrappers.toml"
+DEFAULT_SHIMS = DATA_DIR / "shims"
+
+HOME = Path.home()
+FS_CHOICES = ("project", "home", "home-ro", "all")
+
+# mise's Landlock/seccomp flags landed in the 2026.10 line. Older releases
+# reject --deny-read/--deny-net, which used to surface as a confusing
+# "unexpected argument" from `mise x`; fail loudly instead.
+MIN_MISE_VERSION = (2026, 10, 0)
+
+# Omarchy owns the launcher scripts in ~/.local/bin and rewrites them on
+# provisioning and migrations (`omarchy-mise-install`). Their template always
+# contains these strings; sync rewrites only the `exec mise x` line so the
+# sandbox survives while the tool spec and install line stay intact.
+OMARCHY_MARKERS = ("MISE_MINIMUM_RELEASE_AGE=0", "mise use -g --quiet ", "exec mise x ")
+
+
+# mise prepends its command-wrappers and shims directories to the child PATH.
+# Any tool that shells out to another mise-managed command by name (gemini's
+# shell shim calling `node`, for example) would re-enter mise inside the
+# sandbox, where mise cannot read its own config. Strip those directories so
+# children resolve the real binaries instead.
+SANITIZE_PATH = r"""
+new=""
+IFS=: read -r -a parts <<< "$PATH"
+for d in "${parts[@]}"; do
+    case "$d" in
+        */mise/command-wrappers/bin|*/mise/shims|/usr/local/share/mise/shims) ;;
+        *) new="${new:+$new:}$d" ;;
+    esac
+done
+export PATH="$new"
+exec "$@"
+"""
+
+
+def current_dir() -> Path:
+    """Path.cwd() that fails with a clear message instead of a traceback."""
+    try:
+        return Path.cwd()
+    except OSError as exc:
+        die(f"current directory is not accessible: {exc}")
+
+
+def die(msg: str, code: int = 2) -> "None":
+    print(f"mise-sbx: {msg}", file=sys.stderr)
+    raise SystemExit(code)
+
+
+def mise_bin() -> str:
+    found = shutil.which("mise")
+    if not found:
+        die("mise not found on PATH")
+    return found
+
+
+def bash_executable() -> str:
+    found = shutil.which("bash")
+    if found:
+        return found
+    for candidate in ("/bin/bash", "/usr/bin/bash"):
+        if os.path.exists(candidate):
+            return candidate
+    die("bash not found; mise-sbx needs bash for its child PATH sanitizer")
+
+
+def parse_version(text: str) -> tuple[int, ...] | None:
+    token = (text.strip().split() or [""])[0].lstrip("v")
+    parts: list[int] = []
+    for piece in token.split("."):
+        digits = "".join(ch for ch in piece if ch.isdigit())
+        if not digits:
+            break
+        parts.append(int(digits))
+    while 0 < len(parts) < 3:
+        parts.append(0)
+    return tuple(parts) if parts else None
+
+
+def require_mise_version() -> None:
+    """Fail hard instead of letting `mise x` reject --deny-* with a cryptic error."""
+    if truthy(os.environ.get("MISE_SBX_SKIP_VERSION_CHECK")):
+        return
+    try:
+        out = subprocess.run(
+            [mise_bin(), "--version"], capture_output=True, text=True, timeout=15
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        die(f"could not determine the mise version: {exc}")
+    version = parse_version(out.stdout)
+    if version is None:
+        detail = out.stdout.strip() or out.stderr.strip() or "no output"
+        die(f"could not parse the mise version ({detail})")
+    if version < MIN_MISE_VERSION:
+        found = ".".join(str(part) for part in version)
+        needed = ".".join(str(part) for part in MIN_MISE_VERSION)
+        die(
+            f"mise {found} is too old: mise-sbx needs >= {needed} for "
+            "Landlock/seccomp sandboxing. Upgrade mise, then run `mise-sbx sync`."
+        )
+
+
+def load_policy() -> dict:
+    if not POLICY_PATH.is_file():
+        die(f"policy file not found: {POLICY_PATH}")
+    with POLICY_PATH.open("rb") as fh:
+        return tomllib.load(fh)
+
+
+def as_list(value) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    return [str(v) for v in value]
+
+
+def truthy(value: str | None) -> bool:
+    return str(value).strip().lower() in ("1", "true", "yes", "on")
+
+
+def effective_policy(policy: dict, tool: str) -> dict:
+    default = policy.get("default", {})
+    tool_cfg = policy.get("tools", {}).get(tool, {})
+    net = tool_cfg.get("net", default.get("net", False))
+    return {
+        "net": net,
+        "allow_read": as_list(default.get("allow_read")) + as_list(tool_cfg.get("allow_read")),
+        "allow_write": as_list(default.get("allow_write")) + as_list(tool_cfg.get("allow_write")),
+        "allow_env": as_list(default.get("allow_env")) + as_list(tool_cfg.get("allow_env")),
+        "deny": as_list(policy.get("deny", {}).get("paths")) + as_list(tool_cfg.get("deny")),
+    }
+
+
+def resolve_path(raw: str, cwd: Path) -> Path:
+    expanded = os.path.expanduser(raw)
+    path = Path(expanded)
+    if not path.is_absolute():
+        path = cwd / path
+    try:
+        return path.resolve()
+    except OSError:
+        return path
+
+
+def looks_like_file(path: Path) -> bool:
+    return "." in path.name
+
+
+def prepare_paths(paths: list[str], cwd: Path, writable: bool, create: bool) -> tuple[list[Path], list[str]]:
+    """Return (usable paths, notes). Creates missing directory-looking write paths."""
+    usable: list[Path] = []
+    notes: list[str] = []
+    for raw in paths:
+        path = resolve_path(raw, cwd)
+        if path.exists():
+            usable.append(path)
+            continue
+        if writable and create and not looks_like_file(path) and path.parent.is_dir():
+            try:
+                path.mkdir(parents=True, exist_ok=True)
+                usable.append(path)
+                notes.append(f"created {path}")
+            except OSError as exc:
+                notes.append(f"skipped {path} ({exc.strerror})")
+        else:
+            notes.append(f"skipped missing {path}")
+    return usable, notes
+
+
+def is_under(path: Path, parent: Path) -> bool:
+    """True when `path` is `parent` or lives inside it (both already resolved)."""
+    try:
+        path.relative_to(parent)
+        return True
+    except ValueError:
+        return False
+
+
+RULE_LIMIT = 500
+
+# mise always grants these to a sandboxed command (docs: "Implicit access").
+# A deny inside one of them cannot take effect, so say so instead of pretending.
+IMPLICIT_PATHS = (
+    "/usr",
+    "/lib",
+    "/lib64",
+    "/bin",
+    "/sbin",
+    "/etc",
+    "/dev",
+    "/proc",
+    "/sys",
+    "/tmp",
+    "/nix",
+    "/snap",
+    "/home/linuxbrew",
+)
+
+
+def resolve_denies(pol: dict, cwd: Path) -> tuple[list[Path], list[str]]:
+    """Resolve [deny] paths for this run. Missing paths are ignored."""
+    denies: list[Path] = []
+    notes: list[str] = []
+    implicit = [Path(p) for p in IMPLICIT_PATHS] + [DATA_DIR]
+    for raw in pol.get("deny", []):
+        path = resolve_path(raw, cwd)
+        if not path.exists():
+            notes.append(f"deny path missing, ignored: {path}")
+            continue
+        if any(is_under(path, granted) for granted in implicit):
+            notes.append(f"deny path {path} is implicitly granted by mise and cannot be enforced")
+            continue
+        if path not in denies:
+            denies.append(path)
+    return denies, notes
+
+
+def grant_rules(root: Path, denies: list[Path], explicit: bool = False) -> list[Path]:
+    """Rules granting `root` minus `denies` (Landlock has no negative rules).
+
+    `explicit` marks a path the user passed with -a/--allow: denies at or above
+    it are overridden, while denies below it still apply.
+    """
+    if not root.exists():
+        return []
+
+    if explicit:
+        effective = [d for d in denies if not (d == root or is_under(root, d))]
+    else:
+        if any(is_under(root, d) for d in denies):
+            return []
+        effective = denies
+
+    below = [d for d in effective if is_under(d, root) and d != root]
+    if not below:
+        return [root]
+
+    rules: list[Path] = []
+    try:
+        children = sorted(root.iterdir())
+    except OSError:
+        return rules
+    for child in children:
+        try:
+            resolved = child.resolve()
+        except OSError:
+            continue
+        rules.extend(grant_rules(resolved, effective, explicit=False))
+        if len(rules) > RULE_LIMIT:
+            die(
+                f"refusing to expand {root}: more than {RULE_LIMIT} Landlock rules "
+                "are needed to honour the deny list; narrow the allow or the deny"
+            )
+    return rules
+
+
+def explicit_allow_paths(opts: dict, cwd: Path) -> tuple[list[Path], list[Path]]:
+    """Resolve -a/--allow (read+write) and --allow-ro paths; they must exist."""
+    rw = [resolve_path(raw, cwd) for raw in opts.get("allow_rw", [])]
+    ro = [resolve_path(raw, cwd) for raw in opts.get("allow_ro", [])]
+    for label, paths in (("-a/--allow", rw), ("--allow-ro", ro)):
+        for path in paths:
+            if not path.exists():
+                die(f"{label} path does not exist: {path}")
+    return rw, ro
+
+
+def build_flags(pol: dict, opts: dict, cwd: Path, create: bool = True) -> tuple[list[str], list[str]]:
+    notes: list[str] = []
+
+    if opts["sandbox_off"]:
+        return [], ["sandbox disabled"]
+
+    denies, deny_notes = resolve_denies(pol, cwd)
+    deny_total = len(denies)
+    notes += deny_notes
+
+    explicit_rw, explicit_ro = explicit_allow_paths(opts, cwd)
+    for allow in explicit_rw + explicit_ro:
+        for deny in denies:
+            if deny == allow or is_under(allow, deny):
+                notes.append(f"explicit allow {allow} overrides deny {deny}")
+
+    # (path, writable, explicit)
+    requests: list[tuple[Path, bool, bool]] = []
+
+    usable_read, notes_r = prepare_paths(list(pol["allow_read"]), cwd, writable=False, create=create)
+    usable_write, notes_w = prepare_paths(list(pol["allow_write"]), cwd, writable=True, create=create)
+    notes += notes_r + notes_w
+    requests += [(path, False, False) for path in usable_read]
+    requests += [(path, True, False) for path in usable_write]
+
+    fs = opts["fs"]
+    if fs == "home":
+        requests.append((HOME, True, False))
+    elif fs == "home-ro":
+        requests.append((HOME, False, False))
+    elif fs == "all":
+        if denies:
+            notes.append(
+                "WARNING --fs=all grants / so the deny list cannot be enforced "
+                f"({len(denies)} path(s) ignored)"
+            )
+            denies = []
+        requests.append((Path("/"), True, False))
+
+    requests += [(path, True, True) for path in explicit_rw]
+    requests += [(path, False, True) for path in explicit_ro]
+
+    write_rules: list[Path] = []
+    read_rules: list[Path] = []
+    for path, writable, explicit in requests:
+        for rule in grant_rules(path, denies, explicit=explicit):
+            (write_rules if writable else read_rules).append(rule)
+        if len(write_rules) + len(read_rules) > RULE_LIMIT:
+            die(
+                f"refusing to launch: more than {RULE_LIMIT} Landlock rules are "
+                "needed to honour the deny list; narrow the allow or the deny"
+            )
+
+    flags = ["--deny-read", "--deny-write", "--deny-env"]
+
+    def dedupe(paths: list[Path]) -> list[Path]:
+        seen: list[Path] = []
+        for path in paths:
+            if path not in seen:
+                seen.append(path)
+        return seen
+
+    write_rules = dedupe(write_rules)
+    read_rules = dedupe(read_rules)
+
+    for path in write_rules:
+        flags.append(f"--allow-write={path}")
+    for path in read_rules:
+        if any(is_under(path, granted) for granted in write_rules):
+            continue  # already readable via the write rule
+        flags.append(f"--allow-read={path}")
+
+    if opts["env_all"]:
+        flags.append("--allow-env=*")
+    else:
+        for pattern in pol["allow_env"]:
+            flags.append(f"--allow-env={pattern}")
+
+    net = opts["net"]
+    if net is None:
+        policy_net = pol["net"]
+        if policy_net == "opt-in":
+            net = truthy(os.environ.get("MISE_SANDBOX_NET"))
+        else:
+            net = bool(policy_net)
+    if not net:
+        flags.append("--deny-net")
+
+    notes.append(f"denied={deny_total} rules={len(write_rules)}+{len(read_rules)}")
+    return flags, notes
+
+
+def is_sbx_shim(path: str) -> bool:
+    """True for the ~/.local/bin launcher scripts that call mise-sbx."""
+    try:
+        with open(path, "rb") as fh:
+            head = fh.read(2048)
+    except OSError:
+        return False
+    return b"mise-sbx" in head
+
+
+def resolve_tool(tool: str) -> str:
+    if "/" in tool:
+        path = os.path.expanduser(tool)
+        if not os.path.exists(path):
+            die(f"{tool}: no such file")
+        return path
+    try:
+        out = subprocess.run(
+            [mise_bin(), "which", tool], capture_output=True, text=True, timeout=30
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        die(f"failed to resolve {tool}: {exc}")
+    resolved = out.stdout.strip()
+    if out.returncode == 0 and resolved and os.path.exists(resolved):
+        return resolved
+    found = shutil.which(tool)
+    if found and not is_sbx_shim(found):
+        return found
+    die(f"{tool} is not installed and not on PATH (try: mise use -g {tool})")
+
+
+def write_log(tool: str, flags: list[str], args: list[str], cwd: Path, notes: list[str]) -> None:
+    if not truthy(os.environ.get("MISE_SANDBOX_LOG", "1")):
+        return
+    try:
+        LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        stamp = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+        rendered = " ".join(flags) if flags else "(none)"
+        rendered_args = " ".join(args)[:200]
+        with LOG_PATH.open("a") as fh:
+            fh.write(
+                f"{stamp} tool={tool} cwd={cwd} flags=[{rendered}] "
+                f"args=[{rendered_args}] notes=[{'; '.join(notes)}]\n"
+            )
+    except OSError:
+        pass
+
+
+def atomic_write(path: Path, content: str, mode: int) -> None:
+    """Replace a file atomically so a process executing it keeps its inode."""
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as fh:
+            fh.write(content)
+        os.chmod(tmp, mode)
+        os.replace(tmp, path)
+    except OSError:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def reconcile_omarchy_wrappers(mode: str) -> tuple[list[str], list[str]]:
+    """Repoint Omarchy-regenerated ~/.local/bin launchers at mise-sbx.
+
+    Returns (repointed, warned). Only files carrying every OMARCHY_MARKERS string
+    are touched; everything else is left alone.
+    """
+    bin_dir = HOME / ".local/bin"
+    repointed: list[str] = []
+    warned: list[str] = []
+    if mode == "off" or not bin_dir.is_dir():
+        return repointed, warned
+
+    for path in sorted(bin_dir.iterdir()):
+        if not path.is_file() or path.name == "mise-sbx":
+            continue
+        try:
+            text = path.read_text()
+        except (OSError, UnicodeDecodeError):
+            continue
+        if not all(marker in text for marker in OMARCHY_MARKERS):
+            continue
+
+        if mode == "warn":
+            warned.append(path.name)
+            continue
+
+        lines = text.splitlines()
+        changed = False
+        for index, line in enumerate(lines):
+            if line.startswith("exec mise x "):
+                lines[index] = f'exec mise-sbx "{path.name}" "$@"'
+                changed = True
+        if not changed:
+            continue
+        atomic_write(path, "\n".join(lines) + "\n", 0o755)
+        repointed.append(path.name)
+
+    return repointed, warned
+
+
+def cmd_sync(policy: dict) -> int:
+    require_mise_version()
+    shims_dir = Path(os.environ.get("MISE_SBX_SHIMS_DIR", DEFAULT_SHIMS)).expanduser()
+    if not shims_dir.is_dir():
+        die(f"shims directory not found: {shims_dir}")
+
+    excluded = set(as_list(policy.get("sync", {}).get("exclude")))
+    names = sorted(
+        entry.name
+        for entry in shims_dir.iterdir()
+        if entry.name not in excluded and not entry.name.startswith(".")
+    )
+    if not names:
+        die(f"no shims found in {shims_dir}")
+
+    dispatcher = str(Path(__file__).resolve())
+    lines = [
+        "# Generated by `mise-sbx sync` - do not edit by hand.",
+        "# Add or tweak tools in ~/.config/mise/sandbox.toml instead.",
+        "# See ~/.config/mise/AGENTS.md.",
+        "",
+    ]
+    for name in names:
+        key = name if all(c.isalnum() or c in "-_" for c in name) else f'"{name}"'
+        lines += [f"[wrappers.{key}]", f'command = "{dispatcher}"', f'args = ["{name}"]', ""]
+
+    WRAPPERS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    atomic_write(WRAPPERS_PATH, "\n".join(lines), 0o644)
+
+    reshim = subprocess.run([mise_bin(), "reshim"], capture_output=True, text=True)
+    if reshim.returncode != 0:
+        die(f"mise reshim failed:\n{reshim.stderr.strip() or reshim.stdout.strip()}")
+
+    print(f"mise-sbx: wrapped {len(names)} commands -> {WRAPPERS_PATH}")
+    print("           " + ", ".join(names))
+
+    reconcile_mode = str(policy.get("sync", {}).get("reconcile", "repoint"))
+    repointed, warned = reconcile_omarchy_wrappers(reconcile_mode)
+    if repointed:
+        print(f"mise-sbx: repointed {len(repointed)} Omarchy wrapper(s): {', '.join(repointed)}")
+    if warned:
+        print(
+            "mise-sbx: WARNING unsandboxed Omarchy wrapper(s) left untouched "
+            f"(reconcile={reconcile_mode}): {', '.join(warned)}"
+        )
+    return 0
+
+
+def cmd_dirs() -> int:
+    for label, path in (
+        ("config_dir", CONFIG_DIR),
+        ("policy", POLICY_PATH),
+        ("wrappers", WRAPPERS_PATH),
+        ("data_dir", DATA_DIR),
+        ("shims", DEFAULT_SHIMS),
+        ("state_dir", STATE_DIR),
+        ("log", LOG_PATH),
+        ("cache", CACHE_DIR),
+    ):
+        print(f"{label:12} {path}")
+    return 0
+
+
+def cmd_policy(policy: dict, tool: str) -> int:
+    pol = effective_policy(policy, tool)
+    print(f"tool:        {tool}")
+    print(f"net:         {pol['net']}")
+    print(f"allow_read:  {' '.join(pol['allow_read']) or '(none)'}")
+    print(f"allow_write: {' '.join(pol['allow_write']) or '(none)'}")
+    print(f"allow_env:   {' '.join(pol['allow_env']) or '(none)'}")
+    print(f"deny:        {' '.join(pol['deny']) or '(none)'}")
+    flags, notes = build_flags(
+        pol,
+        {"sandbox_off": False, "fs": "project", "env_all": False, "net": None},
+        current_dir(),
+        create=False,
+    )
+    print(f"flags:       {' '.join(flags)}")
+    for note in notes:
+        print(f"note:        {note}")
+    return 0
+
+
+HELP = __doc__
+
+
+def main(argv: list[str]) -> int:
+    if not argv or argv[0] in ("-h", "--help", "help"):
+        print(HELP.strip())
+        return 0
+
+    if argv[0] == "sync":
+        return cmd_sync(load_policy())
+
+    if argv[0] == "dirs":
+        return cmd_dirs()
+
+    opts = {
+        "net": None,
+        "fs": os.environ.get("MISE_SANDBOX_FS", "project"),
+        "env_all": os.environ.get("MISE_SANDBOX_ENV", "").strip().lower() == "all",
+        "sandbox_off": os.environ.get("MISE_SANDBOX", "").strip().lower() == "off",
+        "dry_run": False,
+        "allow_rw": [p for p in os.environ.get("MISE_SANDBOX_ALLOW", "").split(os.pathsep) if p],
+        "allow_ro": [p for p in os.environ.get("MISE_SANDBOX_ALLOW_RO", "").split(os.pathsep) if p],
+        "command": None,
+    }
+    if truthy(os.environ.get("MISE_SANDBOX_NET")):
+        opts["net"] = True
+
+    if argv[0] == "policy":
+        if len(argv) < 2:
+            die("usage: mise-sbx policy <tool>")
+        return cmd_policy(load_policy(), argv[1])
+
+    args = list(argv)
+    while args and args[0].startswith("-"):
+        flag = args.pop(0)
+        if flag == "--":
+            break
+        if flag == "-c":
+            if not args:
+                die("usage: mise-sbx [-c] 'command'")
+            opts["command"] = args.pop(0)
+            break
+        if flag in ("-a", "--allow"):
+            if not args:
+                die(f"{flag} needs a path")
+            opts["allow_rw"].append(args.pop(0))
+        elif flag.startswith("--allow=") or flag.startswith("-a="):
+            opts["allow_rw"].append(flag.split("=", 1)[1])
+        elif flag == "--allow-ro":
+            if not args:
+                die("--allow-ro needs a path")
+            opts["allow_ro"].append(args.pop(0))
+        elif flag.startswith("--allow-ro="):
+            opts["allow_ro"].append(flag.split("=", 1)[1])
+        elif flag == "--net":
+            opts["net"] = True
+        elif flag == "--no-net":
+            opts["net"] = False
+        elif flag == "--fs":
+            if not args:
+                die("--fs needs a value")
+            opts["fs"] = args.pop(0)
+        elif flag.startswith("--fs="):
+            opts["fs"] = flag.split("=", 1)[1]
+        elif flag == "--env":
+            if not args:
+                die("--env needs a value")
+            opts["env_all"] = args.pop(0) == "all"
+        elif flag.startswith("--env="):
+            opts["env_all"] = flag.split("=", 1)[1] == "all"
+        elif flag == "--sandbox":
+            if not args:
+                die("--sandbox needs a value")
+            opts["sandbox_off"] = args.pop(0) == "off"
+        elif flag.startswith("--sandbox="):
+            opts["sandbox_off"] = flag.split("=", 1)[1] == "off"
+        elif flag == "--dry-run":
+            opts["dry_run"] = True
+        elif flag == "--":
+            break
+        else:
+            die(f"unknown option: {flag}")
+
+    if opts["fs"] not in FS_CHOICES:
+        die(f"--fs must be one of: {', '.join(FS_CHOICES)}")
+
+    if opts["command"] is None and not args:
+        die("no tool given (see: mise-sbx --help)")
+
+    policy = load_policy()
+    cwd = current_dir()
+    require_mise_version()
+
+    if opts["command"] is not None:
+        tool = "bash"
+        tool_args = ["-c", opts["command"]]
+        pol = effective_policy(policy, tool)
+        guard_home(opts, cwd)
+        guard_denied_cwd(pol, opts, cwd)
+        flags, notes = build_flags(pol, opts, cwd, create=not opts["dry_run"])
+        return exec_mise(flags, bash_executable(), tool_args, tool, notes, opts)
+
+    tool = args[0]
+    tool_args = args[1:]
+
+    pol = effective_policy(policy, tool)
+    guard_home(opts, cwd)
+    guard_denied_cwd(pol, opts, cwd)
+    flags, notes = build_flags(pol, opts, cwd, create=not opts["dry_run"])
+    resolved = resolve_tool(tool)
+    return exec_mise(flags, resolved, tool_args, tool, notes, opts)
+
+
+def explicit_grants_cwd(opts: dict, cwd: Path) -> bool:
+    """True when an explicit allow makes `cwd` itself grantable."""
+    rw, ro = explicit_allow_paths(opts, cwd)
+    for path in rw + ro:
+        if path == cwd or is_under(cwd, path):
+            return True
+    return False
+
+
+def guard_denied_cwd(pol: dict, opts: dict, cwd: Path) -> None:
+    """Refuse to launch in a directory that the deny list removes."""
+    if opts["sandbox_off"] or opts["fs"] == "all":
+        return
+    denies, _ = resolve_denies(pol, cwd)
+    covering = [d for d in denies if is_under(cwd, d)]
+    if not covering:
+        return
+    for path in _explicit_paths(opts, cwd):
+        covered = path == cwd or is_under(cwd, path)  # path is cwd or an ancestor
+        overrides = any(d == path or is_under(path, d) for d in covering)
+        if covered and overrides:
+            return
+    die(
+        f"refusing to launch in {cwd}: it is inside a denied path "
+        f"({covering[0]}); pass -a {cwd} to override"
+    )
+
+
+def _explicit_paths(opts: dict, cwd: Path) -> list[Path]:
+    rw, ro = explicit_allow_paths(opts, cwd)
+    return rw + ro
+
+
+def guard_home(opts: dict, cwd: Path) -> None:
+    """Running from $HOME would make 'project' mean the whole home directory."""
+    if opts["sandbox_off"] or opts["fs"] != "project":
+        return
+    try:
+        at_home = cwd.resolve() == HOME.resolve()
+    except OSError:
+        at_home = False
+    if not at_home:
+        return
+    for path in _explicit_paths(opts, cwd):
+        if path == cwd or is_under(cwd, path):
+            return  # -a ~ grants the home root explicitly
+    die(
+        "refusing to sandbox with $HOME as the project root; "
+        "cd into a project, or pass --fs=home (read/write home), "
+        "-a ~, or --sandbox=off"
+    )
+
+
+def exec_mise(flags: list[str], binary: str, tool_args: list[str], tool: str, notes: list[str], opts: dict) -> int:
+    cwd = current_dir()
+    env = os.environ.copy()
+
+    if opts["sandbox_off"]:
+        for key in (
+            "MISE_SANDBOX_DENY_READ",
+            "MISE_SANDBOX_DENY_WRITE",
+            "MISE_SANDBOX_DENY_ENV",
+            "MISE_SANDBOX_DENY_NET",
+        ):
+            env[key] = "false"
+
+    command = [mise_bin(), "x", *flags, "--", bash_executable(), "-c", SANITIZE_PATH, "mise-sbx", binary, *tool_args]
+    if opts["dry_run"]:
+        print(" ".join(command))
+        for note in notes:
+            print(f"# {note}")
+        return 0
+
+    write_log(tool, flags, tool_args, cwd, notes)
+
+    try:
+        os.execve(command[0], command, env)
+    except OSError as exc:
+        die(f"failed to exec mise: {exc}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
