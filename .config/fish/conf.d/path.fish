@@ -12,7 +12,7 @@ if test -n "$DENO_INSTALL"
 end
 
 # https://golang.org/doc/code.html
-set -gx GOPATH "$HOME/Code/go"
+set -gx GOPATH "$HOME/Work/go"
 if test -n "$GOPATH"/bin
     fish_add_path --append $GOPATH/bin
 end

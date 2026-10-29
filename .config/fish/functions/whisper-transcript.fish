@@ -32,7 +32,7 @@ function whisper-transcript --description "Transcribe audio to .txt and .srt wit
         end
     end
 
-    set -l whisper_model ~/Code/AI/whisper-models/ggml-large-v3.bin
+    set -l whisper_model ~/Work/AI/whisper-models/ggml-large-v3.bin
     ffmpeg -loglevel error -i $input -ar 16000 -ac 1 -f wav - \
         | whisper-cli -m $whisper_model -f - -l $lang -otxt -osrt -of $base
 
