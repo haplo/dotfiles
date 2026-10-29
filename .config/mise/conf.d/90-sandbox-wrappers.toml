@@ -37,3 +37,11 @@ args = ["opencode"]
 [wrappers.pi]
 command = "/home/fidel/.local/bin/mise-sbx"
 args = ["pi"]
+
+[wrappers.uv]
+command = "/home/fidel/.local/bin/mise-sbx"
+args = ["uv"]
+
+[wrappers.uvx]
+command = "/home/fidel/.local/bin/mise-sbx"
+args = ["uvx"]
