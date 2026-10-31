@@ -10,6 +10,10 @@ args = ["claude"]
 command = "/home/fidel/.local/bin/mise-sbx"
 args = ["codex"]
 
+[wrappers.codex-exec-server]
+command = "/home/fidel/.local/bin/mise-sbx"
+args = ["codex-exec-server"]
+
 [wrappers.gemini]
 command = "/home/fidel/.local/bin/mise-sbx"
 args = ["gemini"]
