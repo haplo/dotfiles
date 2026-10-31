@@ -1,0 +1,5 @@
+# Refresh opencode: only processes that handle SIGUSR2 (the TUI, not `serve`)
+for pid in $(pgrep -x opencode.exe); do
+  caught=$(awk '/^SigCgt:/ {print $2}' /proc/$pid/status 2>/dev/null) || continue
+  (( 0x$caught & 0x800 )) && kill -USR2 "$pid"
+done
