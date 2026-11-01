@@ -76,17 +76,7 @@ function ai-research --description "Initialize or open an AI agent research proj
     if test "$force_flag" = "true"; or test (git status --porcelain | count) -eq 0
         # start sandboxed opencode
         # direnv exec is necessary to set environment variables via .envrc
-        direnv exec . fish -c '
-            # Build whitelist arguments after direnv loads the colon-separated .envrc value.
-            set -l extra_whitelist_args "--allow=$project_dir"
-            for dir in (string split : -- "$EXTRA_WHITELIST")
-                if test -n "$dir"
-                    set -a extra_whitelist_args "--allow=$dir"
-                end
-            end
-
-            mise-sbx $extra_whitelist_args opencode $argv
-        ' -- $opencode_args
+        direnv exec . fish -c 'mise-sbx --allow=$project_dir opencode $argv' -- $opencode_args
     else
         echo "WARNING: dirty git repository, clean before starting opencode"
         echo

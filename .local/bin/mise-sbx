@@ -29,6 +29,9 @@ Environment equivalents:
   MISE_SANDBOX_ENV=all
   MISE_SANDBOX_ALLOW=<paths>      same as -a, separated by ':'
   MISE_SANDBOX_ALLOW_RO=<paths>   same as --allow-ro, separated by ':'
+  EXTRA_WHITELIST=<paths>         extra read/write allows, separated by ':'
+  EXTRA_WHITELIST_RO=<paths>      extra read-only allows, separated by ':'
+                                  (~ is expanded; missing paths are ignored)
   MISE_SANDBOX=off                same as --sandbox=off
   MISE_SANDBOX_LOG=0              do not append to the audit log
   MISE_SBX_CONFIG=<path>          use another policy file
@@ -190,6 +193,11 @@ def as_list(value) -> list[str]:
     return [str(v) for v in value]
 
 
+def env_paths(name: str) -> list[str]:
+    """Colon-separated path list from an environment variable."""
+    return [p for p in os.environ.get(name, "").split(":") if p]
+
+
 def truthy(value: str | None) -> bool:
     return str(value).strip().lower() in ("1", "true", "yes", "on")
 
@@ -331,13 +339,19 @@ def grant_rules(root: Path, denies: list[Path], explicit: bool = False) -> list[
 
 
 def explicit_allow_paths(opts: dict, cwd: Path) -> tuple[list[Path], list[Path]]:
-    """Resolve -a/--allow (read+write) and --allow-ro paths; they must exist."""
+    """Resolve explicit allows.
+
+    -a/--allow and --allow-ro paths must exist; EXTRA_WHITELIST and
+    EXTRA_WHITELIST_RO paths are best-effort so a stale entry never blocks a run.
+    """
     rw = [resolve_path(raw, cwd) for raw in opts.get("allow_rw", [])]
     ro = [resolve_path(raw, cwd) for raw in opts.get("allow_ro", [])]
     for label, paths in (("-a/--allow", rw), ("--allow-ro", ro)):
         for path in paths:
             if not path.exists():
                 die(f"{label} path does not exist: {path}")
+    rw += [resolve_path(raw, cwd) for raw in opts.get("whitelist_rw", [])]
+    ro += [resolve_path(raw, cwd) for raw in opts.get("whitelist_ro", [])]
     return rw, ro
 
 
@@ -610,7 +624,14 @@ def cmd_policy(policy: dict, tool: str) -> int:
     print(f"deny:        {' '.join(pol['deny']) or '(none)'}")
     flags, notes = build_flags(
         pol,
-        {"sandbox_off": False, "fs": "project", "env_all": False, "net": None},
+        {
+            "sandbox_off": False,
+            "fs": "project",
+            "env_all": False,
+            "net": None,
+            "whitelist_rw": env_paths("EXTRA_WHITELIST"),
+            "whitelist_ro": env_paths("EXTRA_WHITELIST_RO"),
+        },
         current_dir(),
         create=False,
     )
@@ -642,6 +663,8 @@ def main(argv: list[str]) -> int:
         "dry_run": False,
         "allow_rw": [p for p in os.environ.get("MISE_SANDBOX_ALLOW", "").split(os.pathsep) if p],
         "allow_ro": [p for p in os.environ.get("MISE_SANDBOX_ALLOW_RO", "").split(os.pathsep) if p],
+        "whitelist_rw": env_paths("EXTRA_WHITELIST"),
+        "whitelist_ro": env_paths("EXTRA_WHITELIST_RO"),
         "command": None,
     }
     if truthy(os.environ.get("MISE_SANDBOX_NET")):
