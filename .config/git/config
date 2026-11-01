@@ -111,6 +111,11 @@
 [url "git@gitlab.com:"]
   pushInsteadOf = "https://gitlab.com/"
   pushInsteadOf = "git@gitlab.com:"
+[url "https://aur.archlinux.org/"]
+  insteadOf = "ssh://aur@aur.archlinux.org/"
+[url "ssh://aur@aur.archlinux.org/"]
+  pushInsteadOf = "https://aur.archlinux.org/"
+  pushInsteadOf = "ssh://aur@aur.archlinux.org/"
 [url "https://codeberg.org/"]
   insteadOf = "git@codeberg.org:"
 [url "git@codeberg.org:"]
