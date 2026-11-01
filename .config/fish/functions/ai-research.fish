@@ -81,7 +81,7 @@ function ai-research --description "Initialize or open an AI agent research proj
             set -l extra_whitelist_args "--allow=$project_dir"
             for dir in (string split : -- "$EXTRA_WHITELIST")
                 if test -n "$dir"
-                    set -a extra_whitelist_args "-a $dir"
+                    set -a extra_whitelist_args "--allow=$dir"
                 end
             end
 
