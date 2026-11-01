@@ -126,9 +126,9 @@
 # https://blog.jannikwempe.com/git-config-includes
 
 [includeIf "gitdir/i:~/Code/archlinux/"]
-    path = ~/.gitconfig-archlinux
+    path = config-archlinux
 
 [includeIf "hasconfig:remote.*.url:git@codeberg.org:fidelramos/**"]
-    path = ~/.gitconfig-codeberg
+    path = config-codeberg
 [includeIf "hasconfig:remote.*.url:https://codeberg.org/fidelramos/**"]
-    path = ~/.gitconfig-codeberg
+    path = config-codeberg
