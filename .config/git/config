@@ -40,11 +40,11 @@
 
 [commit]
     gpgsign = true
-    template = ~/.gitmessage
+    template = ~/.config/git/message
 
 [core]
-    excludesfile = ~/.gitignore_global
-    attributesfile = ~/.gitattributes
+    excludesfile = ~/.config/git/ignore
+    attributesfile = ~/.config/git/attributes
     pager = delta
 
     # tabwidth: replace tabs with this many spaces
@@ -77,9 +77,6 @@
 
 [gitlab]
     user = haplo
-
-[include]
-    path = ~/.gitconfig_local
 
 [init]
     defaultBranch = main
