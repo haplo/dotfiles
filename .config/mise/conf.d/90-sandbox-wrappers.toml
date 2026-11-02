@@ -49,3 +49,7 @@ args = ["uv"]
 [wrappers.uvx]
 command = "/home/fidel/.local/bin/mise-sbx"
 args = ["uvx"]
+
+[wrappers.zig]
+command = "/home/fidel/.local/bin/mise-sbx"
+args = ["zig"]

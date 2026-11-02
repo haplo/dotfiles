@@ -215,6 +215,18 @@ allow_read  = ["~/.gitconfig", "~/.config/git"]
 allow_env   = ["BUN_*", "NODE_*", "NODE_ENV"]
 
 # ---------------------------------------------------------------------------
+# Zig: compiler, not just a package manager. Offline unless
+# MISE_SANDBOX_NET=1, which `zig fetch` / a build pulling deps will need.
+# Global cache is ~/.cache/zig; Zig has no config directory of its own.
+# ---------------------------------------------------------------------------
+
+[tools.zig]
+net         = "opt-in"
+allow_write = ["~/.cache/zig"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["ZIG_*"]
+
+# ---------------------------------------------------------------------------
 # Node itself: offline unless MISE_SANDBOX_NET=1
 # ---------------------------------------------------------------------------
 
