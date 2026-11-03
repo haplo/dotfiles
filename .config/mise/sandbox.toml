@@ -31,10 +31,48 @@ exclude = ["codex-code-mode-host", "opencode2"]
 reconcile = "repoint"
 
 # ---------------------------------------------------------------------------
-# Deny list: subtracted from every grant, including --fs=home / --fs=home-ro.
+# Named presets for -p/--preset (repeatable, additive). Built in: home,
+# home-ro, all. A preset adds to [default] + [tools.<name>]; [deny] still wins.
+# `include` pulls in other presets (transitively; cycles are a config error).
+# Presets never change network access: use --net / --no-net for that.
+# ---------------------------------------------------------------------------
+
+# End-user Omarchy customization: edit Hyprland/terminal/bar config, apply a
+# theme, reload the compositor. The rest of $HOME stays unreadable.
+[presets.omarchy]
+allow_write = [
+  "~/.config/hypr",
+  "~/.config/omarchy",
+  "~/.config/alacritty",
+  "~/.config/foot",
+  "~/.config/kitty",
+  "~/.config/ghostty",
+  "~/.config/btop",
+  "~/.config/lazygit",
+  "~/.config/starship.toml",
+  "~/.local/state/omarchy",
+  "~/.cache/omarchy",
+]
+allow_read  = [
+  "/usr/share/omarchy",     # explicit, though mise grants /usr implicitly
+  "/var/lib/pacman",        # omarchy commands run `pacman -Q` for version/deps
+  "~/.local/share/icons",
+]
+allow_env   = [
+  "HYPRLAND_*",
+  "WAYLAND_DISPLAY",
+  "XDG_RUNTIME_DIR",
+  "XDG_CURRENT_DESKTOP",
+  "XDG_SESSION_*",
+  "DBUS_SESSION_BUS_ADDRESS",
+  "OMARCHY_*",
+]
+
+# ---------------------------------------------------------------------------
+# Deny list: subtracted from every grant, including -p home / -p home-ro.
 # Landlock has no negative rules, so an allowed parent is split into its
 # non-denied children. `-a <path>` overrides a deny at or above that path;
-# denies below it still apply. `--fs=all` ignores this list (with a warning).
+# denies below it still apply. `-p all` ignores this list (with a warning).
 # `mise-sbx policy <tool>` shows the expanded rules.
 # ---------------------------------------------------------------------------
 
