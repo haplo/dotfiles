@@ -6,17 +6,19 @@ Usage:
   mise-sbx -c '<shell command>'
   mise-sbx sync                 regenerate [wrappers] for every mise bin
   mise-sbx dirs                 show resolved config/data/state paths
-  mise-sbx policy <tool>        show the effective policy for a tool
+  mise-sbx policy <tool> [-p X]  show the effective policy for a tool
   mise-sbx --help
 
 Options (before <tool>):
   --net                allow network for this run
   --no-net             deny network for this run
-  --fs=project|home|home-ro|all
-                       project (default) = read/write cwd only
-                       home              = also read/write $HOME
-                       home-ro           = also read $HOME
-                       all               = read/write / (ignores the deny list)
+  -p, --preset NAME    add a grant bundle (repeatable); with no -p the sandbox
+                       grants read/write on the current directory only
+                       built in: home    = also read/write $HOME
+                                 home-ro = also read $HOME
+                                 all     = read/write / (ignores the deny list)
+                       named presets live in [presets.<name>] in the policy and
+                       may pull in others with include = ["home", ...]
   --env=min|all        min (default) = minimal env, all = pass everything
   -a, --allow PATH     grant read/write access to PATH (repeatable)
   --allow-ro PATH      grant read-only access to PATH (repeatable)
@@ -25,7 +27,7 @@ Options (before <tool>):
 
 Environment equivalents:
   MISE_SANDBOX_NET=1              same as --net
-  MISE_SANDBOX_FS=home|home-ro|all
+  MISE_SANDBOX_PRESET=<names>     same as -p, separated by ':' (home:omarchy)
   MISE_SANDBOX_ENV=all
   MISE_SANDBOX_ALLOW=<paths>      same as -a, separated by ':'
   MISE_SANDBOX_ALLOW_RO=<paths>   same as --allow-ro, separated by ':'
@@ -79,7 +81,9 @@ WRAPPERS_PATH = CONFIG_DIR / "conf.d" / "90-sandbox-wrappers.toml"
 DEFAULT_SHIMS = DATA_DIR / "shims"
 
 HOME = Path.home()
-FS_CHOICES = ("project", "home", "home-ro", "all")
+# Presets that need no [presets.<name>] entry. -p is additive: with no -p a run
+# grants only the cwd through [default], which is what "project" used to mean.
+BUILTIN_PRESETS = ("home", "home-ro", "all")
 
 # mise's Landlock/seccomp flags landed in the 2026.10 line. Older releases
 # reject --deny-read/--deny-net, which used to surface as a confusing
@@ -202,6 +206,44 @@ def truthy(value: str | None) -> bool:
     return str(value).strip().lower() in ("1", "true", "yes", "on")
 
 
+def configured_presets(policy: dict) -> dict:
+    """The [presets] table, validated enough that a typo fails loudly."""
+    presets = policy.get("presets", {})
+    if not isinstance(presets, dict):
+        die("[presets] must be a table of [presets.<name>] sections")
+    for name in presets:
+        if name in BUILTIN_PRESETS:
+            die(f"[presets.{name}] clashes with the built-in preset {name}; rename it")
+    return presets
+
+
+def preset_names(policy: dict) -> list[str]:
+    return sorted(configured_presets(policy))
+
+
+def expand_presets(requested: list[str], policy: dict) -> list[str]:
+    """Flatten -p names through `include`, rejecting unknown names and cycles."""
+    presets = configured_presets(policy)
+    known = set(BUILTIN_PRESETS) | set(presets)
+    ordered: list[str] = []
+
+    def visit(name: str, chain: list[str]) -> None:
+        if name in chain:
+            die(f"preset cycle: {' -> '.join(chain + [name])}")
+        if name in ordered:
+            return
+        if name not in known:
+            origin = f"included by {chain[-1]}" if chain else "requested"
+            die(f"unknown preset {name} ({origin}); known: {', '.join(sorted(known))}")
+        ordered.append(name)
+        for child in as_list(presets.get(name, {}).get("include")):
+            visit(child, chain + [name])
+
+    for name in requested:
+        visit(name, [])
+    return ordered
+
+
 def effective_policy(policy: dict, tool: str) -> dict:
     default = policy.get("default", {})
     tool_cfg = policy.get("tools", {}).get(tool, {})
@@ -212,6 +254,7 @@ def effective_policy(policy: dict, tool: str) -> dict:
         "allow_write": as_list(default.get("allow_write")) + as_list(tool_cfg.get("allow_write")),
         "allow_env": as_list(default.get("allow_env")) + as_list(tool_cfg.get("allow_env")),
         "deny": as_list(policy.get("deny", {}).get("paths")) + as_list(tool_cfg.get("deny")),
+        "preset_defs": configured_presets(policy),
     }
 
 
@@ -380,19 +423,37 @@ def build_flags(pol: dict, opts: dict, cwd: Path, create: bool = True) -> tuple[
     requests += [(path, False, False) for path in usable_read]
     requests += [(path, True, False) for path in usable_write]
 
-    fs = opts["fs"]
-    if fs == "home":
-        requests.append((HOME, True, False))
-    elif fs == "home-ro":
-        requests.append((HOME, False, False))
-    elif fs == "all":
-        if denies:
-            notes.append(
-                "WARNING --fs=all grants / so the deny list cannot be enforced "
-                f"({len(denies)} path(s) ignored)"
+    # -p presets are additive to the tool policy. A named preset contributes
+    # paths through the same pipeline as allow_read/allow_write, so the deny
+    # list, RULE_LIMIT and the write-implies-read dedupe all still apply.
+    preset_env: list[str] = []
+    if opts.get("presets"):
+        notes.append("presets=" + "+".join(opts["presets"]))
+    for name in opts.get("presets", []):
+        if name == "home":
+            requests.append((HOME, True, False))
+        elif name == "home-ro":
+            requests.append((HOME, False, False))
+        elif name == "all":
+            if denies:
+                notes.append(
+                    "WARNING -p all grants / so the deny list cannot be enforced "
+                    f"({len(denies)} path(s) ignored)"
+                )
+                denies = []
+            requests.append((Path("/"), True, False))
+        else:
+            spec = pol.get("preset_defs", {}).get(name, {})
+            usable_write, notes_w2 = prepare_paths(
+                as_list(spec.get("allow_write")), cwd, writable=True, create=create
             )
-            denies = []
-        requests.append((Path("/"), True, False))
+            usable_read, notes_r2 = prepare_paths(
+                as_list(spec.get("allow_read")), cwd, writable=False, create=create
+            )
+            notes += notes_w2 + notes_r2
+            requests += [(path, True, False) for path in usable_write]
+            requests += [(path, False, False) for path in usable_read]
+            preset_env += as_list(spec.get("allow_env"))
 
     requests += [(path, True, True) for path in explicit_rw]
     requests += [(path, False, True) for path in explicit_ro]
@@ -427,10 +488,11 @@ def build_flags(pol: dict, opts: dict, cwd: Path, create: bool = True) -> tuple[
             continue  # already readable via the write rule
         flags.append(f"--allow-read={path}")
 
+    env_patterns = list(dict.fromkeys(list(pol["allow_env"]) + preset_env))
     if opts["env_all"]:
         flags.append("--allow-env=*")
     else:
-        for pattern in pol["allow_env"]:
+        for pattern in env_patterns:
             flags.append(f"--allow-env={pattern}")
 
     net = opts["net"]
@@ -614,19 +676,24 @@ def cmd_dirs() -> int:
     return 0
 
 
-def cmd_policy(policy: dict, tool: str) -> int:
+def cmd_policy(policy: dict, tool: str, requested: list[str] | None = None) -> int:
     pol = effective_policy(policy, tool)
+    presets = expand_presets(requested or [], policy)
     print(f"tool:        {tool}")
     print(f"net:         {pol['net']}")
     print(f"allow_read:  {' '.join(pol['allow_read']) or '(none)'}")
     print(f"allow_write: {' '.join(pol['allow_write']) or '(none)'}")
     print(f"allow_env:   {' '.join(pol['allow_env']) or '(none)'}")
     print(f"deny:        {' '.join(pol['deny']) or '(none)'}")
+    print(
+        f"presets:     {' '.join(BUILTIN_PRESETS)} (built in); "
+        f"{' '.join(preset_names(policy)) or '(none)'} (configured)"
+    )
     flags, notes = build_flags(
         pol,
         {
             "sandbox_off": False,
-            "fs": "project",
+            "presets": presets,
             "env_all": False,
             "net": None,
             "whitelist_rw": env_paths("EXTRA_WHITELIST"),
@@ -655,9 +722,18 @@ def main(argv: list[str]) -> int:
     if argv[0] == "dirs":
         return cmd_dirs()
 
+    if os.environ.get("MISE_SANDBOX_FS"):
+        print(
+            "mise-sbx: MISE_SANDBOX_FS is no longer supported; use "
+            "MISE_SANDBOX_PRESET (for example MISE_SANDBOX_PRESET=home)",
+            file=sys.stderr,
+        )
+
     opts = {
         "net": None,
-        "fs": os.environ.get("MISE_SANDBOX_FS", "project"),
+        "presets": [
+            p for p in os.environ.get("MISE_SANDBOX_PRESET", "").split(os.pathsep) if p
+        ],
         "env_all": os.environ.get("MISE_SANDBOX_ENV", "").strip().lower() == "all",
         "sandbox_off": os.environ.get("MISE_SANDBOX", "").strip().lower() == "off",
         "dry_run": False,
@@ -671,9 +747,27 @@ def main(argv: list[str]) -> int:
         opts["net"] = True
 
     if argv[0] == "policy":
-        if len(argv) < 2:
-            die("usage: mise-sbx policy <tool>")
-        return cmd_policy(load_policy(), argv[1])
+        rest = argv[1:]
+        requested: list[str] = []
+        tools: list[str] = []
+        while rest:
+            item = rest.pop(0)
+            if item in ("-p", "--preset"):
+                if not rest:
+                    die(f"{item} needs a preset name")
+                requested.append(rest.pop(0))
+            elif item.startswith("--preset=") or item.startswith("-p="):
+                requested.append(item.split("=", 1)[1])
+            elif item in ("-h", "--help"):
+                print(HELP.strip())
+                return 0
+            elif item.startswith("-"):
+                die(f"unknown option: {item}")
+            else:
+                tools.append(item)
+        if len(tools) != 1:
+            die("usage: mise-sbx policy <tool> [-p NAME ...]")
+        return cmd_policy(load_policy(), tools[0], requested)
 
     args = list(argv)
     while args and args[0].startswith("-"):
@@ -701,12 +795,12 @@ def main(argv: list[str]) -> int:
             opts["net"] = True
         elif flag == "--no-net":
             opts["net"] = False
-        elif flag == "--fs":
+        elif flag in ("-p", "--preset"):
             if not args:
-                die("--fs needs a value")
-            opts["fs"] = args.pop(0)
-        elif flag.startswith("--fs="):
-            opts["fs"] = flag.split("=", 1)[1]
+                die(f"{flag} needs a preset name")
+            opts["presets"].append(args.pop(0))
+        elif flag.startswith("--preset=") or flag.startswith("-p="):
+            opts["presets"].append(flag.split("=", 1)[1])
         elif flag == "--env":
             if not args:
                 die("--env needs a value")
@@ -726,13 +820,11 @@ def main(argv: list[str]) -> int:
         else:
             die(f"unknown option: {flag}")
 
-    if opts["fs"] not in FS_CHOICES:
-        die(f"--fs must be one of: {', '.join(FS_CHOICES)}")
-
     if opts["command"] is None and not args:
         die("no tool given (see: mise-sbx --help)")
 
     policy = load_policy()
+    opts["presets"] = expand_presets(opts["presets"], policy)
     cwd = current_dir()
     require_mise_version()
 
@@ -767,7 +859,7 @@ def explicit_grants_cwd(opts: dict, cwd: Path) -> bool:
 
 def guard_denied_cwd(pol: dict, opts: dict, cwd: Path) -> None:
     """Refuse to launch in a directory that the deny list removes."""
-    if opts["sandbox_off"] or opts["fs"] == "all":
+    if opts["sandbox_off"] or "all" in opts.get("presets", []):
         return
     denies, _ = resolve_denies(pol, cwd)
     covering = [d for d in denies if is_under(cwd, d)]
@@ -790,8 +882,13 @@ def _explicit_paths(opts: dict, cwd: Path) -> list[Path]:
 
 
 def guard_home(opts: dict, cwd: Path) -> None:
-    """Running from $HOME would make 'project' mean the whole home directory."""
-    if opts["sandbox_off"] or opts["fs"] != "project":
+    """Refuse a cwd that [default] allow_write would turn into the whole home dir.
+
+    `[default] allow_write = ["."]` means launching from $HOME would grant all
+    of $HOME, even with a read-only -p home-ro. Require an explicit choice:
+    -p home / -p all, an explicit -a covering cwd, or a project directory.
+    """
+    if opts["sandbox_off"] or {"home", "all"} & set(opts.get("presets", [])):
         return
     try:
         at_home = cwd.resolve() == HOME.resolve()
@@ -804,7 +901,7 @@ def guard_home(opts: dict, cwd: Path) -> None:
             return  # -a ~ grants the home root explicitly
     die(
         "refusing to sandbox with $HOME as the project root; "
-        "cd into a project, or pass --fs=home (read/write home), "
+        "cd into a project, or pass -p home (read/write home), "
         "-a ~, or --sandbox=off"
     )
 
