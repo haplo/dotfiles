@@ -214,6 +214,18 @@ allow_write = ["~/.bun", "~/.cache/bun"]
 allow_read  = ["~/.gitconfig", "~/.config/git"]
 allow_env   = ["BUN_*", "NODE_*", "NODE_ENV"]
 
+[tools.uv]
+net         = true
+allow_write = ["~/.cache/uv", "~/.config/uv"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["UV_*"]
+
+[tools.uvx]
+net         = true
+allow_write = ["~/.cache/uv", "~/.config/uv"]
+allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_env   = ["UV_*"]
+
 # ---------------------------------------------------------------------------
 # Zig: compiler, not just a package manager. Offline unless
 # MISE_SANDBOX_NET=1, which `zig fetch` / a build pulling deps will need.
