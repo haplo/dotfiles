@@ -12,8 +12,8 @@ Read this before changing anything here.
 
 | Path | Role |
 | --- | --- |
-| `~/.config/mise/sandbox.toml` | **The policy.** Per-tool network, path and env rules. |
-| `~/.local/bin/mise-sbx` | Dispatcher: reads policy, builds flags, execs `mise x`. Also `sync`, `dirs`, `policy`, `-c`, `--dry-run`. |
+| `~/.config/mise/sandbox.toml` | **The policy.** Per-tool network, path and env rules, plus named `-p` presets (`[presets.<name>]`). |
+| `~/.local/bin/mise-sbx` | Dispatcher: reads policy, builds flags, execs `mise x`. Also `sync`, `dirs`, `policy`, `-c`, `-p`, `--dry-run`. |
 | `~/.config/mise/conf.d/90-sandbox-wrappers.toml` | **Generated.** `[wrappers.<bin>] command = "/home/fidel/.local/bin/mise-sbx"`. Never edit by hand; run `mise-sbx sync`. |
 | `~/.config/mise/config.toml` | `[hooks] postinstall = "$HOME/.local/bin/mise-sbx sync"` keeps wrappers current. Note the shell-expanded `$HOME`: a bare `mise-sbx` breaks when `~/.local/bin` is not on PATH (CI, cron, minimal systems). |
 | `~/.local/bin/<agent>` | Launcher scripts (`claude`, `codex`, `gemini`, `gh`, `muse`, ...). **Owned by Omarchy** — see below. |
@@ -84,7 +84,8 @@ global either, because mise cannot re-grant network to agents afterwards.
    The `postinstall` hook runs `mise-sbx sync`; otherwise run `mise-sbx sync`.
 2. Decide its policy. Tools with no `[tools.<name>]` entry get `[default]`:
    read/write the project only, no network. Add an entry when the tool needs
-   network, extra paths, or env vars.
+   network, extra paths, or env vars. Coding agents also need the skill roots
+   from *Agent skill directories* below.
 3. Verify: `mise-sbx policy <tool>`, run the tool, then read the audit log.
 
 For an internal helper that only its already-sandboxed parent invokes, add it
@@ -160,16 +161,94 @@ Rules:
   that looks like a file (last segment contains a dot) is skipped. Watch the
   `notes=` field in the log if a tool cannot see something.
 - Landlock grants a directory and everything under it. Never allow `~` or `/`
-  in a policy — that is what `--fs=home` / `--fs=all` are for.
+  in a policy — that is what `-p home` / `-p all` are for.
 - Network is all-or-nothing. mise cannot filter by host; use `--no-net` or a
   separate firewall if a tool must only reach specific hosts.
+
+## Presets (`-p`)
+
+`-p/--preset NAME` adds a named bundle of paths and env patterns on top of the
+tool policy. It is repeatable. It replaces the old `--fs` flag (removed:
+`--fs=…` is now an unknown option) and `MISE_SANDBOX_FS` (detected, warned
+about on stderr for one line, then ignored).
+
+With no `-p`, a run grants read/write on the current directory only — what the
+old `project` value meant, and already expressed by `[default] allow_write`.
+
+Built in: `home` (read/write `$HOME`), `home-ro` (read `$HOME`), `all`
+(read/write `/`, ignores the deny list with a warning). Everything else comes
+from `sandbox.toml`:
+
+```toml
+[presets.gui]
+include     = ["home"]                # optional; resolved transitively
+allow_write = ["~/.config/gtk-3.0"]   # same syntax as [tools.<name>]
+allow_read  = ["/usr/share/themes"]
+allow_env   = ["GTK_*"]               # fnmatch, merged with the tool policy
+```
+
+```bash
+mise-sbx -p omarchy claude            # one preset
+mise-sbx -p home -p omarchy claude    # additive union
+MISE_SANDBOX_PRESET=home:omarchy claude
+mise-sbx policy claude -p omarchy     # preview the resulting flags
+```
+
+Rules:
+
+- Presets are **additive** to `[default]` + `[tools.<name>]`; they never replace
+  them. Repeating a name is a no-op, and a write root wins over a read root for
+  the same path.
+- `[deny]` still subtracts from every preset path, exactly like a policy root.
+- A `[presets.<name>]` that reuses a built-in name (`home`, `home-ro`, `all`) is
+  a hard config error, as is an `include` cycle or an unknown `include` target.
+- Presets never change network access: `--net`/`--no-net` (or the tool's `net`
+  setting) stay in charge.
+- Without `-p home` or `-p all`, launching from `$HOME` is refused, because
+  `[default] allow_write = ["."]` would otherwise grant the whole home
+  directory. `-a ~` also overrides the refusal, and `-p home-ro` is *not* enough
+  — that case used to leave `$HOME` writable.
+- The audit log records the names: `notes=[presets=home+omarchy; …]`.
+
+The shipped `omarchy` preset is for end-user customization inside the sandbox:
+write on `~/.config/{hypr,omarchy,alacritty,foot,kitty,ghostty,btop,lazygit}`,
+`~/.config/starship.toml`, `~/.local/state/omarchy`, `~/.cache/omarchy`; read on
+`/usr/share/omarchy`, `/var/lib/pacman` and `~/.local/share/icons`; env
+`HYPRLAND_*`, `WAYLAND_DISPLAY`, `XDG_RUNTIME_DIR`, `XDG_CURRENT_DESKTOP`,
+`XDG_SESSION_*`, `DBUS_SESSION_BUS_ADDRESS`, `OMARCHY_*`. The env patterns are
+what make `hyprctl` (and anything talking to quickshell over dbus) work — the
+unix sockets themselves are not path-mediated.
+
+```bash
+mise-sbx -p omarchy -c 'omarchy theme current'
+mise-sbx -p omarchy -c 'hyprctl reload'
+```
+
+Not covered on purpose: `sudo`/`pkexec` flows (`omarchy pkg add`, `omarchy
+update`, `omarchy setup …`) and anything needing network (`omarchy theme
+install <url>` still needs `--net`).
+
+## Agent skill directories
+
+Agents discover skills in `~/.agents/skills` and `~/.claude/skills`. Both sit
+outside every `$HOME` grant (`[deny]` keeps `$HOME` itself ungranted), so each
+agent section must list them in `allow_read`:
+
+```toml
+[tools.opencode]
+allow_read = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+```
+
+The failure is **silent**: the agent starts normally, just without those skills.
+The two paths are read-only markdown and helper `.md` files; granting them does
+not expose `~/.agents` or `~/.claude` themselves.
 
 ## Deny list
 
 `[deny] paths` in `sandbox.toml` is subtracted from every grant, including
-`--fs=home`, `--fs=home-ro` and policy `allow_read`/`allow_write` roots. Landlock
-has no negative rules, so the dispatcher stops granting the parent and grants
-its non-denied children instead.
+`-p home`, `-p home-ro`, preset roots and policy `allow_read`/`allow_write`
+roots. Landlock has no negative rules, so the dispatcher stops granting the
+parent and grants its non-denied children instead.
 
 ```toml
 [deny]
@@ -181,12 +260,12 @@ deny = ["~/work/clients"]   # extra denies for one tool
 
 Rules:
 
-- A deny wins over an implicit `--fs=home` or policy grant.
+- A deny wins over an implicit `-p home`, a preset root, or a policy grant.
 - `-a PATH` overrides a deny at or above `PATH`; a deny *below* `PATH` still
   applies. So `-a ~/.ssh` works, `-a ~` does not disable the list.
 - The current directory being inside a deny aborts the launch:
   `refusing to launch in …; pass -a <dir> to override`.
-- `--fs=all` warns and **ignores** the deny list (it grants `/`).
+- `-p all` warns and **ignores** the deny list (it grants `/`).
 - Denies inside mise's implicit paths (`/usr`, `/etc`, `/tmp`, `/proc`, the mise
   data dir, …) cannot be enforced; `sync`/`policy` note that and skip them.
 - `$HOME` itself is no longer granted when denies are active, so `ls ~` fails
@@ -206,9 +285,12 @@ Flags go before the tool name; env vars work everywhere.
 | Need | Flag | Env |
 | --- | --- | --- |
 | Network for one run | `mise-sbx --net node server.js` | `MISE_SANDBOX_NET=1` |
-| Read/write `$HOME` | `mise-sbx --fs=home claude` | `MISE_SANDBOX_FS=home` |
-| Read `$HOME` only | `mise-sbx --fs=home-ro claude` | `MISE_SANDBOX_FS=home-ro` |
-| Everything | `mise-sbx --fs=all npm install` | `MISE_SANDBOX_FS=all` |
+| Read/write `$HOME` | `mise-sbx -p home claude` | `MISE_SANDBOX_PRESET=home` |
+| Read `$HOME` only | `mise-sbx -p home-ro claude` | `MISE_SANDBOX_PRESET=home-ro` |
+| Everything | `mise-sbx -p all npm install` | `MISE_SANDBOX_PRESET=all` |
+| Omarchy customization | `mise-sbx -p omarchy claude` | `MISE_SANDBOX_PRESET=omarchy` |
+| Two presets at once | `mise-sbx -p home -p omarchy claude` | `MISE_SANDBOX_PRESET=home:omarchy` |
+| See which presets exist | `mise-sbx policy <tool>` (`presets:` line) | |
 | Grant one directory | `mise-sbx -a ~/datasets claude` | `MISE_SANDBOX_ALLOW=~/datasets` |
 | Grant it read-only | `mise-sbx --allow-ro /srv/ref claude` | `MISE_SANDBOX_ALLOW_RO=/srv/ref` |
 | Full environment | `mise-sbx --env=all gh auth status` | `MISE_SANDBOX_ENV=all` |
@@ -236,7 +318,8 @@ allow_write = ["./dist"]
 
 ```bash
 mise-sbx dirs                          # resolved config/data/state paths
-mise-sbx policy claude                 # effective policy + resolved flags
+mise-sbx policy claude                 # effective policy + configured presets
+mise-sbx policy claude -p omarchy      # same, with a preset applied (expanded flags)
 mise-sbx --dry-run claude --version    # exact command, no side effects
 tail -n 20 ~/.local/state/mise-sbx.log # what actually ran, and why
 MISE_SANDBOX_LOG=0 mise-sbx ...        # skip the audit log
@@ -264,7 +347,7 @@ npm ping --registry=https://registry.npmjs.org                               # a
   them. This stops prompt-injected agents and accidents, not a determined
   attacker. Use `syd`/`bubblewrap` if you need PID and network namespaces.
 - **Per-host network** is not possible with mise; `--allow-net` is unsupported.
-- **OAuth/browser flows** need `--sandbox=off` (or `--net --fs=home`) once.
+- **OAuth/browser flows** need `--sandbox=off` (or `--net -p home`) once.
 - **Keyring/dbus** env vars are filtered; `gh` and similar may need
   `--env=all`.
 - **Performance.** Every wrapped call pays a `mise x` startup plus a `bash -c`.
