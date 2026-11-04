@@ -8,10 +8,14 @@
 #   net = true       network allowed
 #   net = "opt-in"   network only when MISE_SANDBOX_NET=1
 #
-# Paths: relative paths resolve from the directory mise-sbx was run in, `~` is
-# expanded. Missing paths are dropped (Landlock cannot bind them). A missing
-# write path whose last segment has no dot is created first; paths that look
-# like files (last segment contains a dot) are skipped.
+# Paths: relative paths resolve from the directory mise-sbx was run in, `~` and
+# `$VAR`/`${VAR}` are expanded ($XDG_RUNTIME_DIR falls back to /run/user/<uid>).
+# Missing paths are dropped (Landlock cannot bind them). A missing write path
+# whose last segment has no dot is created first; paths that look like files
+# (last segment contains a dot) are skipped.
+#
+# Path lists are alphabetical, case-insensitive. The [deny] list is the one
+# exception: it is grouped by category, alphabetical within each group.
 #
 # allow_write implies read access to that path.
 
@@ -79,32 +83,32 @@ allow_env   = [
 [deny]
 paths = [
   # secrets and credentials
-  "~/.ssh",
-  "~/.gnupg",
   "~/.aws",
   "~/.azure",
-  "~/.kube",
-  "~/.netrc",
-  "~/.git-credentials",
-  "~/.npmrc",
-  "~/.pypirc",
-  "~/.gem/credentials",
-  "~/.password-store",
-  "~/.local/share/keyrings",
-  "~/.docker/config.json",
-  "~/.config/containers/auth.json",
-  "~/.config/sops",
-  "~/.config/op",
-  "~/.config/age",
-  "~/.config/gcloud",
   "~/.cargo/credentials.toml",
+  "~/.config/age",
+  "~/.config/containers/auth.json",
+  "~/.config/gcloud",
+  "~/.config/op",
+  "~/.config/sops",
+  "~/.docker/config.json",
+  "~/.gem/credentials",
+  "~/.git-credentials",
+  "~/.gnupg",
+  "~/.kube",
+  "~/.local/share/keyrings",
+  "~/.netrc",
+  "~/.npmrc",
+  "~/.password-store",
+  "~/.pypirc",
+  "~/.ssh",
   # browser profiles
-  "~/.mozilla",
-  "~/.config/google-chrome",
-  "~/.config/chromium",
   "~/.config/BraveSoftware",
+  "~/.config/chromium",
+  "~/.config/google-chrome",
   "~/.config/microsoft-edge",
   "~/.config/vivaldi",
+  "~/.mozilla",
   # personal dirs
   "~/Backups",
   "~/Calibre",
@@ -131,32 +135,32 @@ paths = [
 
 [tools.claude]
 net         = true
-allow_write = ["~/.claude", "~/.cache/claude", "~/.local/state/claude"]
-allow_read  = ["~/.claude.json", "~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/claude", "~/.claude", "~/.local/state/claude"]
+allow_read  = ["~/.agents/skills", "~/.claude.json", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["ANTHROPIC_*", "CLAUDE_*"]
 
 [tools.codex]
 net         = true
-allow_write = ["~/.codex", "~/.cache/codex"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/codex", "~/.codex"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["OPENAI_*", "CODEX_*"]
 
 [tools.gemini]
 net         = true
 allow_write = ["~/.gemini"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["GEMINI_*", "GOOGLE_*", "GOOGLE_CLOUD_*"]
 
 [tools.opencode]
 net         = true
-allow_write = ["~/.config/opencode", "~/.local/share/opencode", "~/.local/state/opencode", "~/.cache/opencode"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/opencode", "~/.config/opencode", "~/.local/share/opencode", "~/.local/state/opencode"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["OPENCODE_*", "ANTHROPIC_*", "OPENAI_*", "GEMINI_*", "GOOGLE_*", "OPENROUTER_*", "GROQ_*", "MISTRAL_*", "XAI_*"]
 
 [tools.pi]
 net         = true
-allow_write = ["~/.pi", "~/.cache/pi", "~/.local/state/pi"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/pi", "~/.local/state/pi", "~/.pi"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["PI_*"]
 
 # Additional agent CLIs installed on demand by the ~/.local/bin launchers.
@@ -165,62 +169,62 @@ allow_env   = ["PI_*"]
 
 [tools.copilot]
 net         = true
-allow_write = ["~/.config/github-copilot", "~/.local/share/github-copilot", "~/.cache/github-copilot"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/github-copilot", "~/.config/github-copilot", "~/.local/share/github-copilot"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["GH_*", "GITHUB_*", "COPILOT_*"]
 
 [tools.crush]
 net         = true
-allow_write = ["~/.config/crush", "~/.local/share/crush", "~/.cache/crush"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/crush", "~/.config/crush", "~/.local/share/crush"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["ANTHROPIC_*", "OPENAI_*", "GEMINI_*", "GROQ_*", "OPENROUTER_*", "CRUSH_*"]
 
 [tools.cursor-agent]
 net         = true
-allow_write = ["~/.cursor", "~/.config/cursor", "~/.local/share/cursor-agent", "~/.cache/cursor-agent"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/cursor-agent", "~/.config/cursor", "~/.cursor", "~/.local/share/cursor-agent"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["CURSOR_*"]
 
 [tools.gh]
 net         = true
-allow_write = ["~/.config/gh", "~/.cache/gh", "~/.local/state/gh"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_write = ["~/.cache/gh", "~/.config/gh", "~/.local/state/gh"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["GH_*", "GITHUB_*", "GIT_*"]
 
 [tools.ghui]
 net         = true
-allow_write = ["~/.config/ghui", "~/.local/share/ghui", "~/.cache/ghui"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_write = ["~/.cache/ghui", "~/.config/ghui", "~/.local/share/ghui"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["GH_*", "GITHUB_*"]
 
 [tools.grok]
 net         = true
-allow_write = ["~/.grok", "~/.config/grok", "~/.local/share/grok", "~/.cache/grok"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/grok", "~/.config/grok", "~/.grok", "~/.local/share/grok"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["XAI_*", "GROK_*"]
 
 [tools.hunk]
 net         = true
-allow_write = ["~/.config/hunk", "~/.local/share/hunk", "~/.cache/hunk"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/hunk", "~/.config/hunk", "~/.local/share/hunk"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["ANTHROPIC_*", "OPENAI_*", "HUNK_*"]
 
 [tools.muse]
 net         = true
-allow_write = ["~/.muse", "~/.config/muse", "~/.local/share/muse", "~/.cache/muse"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/muse", "~/.config/muse", "~/.local/share/muse", "~/.muse"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["MUSE_*"]
 
 [tools.omp]
 net         = true
-allow_write = ["~/.config/omp", "~/.local/share/omp", "~/.cache/omp"]
-allow_read  = ["~/.gitconfig", "~/.config/git", "~/.agents/skills", "~/.claude/skills"]
+allow_write = ["~/.cache/omp", "~/.config/omp", "~/.local/share/omp"]
+allow_read  = ["~/.agents/skills", "~/.claude/skills", "~/.config/git", "~/.gitconfig"]
 allow_env   = ["ANTHROPIC_*", "OPENAI_*", "OMP_*"]
 
 [tools.playwright]
 net         = true
 allow_write = ["~/.cache/ms-playwright", "~/.cache/playwright", "~/.config/playwright"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["PLAYWRIGHT_*", "NODE_*"]
 
 # ---------------------------------------------------------------------------
@@ -229,44 +233,44 @@ allow_env   = ["PLAYWRIGHT_*", "NODE_*"]
 
 [tools.npm]
 net         = true
-allow_write = ["~/.npm", "~/.cache/npm"]
-allow_read  = ["~/.node_repl_history", "~/.gitconfig", "~/.config/git"]
+allow_write = ["~/.cache/npm", "~/.npm"]
+allow_read  = ["~/.config/git", "~/.gitconfig", "~/.node_repl_history"]
 allow_env   = ["NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
 
 [tools.npx]
 net         = true
-allow_write = ["~/.npm", "~/.cache/npm"]
-allow_read  = ["~/.node_repl_history", "~/.gitconfig", "~/.config/git"]
+allow_write = ["~/.cache/npm", "~/.npm"]
+allow_read  = ["~/.config/git", "~/.gitconfig", "~/.node_repl_history"]
 allow_env   = ["NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
 
 [tools.pnpm]
 net         = true
-allow_write = ["~/.local/share/pnpm", "~/.cache/pnpm", "~/.config/pnpm"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_write = ["~/.cache/pnpm", "~/.config/pnpm", "~/.local/share/pnpm"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["PNPM_*", "NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
 
 [tools.yarn]
 net         = true
-allow_write = ["~/.yarn", "~/.cache/yarn", "~/.config/yarn"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_write = ["~/.cache/yarn", "~/.config/yarn", "~/.yarn"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["YARN_*", "NPM_*", "npm_*", "NODE_*", "NODE_ENV"]
 
 [tools.bun]
 net         = true
 allow_write = ["~/.bun", "~/.cache/bun"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["BUN_*", "NODE_*", "NODE_ENV"]
 
 [tools.uv]
 net         = true
 allow_write = ["~/.cache/uv", "~/.config/uv"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["UV_*"]
 
 [tools.uvx]
 net         = true
 allow_write = ["~/.cache/uv", "~/.config/uv"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["UV_*"]
 
 # ---------------------------------------------------------------------------
@@ -278,7 +282,7 @@ allow_env   = ["UV_*"]
 [tools.zig]
 net         = "opt-in"
 allow_write = ["~/.cache/zig"]
-allow_read  = ["~/.gitconfig", "~/.config/git"]
+allow_read  = ["~/.config/git", "~/.gitconfig"]
 allow_env   = ["ZIG_*"]
 
 # ---------------------------------------------------------------------------
@@ -287,6 +291,6 @@ allow_env   = ["ZIG_*"]
 
 [tools.node]
 net         = "opt-in"
-allow_write = ["~/.npm/_logs", "~/.cache/node"]
-allow_read  = ["~/.node_repl_history", "~/.gitconfig", "~/.config/git"]
+allow_write = ["~/.cache/node", "~/.npm/_logs"]
+allow_read  = ["~/.config/git", "~/.gitconfig", "~/.node_repl_history"]
 allow_env   = ["NODE_*", "NODE_ENV"]

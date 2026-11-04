@@ -160,6 +160,15 @@ Rules:
   A missing write path whose last segment has no dot is created first; a path
   that looks like a file (last segment contains a dot) is skipped. Watch the
   `notes=` field in the log if a tool cannot see something.
+- Path lists are **alphabetical, case-insensitive**: `$XDG_RUNTIME_DIR` sorts
+  before `/usr/…` before `~/…`. The one exception is `[deny] paths`, which is
+  grouped by category with each group alphabetical. Keep it that way when you
+  add a path — a sorted list is reviewable at a glance and makes a stray entry
+  obvious.
+- Paths expand `~`, `$VAR` and `${VAR}`; `$XDG_RUNTIME_DIR` falls back to
+  `/run/user/<uid>` when unset, so a policy also resolves from cron or a systemd
+  unit. Unknown variables stay literal, so the path fails the existence check
+  and is dropped with a note instead of becoming a grant.
 - Landlock grants a directory and everything under it. Never allow `~` or `/`
   in a policy — that is what `-p home` / `-p all` are for.
 - Network is all-or-nothing. mise cannot filter by host; use `--no-net` or a
