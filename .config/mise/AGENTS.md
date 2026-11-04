@@ -14,6 +14,7 @@ Read this before changing anything here.
 | --- | --- |
 | `~/.config/mise/sandbox.toml` | **The policy.** Per-tool network, path and env rules, plus named `-p` presets (`[presets.<name>]`). |
 | `~/.local/bin/mise-sbx` | Dispatcher: reads policy, builds flags, execs `mise x`. Also `sync`, `dirs`, `policy`, `-c`, `-p`, `--dry-run`. |
+| `~/.config/fish/completions/mise-sbx.fish` | Fish completion. Presets and tools are read from the policy at completion time; the flags, value options and subcommands are hard-coded, so keep it in step with the dispatcher. |
 | `~/.config/mise/conf.d/90-sandbox-wrappers.toml` | **Generated.** `[wrappers.<bin>] command = "/home/fidel/.local/bin/mise-sbx"`. Never edit by hand; run `mise-sbx sync`. |
 | `~/.config/mise/config.toml` | `[hooks] postinstall = "$HOME/.local/bin/mise-sbx sync"` keeps wrappers current. Note the shell-expanded `$HOME`: a bare `mise-sbx` breaks when `~/.local/bin` is not on PATH (CI, cron, minimal systems). |
 | `~/.local/bin/<agent>` | Launcher scripts (`claude`, `codex`, `gemini`, `gh`, `muse`, ...). **Owned by Omarchy** — see below. |
@@ -390,6 +391,11 @@ mise-sbx sync
 mise-sbx policy <tool>
 fish -lc 'command -v <tool>'   # must print .../mise/command-wrappers/bin/<tool>
 ```
+
+When you add, rename or remove a flag, value option, `-c` or a subcommand in
+`mise-sbx`, update `~/.config/fish/completions/mise-sbx.fish` as well (presets
+and tools are read from the policy automatically). Both files are plain text;
+check the completion with `fish -n` and `fish -c 'complete -C"mise-sbx -"'`.
 
 Reconciliation check (writes a launcher, then restores it):
 
