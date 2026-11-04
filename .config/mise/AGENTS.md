@@ -219,23 +219,43 @@ Rules:
   — that case used to leave `$HOME` writable.
 - The audit log records the names: `notes=[presets=home+omarchy; …]`.
 
-The shipped `omarchy` preset is for end-user customization inside the sandbox:
-write on `~/.config/{hypr,omarchy,alacritty,foot,kitty,ghostty,btop,lazygit}`,
-`~/.config/starship.toml`, `~/.local/state/omarchy`, `~/.cache/omarchy`; read on
-`/usr/share/omarchy`, `/var/lib/pacman` and `~/.local/share/icons`; env
-`HYPRLAND_*`, `WAYLAND_DISPLAY`, `XDG_RUNTIME_DIR`, `XDG_CURRENT_DESKTOP`,
-`XDG_SESSION_*`, `DBUS_SESSION_BUS_ADDRESS`, `OMARCHY_*`. The env patterns are
-what make `hyprctl` (and anything talking to quickshell over dbus) work — the
-unix sockets themselves are not path-mediated.
+Two Omarchy presets ship, both covering the same user surface:
+
+- **`omarchy`** — read-only, for debugging. Read on
+  `~/.config/{hypr,omarchy,alacritty,foot,kitty,ghostty,btop,lazygit}`,
+  `~/.config/starship.toml`, `~/.local/state/omarchy`, `~/.cache/omarchy`,
+  `/usr/share/omarchy`, `/var/lib/pacman`, `~/.local/share/icons` and
+  `$XDG_RUNTIME_DIR`. No write access anywhere, so a tool can inspect the
+  desktop but cannot change it.
+- **`omarchy-rw`** — `include = ["omarchy"]` plus write on the same user config
+  and state paths and on `$XDG_RUNTIME_DIR`. This is the one for `omarchy theme
+  set`, region capture, `reminder clear` and brightness.
+
+Env for both: `HYPRLAND_*`, `WAYLAND_DISPLAY`, `XDG_RUNTIME_DIR`,
+`XDG_CURRENT_DESKTOP`, `XDG_SESSION_*`, `DBUS_SESSION_BUS_ADDRESS`,
+`OMARCHY_*`. The env patterns are what make `hyprctl` (and anything talking to
+quickshell over dbus) work — the unix sockets themselves are not path-mediated.
+
+`$XDG_RUNTIME_DIR` is granted read-only in `omarchy` and read/write in
+`omarchy-rw`, and that distinction is real: omarchy keeps
+`omarchy-theme-set.lock`, `omarchy-brightness-display.lock`,
+`omarchy-reminders/` and the capture markers directly in that directory. With
+the read-only preset those commands still run (no `set -e`; the failed `exec
+9>lock` + `flock` just print "Permission denied"/"Bad file descriptor"), but
+the capture-region picker and `reminder clear` need the files, so they fail.
+Landlock needs `MAKE_REG` on the parent directory, which is why the runtime dir
+cannot be sub-granted or denied piecemeal.
 
 ```bash
-mise-sbx -p omarchy -c 'omarchy theme current'
-mise-sbx -p omarchy -c 'hyprctl reload'
+mise-sbx -p omarchy    -c 'omarchy theme current'      # inspect
+mise-sbx -p omarchy    -c 'hyprctl -j activeworkspace'
+mise-sbx -p omarchy-rw -c 'omarchy theme set Tokyo\ Night'
 ```
 
 Not covered on purpose: `sudo`/`pkexec` flows (`omarchy pkg add`, `omarchy
 update`, `omarchy setup …`) and anything needing network (`omarchy theme
-install <url>` still needs `--net`).
+install <url>` still needs `--net`). Neither preset carries write access to
+`~/Pictures`, so screenshot output still needs `-a ~/Pictures`.
 
 ## Agent skill directories
 
@@ -297,7 +317,8 @@ Flags go before the tool name; env vars work everywhere.
 | Read/write `$HOME` | `mise-sbx -p home claude` | `MISE_SANDBOX_PRESET=home` |
 | Read `$HOME` only | `mise-sbx -p home-ro claude` | `MISE_SANDBOX_PRESET=home-ro` |
 | Everything | `mise-sbx -p all npm install` | `MISE_SANDBOX_PRESET=all` |
-| Omarchy customization | `mise-sbx -p omarchy claude` | `MISE_SANDBOX_PRESET=omarchy` |
+| Omarchy debugging (read-only) | `mise-sbx -p omarchy claude` | `MISE_SANDBOX_PRESET=omarchy` |
+| Omarchy changes (read/write) | `mise-sbx -p omarchy-rw claude` | `MISE_SANDBOX_PRESET=omarchy-rw` |
 | Two presets at once | `mise-sbx -p home -p omarchy claude` | `MISE_SANDBOX_PRESET=home:omarchy` |
 | See which presets exist | `mise-sbx policy <tool>` (`presets:` line) | |
 | Grant one directory | `mise-sbx -a ~/datasets claude` | `MISE_SANDBOX_ALLOW=~/datasets` |

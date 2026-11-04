@@ -39,28 +39,34 @@ reconcile = "repoint"
 # home-ro, all. A preset adds to [default] + [tools.<name>]; [deny] still wins.
 # `include` pulls in other presets (transitively; cycles are a config error).
 # Presets never change network access: use --net / --no-net for that.
+# Paths expand ~ and $VAR/${VAR}; $XDG_RUNTIME_DIR falls back to /run/user/<uid>.
 # ---------------------------------------------------------------------------
 
-# End-user Omarchy customization: edit Hyprland/terminal/bar config, apply a
-# theme, reload the compositor. The rest of $HOME stays unreadable.
+# Read-only view of an Omarchy desktop: inspect config, theme, compositor and
+# window state without changing anything. Meant for debugging. Use
+# -p omarchy-rw when the tool has to write.
+#
+# $XDG_RUNTIME_DIR covers the hypr/quickshell IPC directories, the wayland lock
+# files and the dconf database. /usr/share/omarchy is listed even though mise
+# grants /usr implicitly; /var/lib/pacman is read because omarchy commands run
+# `pacman -Q` for version and dependency checks.
 [presets.omarchy]
-allow_write = [
-  "~/.config/hypr",
-  "~/.config/omarchy",
-  "~/.config/alacritty",
-  "~/.config/foot",
-  "~/.config/kitty",
-  "~/.config/ghostty",
-  "~/.config/btop",
-  "~/.config/lazygit",
-  "~/.config/starship.toml",
-  "~/.local/state/omarchy",
-  "~/.cache/omarchy",
-]
 allow_read  = [
-  "/usr/share/omarchy",     # explicit, though mise grants /usr implicitly
-  "/var/lib/pacman",        # omarchy commands run `pacman -Q` for version/deps
+  "$XDG_RUNTIME_DIR",
+  "/usr/share/omarchy",
+  "/var/lib/pacman",
+  "~/.cache/omarchy",
+  "~/.config/alacritty",
+  "~/.config/btop",
+  "~/.config/foot",
+  "~/.config/ghostty",
+  "~/.config/hypr",
+  "~/.config/kitty",
+  "~/.config/lazygit",
+  "~/.config/omarchy",
+  "~/.config/starship.toml",
   "~/.local/share/icons",
+  "~/.local/state/omarchy",
 ]
 allow_env   = [
   "HYPRLAND_*",
@@ -70,6 +76,28 @@ allow_env   = [
   "XDG_SESSION_*",
   "DBUS_SESSION_BUS_ADDRESS",
   "OMARCHY_*",
+]
+
+# Same view plus write access, for real customization: `omarchy theme set`,
+# region capture, reminders, brightness. omarchy keeps its lock files and
+# capture markers directly in $XDG_RUNTIME_DIR, so that directory has to be
+# writable too - denying or sub-granting pieces of it would block file
+# creation, since Landlock needs MAKE_REG on the parent directory.
+[presets.omarchy-rw]
+include     = ["omarchy"]
+allow_write = [
+  "$XDG_RUNTIME_DIR",
+  "~/.cache/omarchy",
+  "~/.config/alacritty",
+  "~/.config/btop",
+  "~/.config/foot",
+  "~/.config/ghostty",
+  "~/.config/hypr",
+  "~/.config/kitty",
+  "~/.config/lazygit",
+  "~/.config/omarchy",
+  "~/.config/starship.toml",
+  "~/.local/state/omarchy",
 ]
 
 # ---------------------------------------------------------------------------

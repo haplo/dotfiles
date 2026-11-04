@@ -258,9 +258,30 @@ def effective_policy(policy: dict, tool: str) -> dict:
     }
 
 
+def runtime_dir() -> str:
+    """$XDG_RUNTIME_DIR, falling back to logind's /run/user/<uid>.
+
+    The dispatcher runs unsandboxed, so it sees the real value; the fallback
+    keeps policies resolvable from cron and systemd units, where the variable
+    is often unset.
+    """
+    return os.environ.get("XDG_RUNTIME_DIR") or f"/run/user/{os.getuid()}"
+
+
+def expand_policy_path(raw: str) -> str:
+    """Expand ~, $VAR and ${VAR}; $XDG_RUNTIME_DIR never expands to nothing.
+
+    Unknown variables are left literal on purpose: the path then fails the
+    existence check in prepare_paths() and is dropped with a note, so a typo
+    cannot turn into a grant.
+    """
+    runtime = runtime_dir()
+    text = raw.replace("${XDG_RUNTIME_DIR}", runtime).replace("$XDG_RUNTIME_DIR", runtime)
+    return os.path.expanduser(os.path.expandvars(text))
+
+
 def resolve_path(raw: str, cwd: Path) -> Path:
-    expanded = os.path.expanduser(raw)
-    path = Path(expanded)
+    path = Path(expand_policy_path(raw))
     if not path.is_absolute():
         path = cwd / path
     try:
