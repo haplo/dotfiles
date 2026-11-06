@@ -6,9 +6,7 @@ include lrcget.local
 # Persistent global definitions
 include globals.local
 
-noblacklist ${HOME}/.cache/lrcget
-noblacklist ${HOME}/.config/lrcget
-noblacklist ${HOME}/.local/share/lrcget
+noblacklist ${HOME}/.local/share/net.lrclib.lrcget
 noblacklist ${MUSIC}
 
 include disable-common.inc

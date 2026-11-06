@@ -1,2 +1,6 @@
+mkdir ${HOME}/.local/share/net.lrclib.lrcget
+whitelist ${HOME}/.local/share/net.lrclib.lrcget
+include whitelist-music-common.local
+
 # AUR version renames to lrcget-bin, lrcget is a sh wrapper that launches it
 private-bin sh,lrcget,lrcget-bin
