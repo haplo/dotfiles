@@ -1,0 +1,2 @@
+# AUR version renames to lrcget-bin, lrcget is a sh wrapper that launches it
+private-bin sh,lrcget,lrcget-bin
